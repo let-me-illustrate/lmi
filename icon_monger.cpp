@@ -31,8 +31,6 @@
 
 #include <wx/image.h>
 
-#include <sstream>
-
 /// Enumerate lmi icon names; map 'wxART_' id's to icon names.
 ///
 /// The wxART mapping permits the use of simpler gnome-standard names:
@@ -99,50 +97,21 @@ icon_monger::icon_monger()
     lmi_specific_icon_names_.insert("write-spreadsheet"       );
 }
 
-namespace
-{
-/// Return desired icon size.
+/// Create a bitmap bundle, representing the same bitmap at multiple
+/// resolutions from a wxArtID value.
 ///
-/// Most often, the 'size' argument is wxDefaultSize, and the returned
-/// size therefore depends only on the client that requested the icon.
+/// Note that builtin wxArtID values are converted to the corresponding names,
+/// i.e.
 ///
-/// For platforms with standard interface guidelines, GetSizeHint()
-/// does the right thing; but for msw it just returns 16 by 15 because
-/// there's no standard practice, so hardcoded sizes are given here.
-
-wxSize desired_icon_size
-    (wxArtClient const& client
-    ,wxSize const&      size
-    )
-{
-    wxSize z(wxDefaultSize != size ? size : wxArtProvider::GetSizeHint(client));
-#if !defined LMI_MSW
-    return z;
-#else  // defined LMI_MSW
-    if     (wxART_MENU    == client) {return wxSize(16, 16);}
-    else if(wxART_TOOLBAR == client) {return wxSize(24, 24);}
-    else                             {return z;}
-#endif // defined LMI_MSW
-}
-} // Unnamed namespace.
-
-/// Provide the most suitable icon in the given context.
-///
-/// Convert builtin wxArtID values to fitting filenames, e.g.:
 ///   wxART_FOO_BAR --> foo-bar.png    [default size]
 ///   wxART_FOO_BAR --> foo-bar-16.png [16 pixels square]
-///
-/// First, try to find an icon of the requested size. If none is
-/// found, then try to find an icon of default size and scale it--but
-/// complain even if that succeeds, because the result of scaling may
-/// be quite unappealing.
 ///
 /// Diagnosed failures are presented merely as warnings because they
 /// do not make the system impossible to use.
 
-wxBitmap icon_monger::CreateBitmap
+wxBitmapBundle icon_monger::CreateBitmapBundle
     (wxArtID const&     id
-    ,wxArtClient const& client
+    ,wxArtClient const&
     ,wxSize const&      size
     )
 {
@@ -155,21 +124,43 @@ wxBitmap icon_monger::CreateBitmap
             {
             // This is not an error as not all wxART id's have lmi overrides,
             // so just let the next art provider deal with it.
-            return wxNullBitmap;
+            return wxBitmapBundle{};
             }
         icon_name = i->second;
         }
 
-    wxSize const desired_size = desired_icon_size(client, size);
+    wxVector<wxBitmap> bitmaps;
 
-    std::ostringstream oss;
-    oss << AddDataDir(icon_name) << '-' << desired_size.GetWidth();
-    fs::path icon_path(oss.str() + ".png");
-    if(!fs::exists(icon_path))
+    auto const try_using_icon = [&bitmaps](fs::path const& icon_path)
         {
-        icon_path = AddDataDir(icon_name) + ".png";
-        }
-    if(!fs::exists(icon_path))
+        wxBitmap bitmap;
+        if(fs::exists(icon_path))
+            {
+            if(bitmap.LoadFile(icon_path.string().c_str(), wxBITMAP_TYPE_PNG))
+                {
+                bitmaps.push_back(bitmap);
+                }
+            else
+                {
+                warning()
+                    << "Unable to load image '"
+                    << icon_path
+                    << "'. Try reinstalling."
+                    << LMI_FLUSH
+                    ;
+                }
+            }
+        };
+
+    // We could find all files matching "icon_name*.png" in the data directory,
+    // but currently we know that only "-16" variants exist, so it seems a bit
+    // wasteful to do it, when we never risk finding anything else.
+    fs::path icon_path(AddDataDir(icon_name) + "-16.png");
+    try_using_icon(icon_path);
+    icon_path = AddDataDir(icon_name) + ".png";
+    try_using_icon(icon_path);
+
+    if(bitmaps.empty())
         {
         if(!contains(lmi_specific_icon_names_, icon_name))
             {
@@ -180,7 +171,6 @@ wxBitmap icon_monger::CreateBitmap
                 << "\nA blank icon will be used instead."
                 << LMI_FLUSH
                 ;
-            return wxNullBitmap;
             }
         else if(is_builtin)
             {
@@ -192,7 +182,6 @@ wxBitmap icon_monger::CreateBitmap
                 << " but it may be visually jarring."
                 << LMI_FLUSH
                 ;
-            return wxNullBitmap;
             }
         else
             {
@@ -203,46 +192,44 @@ wxBitmap icon_monger::CreateBitmap
                 << "\nA blank icon will be used instead."
                 << LMI_FLUSH
                 ;
-            return wxNullBitmap;
+            }
+        return wxBitmapBundle{};
+        }
+
+    if(size.IsFullySpecified())
+        {
+        bool has_matching_size = false;
+        for(auto const& bitmap : bitmaps)
+            {
+            if(bitmap.GetSize() == size)
+                {
+                has_matching_size = true;
+                break;
+                }
+            }
+
+        if(!has_matching_size)
+            {
+            warning()
+                << "Image '"
+                << icon_path
+                << "' of size "
+                << bitmaps.at(0).GetWidth()
+                << " by "
+                << bitmaps.at(0).GetHeight()
+                << " may be scaled because no bitmap of requested size "
+                << size.GetWidth()
+                << " by "
+                << size.GetHeight()
+                << " was found."
+                << LMI_FLUSH
+                ;
+            // Note that there is no need to actually rescale the image, this will
+            // be done by wxBitmapBundle itself automatically if needed.
             }
         }
 
-    wxImage image(icon_path.string().c_str(), wxBITMAP_TYPE_PNG);
-    if(!image.IsOk())
-        {
-        warning()
-            << "Unable to load image '"
-            << icon_path
-            << "'. Try reinstalling."
-            << LMI_FLUSH
-            ;
-        return wxNullBitmap;
-        }
-
-    if(desired_size != wxSize(image.GetWidth(), image.GetHeight()))
-        {
-        warning()
-            << "Image '"
-            << icon_path
-            << "' of size "
-            << image.GetWidth()
-            << " by "
-            << image.GetHeight()
-            << " has been scaled because no bitmap of requested size "
-            << desired_size.GetWidth()
-            << " by "
-            << desired_size.GetHeight()
-            << " was found."
-            << LMI_FLUSH
-            ;
-        image.Rescale
-            (desired_size.GetWidth()
-            ,desired_size.GetHeight()
-            ,wxIMAGE_QUALITY_HIGH
-            );
-        }
-
-    return wxBitmap(image);
+    return wxBitmapBundle::FromBitmaps(bitmaps);
 }
 
 /// Load the image from the given file.
