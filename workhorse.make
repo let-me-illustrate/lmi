@@ -1219,6 +1219,7 @@ wrap_fardel:
 	  --directory=$(fardel_root) \
 	  --file=$(fardel_root)/$(fardel_name).zip \
 	  $(fardel_name)
+	@-$(srcdir)/publish.sh $(fardel_root)/$(fardel_name).zip
 
 ################################################################################
 
