@@ -1213,6 +1213,12 @@ wrap_fardel:
 	  --directory=$(fardel_root) \
 	  --file=$(fardel_root)/$(fardel_name).tar.bz2 \
 	  $(fardel_name)
+	@$(BSDTAR) \
+	  --create \
+	  --auto-compress \
+	  --directory=$(fardel_root) \
+	  --file=$(fardel_root)/$(fardel_name).zip \
+	  $(fardel_name)
 
 ################################################################################
 
