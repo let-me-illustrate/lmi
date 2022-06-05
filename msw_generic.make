@@ -88,6 +88,7 @@ TAR     := tar
 # FHS-2.2 would presumably put these in /usr/bin . However, debian
 # puts 'bzip2' and 'grep' in /bin .
 
+BSDTAR  := bsdtar
 BZIP2   := bzip2
 DIFF    := diff
 GREP    := grep

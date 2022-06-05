@@ -57,6 +57,7 @@ TAR     := tar
 
 # FHS-2.2 would put these in /usr/bin .
 
+BSDTAR  := bsdtar
 BZIP2   := bzip2
 DIFF    := diff
 GREP    := grep
