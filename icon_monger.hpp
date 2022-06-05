@@ -44,8 +44,8 @@ class icon_monger
     icon_monger(icon_monger const&) = delete;
     icon_monger& operator=(icon_monger const&) = delete;
 
-    // wxArtProvider required implementation.
-    wxBitmap CreateBitmap
+    // Implement wxArtProvider function.
+    wxBitmapBundle CreateBitmapBundle
         (wxArtID const&
         ,wxArtClient const&
         ,wxSize const&
