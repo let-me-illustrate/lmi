@@ -386,11 +386,19 @@
     </object>
     <object class="wxMenuItem" name="add_cell">
         <label>_Add cell\tCtrl-+</label>
+        <extra-accels>
+            <accel>Shift-Ctrl-+</accel>
+            <accel>Ctrl-Num-+</accel>
+        </extra-accels>
         <bitmap platform="win" stock_id="insert-rows"/>
         <help>Add a new cell with case default parameters</help>
     </object>
     <object class="wxMenuItem" name="delete_cells">
         <label>_Delete cell(s)\tCtrl--</label>
+        <extra-accels>
+            <accel>Shift-Ctrl--</accel>
+            <accel>Ctrl-Num--</accel>
+        </extra-accels>
         <bitmap platform="win" stock_id="delete-row"/>
         <help>Delete selected cell(s)</help>
     </object>
