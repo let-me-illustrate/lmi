@@ -1121,16 +1121,16 @@ fardel_name := lmi-$(yyyymmddhhmm)
 fardel_root := $(prefix)/fardels
 fardel_dir  := $(fardel_root)/$(fardel_name)
 
+# The fardel will be valid from $(j1) to $(j2).
+#
 # The obvious y2038 problem is ignored because any breakage it causes
 # will be, well, obvious.
 
-fardel_date_script := \
-  d0=`$(DATE) +%Y-%m-01`; \
-  d1=`$(DATE) --utc --date="$$d0 + 1 month " +%s`; \
-  d2=`$(DATE) --utc --date="$$d0 + 2 months" +%s`; \
-  j1=`expr 2440588 + $$d1 / 86400`; \
-  j2=`expr 2440588 + $$d2 / 86400`; \
-  printf "$$j1 $$j2" >expiry; \
+d0 := $(shell $(DATE) +%Y-%m-01)
+d1 := $(shell $(DATE) --utc --date="$(d0) + 1 month " +%s)
+d2 := $(shell $(DATE) --utc --date="$(d0) + 2 months" +%s)
+j1 := $(shell expr 2440588 + $(d1) / 86400)
+j2 := $(shell expr 2440588 + $(d2) / 86400)
 
 # Several shared libraries are required by lmi, but there seems to be
 # no straightforward way to discover their individual names because
@@ -1204,7 +1204,7 @@ wrap_fardel:
 	@$(INSTALL) -m 0664 $(datadir)/group_quote_banner.png .
 	@$(INSTALL) -m 0775 $(fardel_binaries) .
 	@$(INSTALL) -m 0664 $(fardel_files) .
-	@$(fardel_date_script)
+	printf "$(j1) $(j2)" >expiry
 	@$(MD5SUM) --binary $(fardel_checksummed_files) >validated.md5
 	@$(PERFORM) $(bindir)/generate_passkey > passkey
 	@$(TAR) \
