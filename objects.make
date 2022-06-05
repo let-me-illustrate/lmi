@@ -352,13 +352,13 @@ endif
 
 # Override this variable to exclude tests that are inappropriate in
 # context--e.g., tests that don't even compile with a particular
-# toolchain. For example:
-#
-# ifeq (foobar,$(build_type))
-#   excluded_unit_test_targets += calendar_date_test
-# endif
+# toolchain.
 
 excluded_unit_test_targets :=
+
+ifeq (ubsan,$(findstring ubsan,$(build_type)))
+  excluded_unit_test_targets += loads_test mortality_rates_test
+endif
 
 unit_test_targets := \
   account_value_test \

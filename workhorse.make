@@ -686,6 +686,16 @@ CXX_WARNINGS = \
 #  - gprof
 #  - libstdc++ debugging macros
 
+# Options for undefined-behavior sanitizer.
+
+ubsan_options := \
+  -fsanitize=undefined \
+  -Wno-duplicated-branches \
+  -fno-omit-frame-pointer \
+  -fno-var-tracking \
+  -fno-var-tracking-assignments \
+  -O3 \
+
 # libstdc++ debugging macros
 
 every_libstdcxx_warning_macro := \
@@ -700,7 +710,9 @@ test_targets := unit_tests cgi_tests cli_tests
 
 ifeq (gprof,$(findstring gprof,$(build_type)))
   optimization_flag := -O0 -fno-omit-frame-pointer
-  gprof_flag := -pg
+  analyzer_flag := -pg
+else ifeq (ubsan,$(findstring ubsan,$(build_type)))
+  analyzer_flag := $(ubsan_options)
 else ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
   optimization_flag := -O0 -fno-omit-frame-pointer
   libstdcxx_warning_macros := $(every_libstdcxx_warning_macro)
@@ -774,7 +786,7 @@ endif
 #   https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html#DOCF1
 # Yet another is 'debug_flag'.
 
-c_l_flags := $(debug_flag) $(gprof_flag)
+c_l_flags := $(debug_flag) $(analyzer_flag)
 
 ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
   c_l_flags += -fPIC
