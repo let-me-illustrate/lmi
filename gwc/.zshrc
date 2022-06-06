@@ -50,6 +50,13 @@ export LANG=en_US.UTF-8 LC_ALL=$pref_lc LC_TIME=en_DK.UTF-8 LC_COLLATE=$pref_lc
 # but it seems to be necessary nevertheless.
 export LESSCHARSET=utf-8
 
+# Avoid "it looks like wine32 is missing, you should install it": see
+#   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00016.html
+WINEDEBUG=-all,err+all,fixme+all
+
+# These UBSan options are generally useful.
+UBSAN_OPTIONS=print_stacktrace=1:print_summary=1
+
 # Use vim keybindings.
 bindkey -v
 
