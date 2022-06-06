@@ -64,7 +64,7 @@ template<typename T>
 constexpr T bin_exp(T x, int exponent)
 {
     static_assert(std::is_floating_point_v<T>);
-    bool negative_exponent {exponent < 0};
+    bool is_exponent_negative {exponent < 0};
     unsigned int n = u_abs(exponent);
     T y = 1;
     for(;;)
@@ -76,7 +76,7 @@ constexpr T bin_exp(T x, int exponent)
             break;
         x *= x;
         }
-    return negative_exponent ? 1 / y : y;
+    return is_exponent_negative ? 1 / y : y;
 }
 
 double Algorithm_A(double x, int n);
