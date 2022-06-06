@@ -54,9 +54,13 @@
 // And MSVC maintainers don't believe in having different endianness
 // values at all, so the compiler never predefines these symbols.
 #if defined LMI_MSC
-#   define __ORDER_BIG_ENDIAN__ 4321
-#   define __ORDER_LITTLE_ENDIAN__ 1234
-#   define __FLOAT_WORD_ORDER__ __ORDER_LITTLE_ENDIAN__
+#   if !defined __ORDER_BIG_ENDIAN__ \
+    && !defined __ORDER_LITTLE_ENDIAN__ \
+    && !defined __FLOAT_WORD_ORDER__
+#       define __ORDER_BIG_ENDIAN__ 4321
+#       define __ORDER_LITTLE_ENDIAN__ 1234
+#       define __FLOAT_WORD_ORDER__ __ORDER_LITTLE_ENDIAN__
+#   endif // none of those macros were defined
 #endif // defined LMI_MSC
 
 #if !defined __FLOAT_WORD_ORDER__ || \
