@@ -79,6 +79,12 @@ $(srcdir)/objects.make:: ;
 
 ################################################################################
 
+# Override this variable to exclude targets that are inappropriate in
+# context--e.g., targets that don't even compile with a particular
+# $(build_type).
+
+excluded_default_targets :=
+
 # Effective default target (described above under "Default target").
 
 default_targets := \
@@ -131,6 +137,10 @@ ifeq (,$(USE_SO_ATTRIBUTES))
 
   endif
 endif
+
+default_targets := \
+  $(filter-out $(excluded_default_targets), $(default_targets) \
+  ) \
 
 .PHONY: effective_default_target
 effective_default_target: $(default_targets)
