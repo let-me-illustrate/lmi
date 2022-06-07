@@ -79,6 +79,10 @@ $(srcdir)/objects.make:: ;
 
 ################################################################################
 
+ifeq (so_test,$(findstring so_test,$(build_type)))
+  USE_SO_ATTRIBUTES=1
+endif
+
 # Override this variable to exclude targets that are inappropriate in
 # context--e.g., targets that don't even compile with a particular
 # $(build_type).
