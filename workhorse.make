@@ -129,6 +129,18 @@ ifdef USE_SO_ATTRIBUTES
 
 endif
 
+# For targets that depend on wx, build type 'safestdlib' requires a
+# compatible wx build, which is not yet available.
+
+ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
+  excluded_default_targets += \
+    lmi_wx_shared$(EXEEXT) \
+    skeleton$(SHREXT) \
+    wx_new$(SHREXT) \
+    wx_test$(EXEEXT) \
+
+endif
+
 # Effective default target (described above under "Default target").
 
 default_targets := \
@@ -145,21 +157,13 @@ default_targets := \
   liblmi$(SHREXT) \
   lmi_cli_shared$(EXEEXT) \
   lmi_md5sum$(EXEEXT) \
+  lmi_wx_shared$(EXEEXT) \
   product_files$(EXEEXT) \
   rate_table_tool$(EXEEXT) \
+  skeleton$(SHREXT) \
   test_coding_rules$(EXEEXT) \
-
-# For targets that depend on wx, build type 'safestdlib' requires a
-# compatible wx build, which is not yet available.
-
-ifneq (safestdlib,$(findstring safestdlib,$(build_type)))
-  default_targets += \
-    lmi_wx_shared$(EXEEXT) \
-    skeleton$(SHREXT) \
-    wx_new$(SHREXT) \
-    wx_test$(EXEEXT) \
-
-endif
+  wx_new$(SHREXT) \
+  wx_test$(EXEEXT) \
 
 default_targets := \
   $(filter-out $(excluded_default_targets), $(default_targets) \
