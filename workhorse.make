@@ -164,6 +164,12 @@ default_targets := \
 .PHONY: effective_default_target
 effective_default_target: $(default_targets)
 
+erroneous_targets := $(filter $(excluded_default_targets), $(MAKECMDGOALS))
+
+ifneq (,$(erroneous_targets))
+    $(error in context, cannot build "$(erroneous_targets)")
+endif
+
 ################################################################################
 
 # $(subst): workaround for debian, whose MinGW-w64 identifies its
