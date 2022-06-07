@@ -79,6 +79,10 @@ $(srcdir)/objects.make:: ;
 
 ################################################################################
 
+ifneq (1,$(words $(build_type)))
+    $(error There must be exactly one build_type, not "$(build_type)")
+endif
+
 ifeq (so_test,$(findstring so_test,$(build_type)))
   USE_SO_ATTRIBUTES=1
 endif
@@ -153,12 +157,8 @@ ifneq (safestdlib,$(findstring safestdlib,$(build_type)))
     lmi_wx_shared$(EXEEXT) \
     skeleton$(SHREXT) \
     wx_new$(SHREXT) \
+    wx_test$(EXEEXT) \
 
-  ifneq (so_test,$(findstring so_test,$(build_type)))
-    default_targets += \
-      wx_test$(EXEEXT) \
-
-  endif
 endif
 
 default_targets := \
