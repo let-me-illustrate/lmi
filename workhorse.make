@@ -85,6 +85,16 @@ $(srcdir)/objects.make:: ;
 
 excluded_default_targets :=
 
+# 'antediluvian' targets are incompatible with UBSan.
+
+ifeq (ubsan,$(findstring ubsan,$(build_type)))
+  excluded_default_targets += \
+    antediluvian_cgi$(EXEEXT) \
+    antediluvian_cli$(EXEEXT) \
+    libantediluvian$(SHREXT) \
+
+endif
+
 # Effective default target (described above under "Default target").
 
 default_targets := \
