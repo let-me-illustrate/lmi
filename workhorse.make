@@ -106,11 +106,14 @@ ifneq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
   excluded_default_targets += test_coding_rules$(EXEEXT)
 endif
 
-# 'test_coding_rules' is incompatible with $(USE_SO_ATTRIBUTES)
-# because it uses no shared library.
+# Many targets are incompatible with $(USE_SO_ATTRIBUTES) because they
+# use no shared libraries.
 
 ifdef USE_SO_ATTRIBUTES
-  excluded_default_targets += test_coding_rules$(EXEEXT)
+  excluded_default_targets += \
+    product_files$(EXEEXT) \
+    test_coding_rules$(EXEEXT) \
+
 endif
 
 # Effective default target (described above under "Default target").
@@ -121,6 +124,7 @@ default_targets := \
   libantediluvian$(SHREXT) \
   liblmi$(SHREXT) \
   lmi_cli_shared$(EXEEXT) \
+  product_files$(EXEEXT) \
   test_coding_rules$(EXEEXT) \
 
 # For targets that depend on wx, build type 'safestdlib' requires a
@@ -139,9 +143,6 @@ ifneq (safestdlib,$(findstring safestdlib,$(build_type)))
   endif
 endif
 
-# The product_files target doesn't build with shared-library
-# 'attributes'.
-
 ifeq (,$(USE_SO_ATTRIBUTES))
   default_targets += \
     bcc_ar$(EXEEXT) \
@@ -154,11 +155,6 @@ ifeq (,$(USE_SO_ATTRIBUTES))
     lmi_md5sum$(EXEEXT) \
     rate_table_tool$(EXEEXT) \
 
-  ifneq (so_test,$(findstring so_test,$(build_type)))
-    default_targets += \
-      product_files$(EXEEXT) \
-
-  endif
 endif
 
 default_targets := \
@@ -1103,10 +1099,8 @@ install: $(default_targets)
 	@$(INSTALL) -c -m 0664 $(data_files) $(datadir)
 	@$(INSTALL) -c -m 0664 $(help_files) $(datadir)
 	@datadir=$(datadir) srcdir=$(srcdir) $(srcdir)/mst_to_xst.sh
-ifeq (,$(USE_SO_ATTRIBUTES))
+ifndef USE_SO_ATTRIBUTES
 	@cd $(datadir); $(PERFORM) $(bindir)/product_files$(EXEEXT)
-else
-	@$(ECHO) "Can't build product_files$(EXEEXT) with USE_SO_ATTRIBUTES."
 endif
 
 ################################################################################
