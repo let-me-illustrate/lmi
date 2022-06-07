@@ -90,6 +90,7 @@ std::vector<double> table_42(int age)
 std::vector<double> table_256(int age, int duration)
 {
     LMI_ASSERT(0 <= duration && duration <= 3);
+    LMI_ASSERT(10 <= age && age <= 80);
     // Select: issue age by duration.
     static int const nsel = 71 * 3;
     static double const qsel[nsel] =
