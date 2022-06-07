@@ -106,8 +106,6 @@ endif
 
 # The product_files target doesn't build with shared-library
 # 'attributes'.
-#
-# TODO ?? The gpt server, however, is important; it needs work anyway.
 
 ifeq (,$(USE_SO_ATTRIBUTES))
   default_targets += \
