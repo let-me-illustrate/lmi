@@ -356,7 +356,7 @@ endif
 
 excluded_unit_test_targets :=
 
-ifeq (ubsan,$(findstring ubsan,$(build_type)))
+ifeq (ubsan,$(build_type))
   excluded_unit_test_targets += loads_test mortality_rates_test
 endif
 

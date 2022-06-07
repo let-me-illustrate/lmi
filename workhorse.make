@@ -83,7 +83,7 @@ ifneq (1,$(words $(build_type)))
     $(error There must be exactly one build_type, not "$(build_type)")
 endif
 
-ifeq (so_test,$(findstring so_test,$(build_type)))
+ifeq (so_test,$(build_type))
   USE_SO_ATTRIBUTES=1
 endif
 
@@ -95,7 +95,7 @@ excluded_default_targets :=
 
 # 'antediluvian' targets are incompatible with UBSan.
 
-ifeq (ubsan,$(findstring ubsan,$(build_type)))
+ifeq (ubsan,$(build_type))
   excluded_default_targets += \
     antediluvian_cgi$(EXEEXT) \
     antediluvian_cli$(EXEEXT) \
@@ -132,7 +132,7 @@ endif
 # For targets that depend on wx, build type 'safestdlib' requires a
 # compatible wx build, which is not yet available.
 
-ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
+ifeq (safestdlib,$(build_type))
   excluded_default_targets += \
     lmi_wx_shared$(EXEEXT) \
     skeleton$(SHREXT) \
@@ -676,7 +676,7 @@ $(cgicc_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
   -Wno-zero-as-null-pointer-constant \
 
-ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
+ifeq (safestdlib,$(build_type))
   ifeq (3.4.5,$(gcc_version))
     expression_template_0_test.o: gcc_common_extra_warnings += -Wno-unused-parameter
   endif
@@ -749,12 +749,12 @@ test_targets := unit_tests cgi_tests cli_tests
 # See:
 #   https://lists.gnu.org/archive/html/lmi/2016-06/msg00091.html
 
-ifeq (gprof,$(findstring gprof,$(build_type)))
+ifeq (gprof,$(build_type))
   optimization_flag := -O0 -fno-omit-frame-pointer
   analyzer_flag := -pg
-else ifeq (ubsan,$(findstring ubsan,$(build_type)))
+else ifeq (ubsan,$(build_type))
   analyzer_flag := $(ubsan_options)
-else ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
+else ifeq (safestdlib,$(build_type))
   optimization_flag := -O0 -fno-omit-frame-pointer
   libstdcxx_warning_macros := $(every_libstdcxx_warning_macro)
 else
