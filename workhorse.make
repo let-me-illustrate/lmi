@@ -111,7 +111,16 @@ endif
 
 ifdef USE_SO_ATTRIBUTES
   excluded_default_targets += \
+    bcc_ar$(EXEEXT) \
+    bcc_cc$(EXEEXT) \
+    bcc_ld$(EXEEXT) \
+    bcc_rc$(EXEEXT) \
+    elapsed_time$(EXEEXT) \
+    generate_passkey$(EXEEXT) \
+    ihs_crc_comp$(EXEEXT) \
+    lmi_md5sum$(EXEEXT) \
     product_files$(EXEEXT) \
+    rate_table_tool$(EXEEXT) \
     test_coding_rules$(EXEEXT) \
 
 endif
@@ -121,10 +130,19 @@ endif
 default_targets := \
   antediluvian_cgi$(EXEEXT) \
   antediluvian_cli$(EXEEXT) \
+  bcc_ar$(EXEEXT) \
+  bcc_cc$(EXEEXT) \
+  bcc_ld$(EXEEXT) \
+  bcc_rc$(EXEEXT) \
+  elapsed_time$(EXEEXT) \
+  generate_passkey$(EXEEXT) \
+  ihs_crc_comp$(EXEEXT) \
   libantediluvian$(SHREXT) \
   liblmi$(SHREXT) \
   lmi_cli_shared$(EXEEXT) \
+  lmi_md5sum$(EXEEXT) \
   product_files$(EXEEXT) \
+  rate_table_tool$(EXEEXT) \
   test_coding_rules$(EXEEXT) \
 
 # For targets that depend on wx, build type 'safestdlib' requires a
@@ -141,20 +159,6 @@ ifneq (safestdlib,$(findstring safestdlib,$(build_type)))
       wx_test$(EXEEXT) \
 
   endif
-endif
-
-ifeq (,$(USE_SO_ATTRIBUTES))
-  default_targets += \
-    bcc_ar$(EXEEXT) \
-    bcc_cc$(EXEEXT) \
-    bcc_ld$(EXEEXT) \
-    bcc_rc$(EXEEXT) \
-    elapsed_time$(EXEEXT) \
-    generate_passkey$(EXEEXT) \
-    ihs_crc_comp$(EXEEXT) \
-    lmi_md5sum$(EXEEXT) \
-    rate_table_tool$(EXEEXT) \
-
 endif
 
 default_targets := \
