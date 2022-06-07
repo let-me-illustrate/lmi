@@ -628,7 +628,7 @@ checkout:
 .PHONY: test_various_build_types
 test_various_build_types: source_clean
 	-$(MAKE) test build_type=safestdlib
-	-$(MAKE) all cgi_tests cli_tests build_type=so_test USE_SO_ATTRIBUTES=1
+	-$(MAKE) all cgi_tests cli_tests build_type=so_test
 	-$(MAKE) check_concinnity
 	-$(MAKE) check_physical_closure
 	-$(MAKE) all test

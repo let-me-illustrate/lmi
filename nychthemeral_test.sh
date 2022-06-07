@@ -335,11 +335,11 @@ make "$coefficiency" --output-sync=recurse unit_tests 2>&1 \
   | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests
 
 printf '\n# build with shared-object attributes\n\n'
-make "$coefficiency" all build_type=so_test USE_SO_ATTRIBUTES=1 2>&1 \
+make "$coefficiency" all build_type=so_test 2>&1 \
   | tee "$log_dir"/default_targets_so_test | sed -e "$build_clutter"
 
 printf '\n# cgi and cli tests with shared-object attributes\n\n'
-make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=so_test USE_SO_ATTRIBUTES=1 2>&1 \
+make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=so_test 2>&1 \
   | tee "$log_dir"/cgi_cli_so_test | sed -e "$build_clutter" -e "$cli_cgi_clutter"
 
 printf '\n# cgi and cli tests in libstdc++ debug mode\n\n'

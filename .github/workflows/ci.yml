@@ -288,7 +288,7 @@ jobs:
 
       - name: Build lmi with SO attributes
         if: matrix.autotools != true
-        run: make $coefficiency --output-sync=recurse build_type=so_test USE_SO_ATTRIBUTES=1 all
+        run: make $coefficiency --output-sync=recurse build_type=so_test all
 
       - name: Setup lmi for tests
         run: |
