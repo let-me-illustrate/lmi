@@ -95,6 +95,20 @@ ifeq (ubsan,$(findstring ubsan,$(build_type)))
 
 endif
 
+# 'test_coding_rules' depends on PCRE2, which is installed only for
+# x86_64-pc-linux-gnu.
+
+ifneq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
+  excluded_default_targets += test_coding_rules$(EXEEXT)
+endif
+
+# 'test_coding_rules' is incompatible with $(USE_SO_ATTRIBUTES)
+# because it uses no shared library.
+
+ifdef USE_SO_ATTRIBUTES
+  excluded_default_targets += test_coding_rules$(EXEEXT)
+endif
+
 # Effective default target (described above under "Default target").
 
 default_targets := \
@@ -103,6 +117,7 @@ default_targets := \
   libantediluvian$(SHREXT) \
   liblmi$(SHREXT) \
   lmi_cli_shared$(EXEEXT) \
+  test_coding_rules$(EXEEXT) \
 
 # For targets that depend on wx, build type 'safestdlib' requires a
 # compatible wx build, which is not yet available.
@@ -134,12 +149,6 @@ ifeq (,$(USE_SO_ATTRIBUTES))
     ihs_crc_comp$(EXEEXT) \
     lmi_md5sum$(EXEEXT) \
     rate_table_tool$(EXEEXT) \
-
-  ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
-    default_targets += \
-      test_coding_rules$(EXEEXT) \
-
-  endif
 
   ifneq (so_test,$(findstring so_test,$(build_type)))
     default_targets += \
