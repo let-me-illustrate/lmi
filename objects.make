@@ -357,7 +357,7 @@ endif
 excluded_unit_test_targets :=
 
 ifeq (ubsan,$(build_type))
-  excluded_unit_test_targets += loads_test mortality_rates_test
+  excluded_unit_test_targets += actuarial_table_test loads_test mortality_rates_test
 endif
 
 unit_test_targets := \
