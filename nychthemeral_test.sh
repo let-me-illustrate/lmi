@@ -362,29 +362,29 @@ printf '\n# unit tests in libstdc++ debug mode\n\n'
 make "$coefficiency" --output-sync=recurse unit_tests build_type=safestdlib 2>&1 \
   | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests_safestdlib
 
-  if [ "x86_64-pc-linux-gnu" = "$LMI_TRIPLET" ]
-  then
-    printf '\n# unit tests with UBSan\n\n'
-    # shellcheck disable=SC3001
-    (setopt nomultios; \
-      ( \
-        (make "$coefficiency" --output-sync=recurse unit_tests \
-          build_type=ubsan UBSAN_OPTIONS=print_stacktrace=1 \
-        | tee \
-          >(grep '\*\*\*') \
-          >(grep \?\?\?\?) \
-          >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') \
-        >"$log_dir"/unit_tests_ubsan_stdout \
-        ) \
-        3>&1 1>&2 2>&3 \
-        | tee "$log_dir"/unit_tests_ubsan_stderr \
-          | sed -e "$unit_test_stderr_clutter" \
-          | sed -e's/^/UBSan: /' \
-      ) 3>&1 1>&2 2>&3 \
-    );
-  else
-    printf '\n# ubsan tests skipped--used with POSIX only\n\n'
-  fi
+if [ "x86_64-pc-linux-gnu" = "$LMI_TRIPLET" ]
+then
+  printf '\n# unit tests with UBSan\n\n'
+  # shellcheck disable=SC3001
+  (setopt nomultios; \
+    ( \
+      (make "$coefficiency" --output-sync=recurse unit_tests \
+        build_type=ubsan UBSAN_OPTIONS=print_stacktrace=1 \
+      | tee \
+        >(grep '\*\*\*') \
+        >(grep \?\?\?\?) \
+        >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') \
+      >"$log_dir"/unit_tests_ubsan_stdout \
+      ) \
+      3>&1 1>&2 2>&3 \
+      | tee "$log_dir"/unit_tests_ubsan_stderr \
+        | sed -e "$unit_test_stderr_clutter" \
+        | sed -e's/^/UBSan: /' \
+    ) 3>&1 1>&2 2>&3 \
+  );
+else
+  printf '\n# ubsan tests skipped--used with POSIX only\n\n'
+fi
 
 if [ "greg" = "$(whoami)" ]
 then
