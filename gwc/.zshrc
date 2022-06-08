@@ -54,8 +54,8 @@ export LESSCHARSET=utf-8
 #   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00016.html
 export WINEDEBUG=-all,err+all,fixme+all
 
-# These UBSan options are generally useful.
-export UBSAN_OPTIONS=print_stacktrace=1:print_summary=1
+# This UBSan option is generally useful.
+export UBSAN_OPTIONS=print_stacktrace=1
 
 # Use vim keybindings.
 bindkey -v
