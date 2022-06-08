@@ -65,6 +65,7 @@ concinnity_clutter='
 '
 
 install_clutter='
+/^install -m 0775 lmi_md5sum.*\/bin$/d
 /^Generating product files.$/d
 /^All product files written.$/d
 /^$/d
@@ -344,7 +345,7 @@ make "$coefficiency" --output-sync=recurse unit_tests 2>&1 \
 
 printf '\n# default targets with shared-object attributes\n\n'
 make "$coefficiency" build_type=so_test 2>&1 \
-  | tee "$log_dir"/default_targets_so_test | sed -e "$build_clutter"
+  | tee "$log_dir"/default_targets_so_test | sed -e "$build_clutter" -e "$concinnity_clutter" -e "$install_clutter"
 
 printf '\n# cgi and cli tests with shared-object attributes\n\n'
 make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=so_test 2>&1 \
@@ -352,7 +353,7 @@ make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=so_tes
 
 printf '\n# default targets in libstdc++ debug mode\n\n'
 make "$coefficiency" build_type=safestdlib 2>&1 \
-  | tee "$log_dir"/default_targets_safestdlib | sed -e "$build_clutter"
+  | tee "$log_dir"/default_targets_safestdlib | sed -e "$build_clutter" -e "$concinnity_clutter" -e "$install_clutter"
 
 printf '\n# cgi and cli tests in libstdc++ debug mode\n\n'
 make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=safestdlib 2>&1 \
@@ -367,7 +368,7 @@ if [ "x86_64-pc-linux-gnu" = "$LMI_TRIPLET" ]
 then
   printf '\n# default targets with UBSan\n\n'
   make "$coefficiency" build_type=ubsan UBSAN_OPTIONS=print_stacktrace=1 2>&1 \
-    | tee "$log_dir"/default_targets_ubsan | sed -e "$build_clutter"
+    | tee "$log_dir"/default_targets_ubsan | sed -e "$build_clutter" -e "$concinnity_clutter" -e "$install_clutter"
 
   printf '\n# unit tests with UBSan\n\n'
   # shellcheck disable=SC3001
