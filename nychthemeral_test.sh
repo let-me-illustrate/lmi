@@ -187,6 +187,15 @@ cli_cgi_clutter='
 /^  0 errors$/d
 '
 
+unit_test_stderr_clutter='
+/.*\/test_coding_rules_test\.sh$/d
+/^Testing .test_coding_rules.\.$/d
+/^  This message should appear on stderr\.$/d
+/^Integrity check failed for .coleridge.$/d
+/^Please report this: culminate() not called\.$/d
+/^sh: 1: xyzzy: not found$/d
+'
+
 schemata_clutter='
 /^  Test cell-subelement sorting\.$/d
 /^  Test schemata\.\.\.$/d
@@ -227,6 +236,8 @@ nychthemeral_clutter='
 /^Test sample.cns:/d
 /^Test sample.ill:/d
 /^# unit tests in libstdc++ debug mode/d
+/^# unit tests with UBSan/d
+/^# ubsan tests skipped--used with POSIX only/d
 /^[1-9][0-9]* tests succeeded/d
 /^# test concinnity/d
 /^  Problems detected by xmllint:/d
@@ -350,6 +361,30 @@ printf '\n# unit tests in libstdc++ debug mode\n\n'
 # shellcheck disable=SC2039,SC3001
 make "$coefficiency" --output-sync=recurse unit_tests build_type=safestdlib 2>&1 \
   | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests_safestdlib
+
+  if [ "x86_64-pc-linux-gnu" = "$LMI_TRIPLET" ]
+  then
+    printf '\n# unit tests with UBSan\n\n'
+    # shellcheck disable=SC3001
+    (setopt nomultios; \
+      ( \
+        (make "$coefficiency" --output-sync=recurse unit_tests \
+          build_type=ubsan UBSAN_OPTIONS=print_stacktrace=1 \
+        | tee \
+          >(grep '\*\*\*') \
+          >(grep \?\?\?\?) \
+          >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') \
+        >"$log_dir"/unit_tests_ubsan_stdout \
+        ) \
+        3>&1 1>&2 2>&3 \
+        | tee "$log_dir"/unit_tests_ubsan_stderr \
+          | sed -e "$unit_test_stderr_clutter" \
+          | sed -e's/^/UBSan: /' \
+      ) 3>&1 1>&2 2>&3 \
+    );
+  else
+    printf '\n# ubsan tests skipped--used with POSIX only\n\n'
+  fi
 
 if [ "greg" = "$(whoami)" ]
 then

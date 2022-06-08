@@ -1,14 +1,5 @@
 #!/bin/zsh
 
-unit_test_stderr_clutter='
-/.*\/test_coding_rules_test\.sh$/d
-/^Testing .test_coding_rules.\.$/d
-/^  This message should appear on stderr\.$/d
-/^Integrity check failed for .coleridge.$/d
-/^Please report this: culminate() not called\.$/d
-/^sh: 1: xyzzy: not found$/d
-'
-
 # 'triplets' really is used, but in a zsh-specific way
 # shellcheck disable=SC2034
   triplets="x86_64-pc-linux-gnu x86_64-w64-mingw32"
@@ -29,27 +20,6 @@ printf 'LMI_TRIPLET = "%s"\n' "$LMI_TRIPLET" > /dev/tty
     >(grep \?\?\?\?) \
     >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') \
     >"$log_dir"/unit_tests
-  if [ "x86_64-pc-linux-gnu" = "$LMI_TRIPLET" ]
-  then
-    printf '\n  unit tests with UBSan\n\n'
-    # shellcheck disable=SC3001
-    (setopt nomultios; \
-      ( \
-        (make "$coefficiency" --output-sync=recurse unit_tests \
-          build_type=ubsan UBSAN_OPTIONS=print_stacktrace=1 \
-        | tee \
-          >(grep '\*\*\*') \
-          >(grep \?\?\?\?) \
-          >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') \
-        >"$log_dir"/unit_tests_ubsan_stdout \
-        ) \
-        3>&1 1>&2 2>&3 \
-        | tee "$log_dir"/unit_tests_ubsan_stderr \
-          | sed -e "$unit_test_stderr_clutter" \
-          | sed -e's/^/UBSan: /' \
-      ) 3>&1 1>&2 2>&3 \
-    );
-  fi
 }
 printf "\n  Done.\n"
 done
