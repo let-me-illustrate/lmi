@@ -457,6 +457,7 @@ for z in *.touchstone; do \
     --strip-trailing-cr \
     --ignore-matching-lines="^DatePrepared[ \t]*.*'[0-9-]*'$" \
     "$z" "$srcdir/$z" \
+    2>&1 | tee "$log_dir"/emit_cli \
   || true ; \
 done
 
