@@ -388,6 +388,11 @@ then
         | sed -e's/^/UBSan: /' \
     ) 3>&1 1>&2 2>&3 \
   );
+
+  printf '\n# system test with UBSan\n\n'
+  make "$coefficiency" system_test \
+    build_type=ubsan UBSAN_OPTIONS=print_stacktrace=1 2>&1 \
+    | tee "$log_dir"/system_test_ubsan | sed -e "$build_clutter" -e "$install_clutter"
 else
   printf '\n# ubsan tests skipped--used with POSIX only\n\n'
 fi
