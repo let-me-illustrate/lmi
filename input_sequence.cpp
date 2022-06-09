@@ -29,10 +29,11 @@
 #include "assert_lmi.hpp"
 #include "contains.hpp"
 #include "input_sequence_parser.hpp"
+#include "oecumenic_enumerations.hpp"   // methuselah
 #include "ssize_lmi.hpp"
 #include "value_cast.hpp"
 
-#include <algorithm>                    // fill()
+#include <algorithm>                    // fill(), max()
 #include <sstream>
 #include <stdexcept>
 #include <type_traits>
@@ -404,6 +405,10 @@ void assert_not_insane_or_disordered
     ,int                               years_to_maturity
     )
 {
+    int const n_intervals = lmi::ssize(intervals);
+    LMI_ASSERT(0 <= n_intervals       && n_intervals       <= methuselah);
+    LMI_ASSERT(0 <= years_to_maturity && years_to_maturity <= methuselah);
+
     int prior_begin_duration = 0;
     for(auto const& i : intervals)
         {
@@ -523,6 +528,9 @@ void fill_interval_gaps
 
     LMI_ASSERT(out.empty());
 
+    // in.size() <= methuselah, so doubling it can't overflow
+    out.reserve(std::max(1, 2 * lmi::ssize(in)));
+
     ValueInterval default_interval;
     default_interval.value_is_keyword = keywords_only;
     if(keywords_only)
@@ -550,9 +558,13 @@ void fill_interval_gaps
             }
         else // Iff not first pass.
             {
-            auto const& last = out.back(); // Safe: 'out' cannot be empty.
+            // This reference to back() is valid because 'out' cannot
+            // be empty, and remains valid in the if-block below
+            // because push_back() cannot invalidate it.
+            auto const& last = out.back();
             if(last.end_duration != next.begin_duration)
                 {
+                LMI_ASSERT(out.size() < out.capacity());
                 out.push_back(default_interval);
                 out.back().begin_mode     = last.end_mode    ;
                 out.back().begin_duration = last.end_duration;
