@@ -31,12 +31,6 @@ jobs:
           - name: MSW/make/mingw64
             triplet: x86_64-w64-mingw32
             mingw: true
-          - name: Linux/make/gcc
-          - name: Linux/autotools/gcc
-            autotools: true
-          - name: Linux/autotools/clang
-            compiler: clang
-            autotools: true
     env:
       LMI_COMPILER: ${{ matrix.compiler || 'gcc' }}
       LMI_TRIPLET: ${{ matrix.triplet || 'x86_64-pc-linux-gnu' }}
