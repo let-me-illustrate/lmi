@@ -26,6 +26,7 @@
 
 #include "math_functions.hpp"           // u_abs()
 
+#include <limits>
 #include <type_traits>                  // is_floating_point_v
 
 /// Binary method for exponentiation.
@@ -59,11 +60,22 @@
 ///   (-1 >>1) = -1;
 /// and twenty-first-century optimizers generate the same code for
 /// unsigned values anyway.
+///
+/// The last line conditionally forms the reciprocal of 'y', which
+/// C++20 says is UB if ±0.0 == y. However, it's well defined by
+/// IEEE 754, and lmi is built with gcc's '-frounding-math' to choose
+/// IEEE 754 behavior, so it would be unreasonable for a compiler to
+/// perform any optimization that assumes otherwise. See:
+///   https://bugs.llvm.org/show_bug.cgi?id=19535#c1
 
 template<typename T>
+#if defined LMI_GCC || defined LMI_CLANG
+__attribute__((no_sanitize("float-divide-by-zero")))
+#endif // defined LMI_GCC || defined LMI_CLANG
 constexpr T bin_exp(T x, int exponent)
 {
     static_assert(std::is_floating_point_v<T>);
+    static_assert(std::numeric_limits<T>::is_iec559);
     bool is_exponent_negative {exponent < 0};
     unsigned int n = u_abs(exponent);
     T y = 1;
