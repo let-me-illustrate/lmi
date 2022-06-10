@@ -853,6 +853,10 @@ CXXFLAGS = \
 
 LDFLAGS = $(c_l_flags) -Wl,-Map,$@.map \
 
+ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
+  LDFLAGS += -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -Wl,-z,separate-code
+endif
+
 # Explicitly disable the infelicitous auto-import default. See:
 #   http://article.gmane.org/gmane.comp.gnu.mingw.user/19758
 #     [2006-05-18T11:38:01Z from Earnie Boyd]
