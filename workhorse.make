@@ -563,7 +563,7 @@ gcc_common_warnings := \
   -Wall \
   -Walloc-zero \
   -Walloca \
-  -Wcast-align \
+  -Wcast-align=strict \
   -Wcast-function-type \
   -Wconversion \
   -Wdangling-else \
@@ -573,7 +573,9 @@ gcc_common_warnings := \
   -Wduplicated-branches \
   -Wduplicated-cond \
   -Wextra \
+  -Wformat=2 \
   -Wformat-nonliteral \
+  -Wformat-overflow=2 \
   -Wformat-security \
   -Wformat-signedness \
   -Wformat-y2k \
@@ -588,14 +590,17 @@ gcc_common_warnings := \
   -Wredundant-decls \
   -Wrestrict \
   -Wshadow \
+  -Wshift-overflow=2 \
   -Wsign-compare \
   -Wstack-protector \
+  -Wstringop-overflow=4 \
   -Wswitch-enum \
   -Wtrampolines \
   -Wundef \
   -Wunreachable-code \
   -Wunused-macros \
   -Wvector-operation-performance \
+  -Wvla \
   -Wno-parentheses \
 
 # Warnings that are not generally useful.
