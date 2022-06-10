@@ -455,8 +455,8 @@ tutelary_flag :=
 # which causes harm while bringing no countervailing benefit--see:
 #   https://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
 
-c_standard   := -fno-ms-extensions -frounding-math -std=c99
-cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
+c_standard   := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c99
+cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++20
 
 # Specify these:
 #   $(gcc_version_specific_c_warnings)
@@ -499,12 +499,12 @@ else ifneq (,$(filter $(gcc_version), 6.3.0))
   gcc_version_specific_c_warnings   := -Wno-conversion
   gcc_version_specific_cxx_warnings := -Wno-conversion
 
-  cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
+  cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++17
 else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
   gcc_version_specific_c_warnings   :=
   gcc_version_specific_cxx_warnings :=
 
-  cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
+  cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++17
 else ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0 9 9.3.0))
   gcc_version_specific_c_warnings   :=
   gcc_version_specific_cxx_warnings :=
@@ -517,7 +517,7 @@ else ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0 9 9.3.0))
     tutelary_flag := -fomit-frame-pointer
   endif
 
-  cxx_standard := -fno-ms-extensions -frounding-math -std=c++2a
+  cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++2a
 else ifneq (,$(filter $(gcc_version), 10 10.0))
   gcc_version_specific_c_warnings :=
 
@@ -540,7 +540,7 @@ else ifneq (,$(filter $(gcc_version), 10 10.0))
     endif
   endif
 
-  cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
+  cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++20
 else ifneq (,$(filter $(gcc_version), 11 11.0))
   gcc_version_specific_c_warnings :=
 
@@ -548,7 +548,7 @@ else ifneq (,$(filter $(gcc_version), 11 11.0))
     -Wredundant-tags \
     -Wvolatile \
 
-  cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
+  cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++20
 endif
 
 treat_warnings_as_errors := -pedantic-errors -Werror
