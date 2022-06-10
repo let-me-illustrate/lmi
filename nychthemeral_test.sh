@@ -370,6 +370,16 @@ then
 
   export UBSAN_OPTIONS=print_stacktrace=1
 
+  # Specify 'detect_invalid_pointer_pairs' even though that feature
+  # isn't necessarily usable with gcc (see:
+  #   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00033.html
+  # ) to support potential future experimentation. This has no effect
+  # unless an applicable '-fsanitize=' option is specified at build
+  # time; it's too confusing to have to change both a gcc option and
+  # an environment variable. Set its value to one because a value of
+  # two is known to give false positives.
+  export ASAN_OPTIONS=detect_leaks=0:detect_invalid_pointer_pairs=1:strict_string_checks=1:detect_stack_use_after_return=1:check_initialization_order=1:strict_init_order=1
+
   make "$coefficiency" build_type=ubsan 2>&1 \
     | tee "$log_dir"/default_targets_ubsan | sed -e "$build_clutter" -e "$concinnity_clutter" -e "$install_clutter"
 
