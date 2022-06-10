@@ -367,7 +367,10 @@ make "$coefficiency" --output-sync=recurse unit_tests build_type=safestdlib 2>&1
 if [ "x86_64-pc-linux-gnu" = "$LMI_TRIPLET" ]
 then
   printf '\n# default targets with UBSan\n\n'
-  make "$coefficiency" build_type=ubsan UBSAN_OPTIONS=print_stacktrace=1 2>&1 \
+
+  export UBSAN_OPTIONS=print_stacktrace=1
+
+  make "$coefficiency" build_type=ubsan 2>&1 \
     | tee "$log_dir"/default_targets_ubsan | sed -e "$build_clutter" -e "$concinnity_clutter" -e "$install_clutter"
 
   printf '\n# unit tests with UBSan\n\n'
@@ -375,7 +378,7 @@ then
   (setopt nomultios; \
     ( \
       (make "$coefficiency" --output-sync=recurse unit_tests \
-        build_type=ubsan UBSAN_OPTIONS=print_stacktrace=1 \
+        build_type=ubsan \
       | tee \
         >(grep '\*\*\*') \
         >(grep \?\?\?\?) \
@@ -391,7 +394,7 @@ then
 
   printf '\n# system test with UBSan\n\n'
   make "$coefficiency" system_test \
-    build_type=ubsan UBSAN_OPTIONS=print_stacktrace=1 2>&1 \
+    build_type=ubsan 2>&1 \
     | tee "$log_dir"/system_test_ubsan | sed -e "$build_clutter" -e "$install_clutter"
 else
   printf '\n# ubsan tests skipped--used with POSIX only\n\n'
