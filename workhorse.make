@@ -554,9 +554,6 @@ endif
 treat_warnings_as_errors := -pedantic-errors -Werror
 
 # Write '-Wno' options at the end.
-#
-# Rationale for specific warning options:
-# -Wno-parentheses [its diagnostics are beyond pedantic]
 
 gcc_common_warnings := \
   $(treat_warnings_as_errors) \
@@ -581,6 +578,7 @@ gcc_common_warnings := \
   -Wformat-signedness \
   -Wformat-y2k \
   -Wimport \
+  -Winit-self \
   -Winvalid-pch \
   -Wlogical-op \
   -Wmissing-include-dirs \
@@ -602,13 +600,25 @@ gcc_common_warnings := \
   -Wunused-macros \
   -Wvector-operation-performance \
   -Wvla \
+  -Wno-date-time \
+  -Wno-float-equal \
+  -Wno-inline \
+  -Wno-missing-declarations \
   -Wno-parentheses \
+  -Wno-switch-default \
+  -Wno-unsafe-loop-optimizations \
 
 # Warnings that are not generally useful.
 #
 # -Wdate-time: only for "bit-wise-identical reproducible compilations"
+# -Wfloat-equal: too many warnings on correct code, e.g.,
+#   exact comparison to zero
+# -Winline: 'inline' now refers to linkage, not inlining
 # -Wmissing-declarations: for C++, this flags valid functions that
 #   arguably belong in an unnamed namespace
+# -Wparentheses: its diagnostics are beyond pedantic
+# -Wswitch-default: false positives for switches on enums that
+#   include all cases (verified by -Wswitch-enum)
 # -Wunsafe-loop-optimizations: incompatible with ranged for-loops
 
 # Consider these later:
@@ -619,7 +629,6 @@ gcc_c_warnings := \
   $(gcc_common_warnings) \
   -Wbad-function-cast \
   -Wc++-compat \
-  -Winit-self \
   -Wjump-misses-init \
   -Wmissing-prototypes \
   -Wnested-externs \
@@ -656,6 +665,9 @@ gcc_cxx_warnings := \
   -Wsynth \
   -Wuseless-cast \
   -Wzero-as-null-pointer-constant \
+  -Wno-sign-promo \
+  -Wno-suggest-final-methods \
+  -Wno-suggest-final-types \
 
 # Warnings that are not generally useful.
 #
@@ -666,8 +678,6 @@ gcc_cxx_warnings := \
 #   work with '-Wsuggest-final-types' first, because making a class
 #   final may resolve '-Wsuggest-final-methods' suggestions for its
 #   members; but expect many false positives
-# -Wfloat-equal: too many warnings on correct code, e.g.,
-#   exact comparison to zero
 
 # Consider these later:
 postponed_gcc_cxx_warnings := \
