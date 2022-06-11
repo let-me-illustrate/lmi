@@ -133,6 +133,12 @@ jobs:
             done
             echo 'DISPLAY=:10' >> $GITHUB_ENV
 
+      - name: Check that Wine works
+        run: wine cmd /c 'echo Hi'
+
+      - name: Run test application under Wine
+        run: wine cw.exe
+
       - name: Checkout
         uses: actions/checkout@v2
         with:
