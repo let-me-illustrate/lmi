@@ -63,8 +63,8 @@ vendor=${LMI_TRIPLET}-$gcc_version-$(git rev-parse --short HEAD:third_party/wx)
 # Configuration reference:
 #   https://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
 
-wx_cc_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math'
-wx_cxx_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math'
+wx_cc_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math -fsignaling-nans'
+wx_cxx_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math -fsignaling-nans'
 
 config_options="
   --prefix=$prefix

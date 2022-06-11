@@ -54,8 +54,8 @@ case "$build_type" in
         ;;
 esac
 
-wxpdfdoc_cc_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math'
-wxpdfdoc_cxx_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math'
+wxpdfdoc_cc_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math -fsignaling-nans'
+wxpdfdoc_cxx_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math -fsignaling-nans'
 
 config_options="
   --prefix=$prefix

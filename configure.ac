@@ -170,7 +170,7 @@ if test "$lmi_cv_cxx_features" = "no"; then
 fi
 
 dnl These options must be always used for lmi unit tests to pass.
-common_options="-fno-ms-extensions -frounding-math"
+common_options="-fno-ms-extensions -frounding-math -fsignaling-nans"
 
 CFLAGS="$CFLAGS $common_options"
 CXXFLAGS="$CXXFLAGS $common_options"
