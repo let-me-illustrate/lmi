@@ -133,19 +133,22 @@ jobs:
             done
             echo 'DISPLAY=:10' >> $GITHUB_ENV
 
-      - name: Check that Wine works
-        run: wine cmd /c 'echo Hi'
-
-      - name: Run test application under Wine
-        run: |
-          file cw.exe
-          wine --version
-          wine cw.exe
-
       - name: Checkout
         uses: actions/checkout@v2
         with:
           submodules: 'recursive'
+
+      - name: Check that Wine works
+        run: |
+          ls -l /usr/lib/wine
+          wine --version
+          wine cmd /c 'echo Hi'
+
+      - name: Run test application under Wine
+        run: |
+          pwd
+          file cw.exe
+          wine cw.exe
 
       - name: Install CCache
         uses: vadz/ccache-action@51a14bafac785236dfc551c76c779429eaf85a13
