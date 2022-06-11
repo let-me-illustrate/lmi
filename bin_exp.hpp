@@ -68,6 +68,29 @@
 /// be unreasonable for a compiler to perform any optimization that
 /// assumes otherwise. See:
 ///   https://bugs.llvm.org/show_bug.cgi?id=19535#c1
+///
+/// IEEE754-2008's "Division by zero" section [7.3] specifies:
+/// | The default result of divideByZero shall be an ∞ correctly
+/// | signed according to the operation
+/// The C and C++ standards should specifically permit IEEE 754
+/// semantics by making floating-point division by zero implementation
+/// -defined rather than undefined behavior.
+///
+/// C++20 [7.6.5/4] says:
+/// | If the second operand of / or % is zero the behavior is undefined.
+/// Although C99 [6.5.5/5] says:
+/// | if the value of the second operand is zero, the behavior is
+/// | undefined.
+/// its normative Annex F allows an implementation to define
+/// __STDC_IEC_559__, in which case [F.1]
+/// | the IEC 60559-specified behavior is adopted by reference,
+/// | unless stated otherwise.
+/// It isn't completely clear whether that exception means "unless
+/// stated otherwise in Annex F"; but if it includes [6.5.5/5] as
+/// well, then the four examples of division by zero in [F.7.4/2]
+/// are incorrect: whether they raise an exception or not cannot
+/// be specified as indicated in the comments, because that would
+/// be undefined.
 
 template<typename T>
 #if defined LMI_GCC || defined LMI_CLANG
