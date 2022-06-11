@@ -22,7 +22,7 @@ on:
 jobs:
   build-linux:
     runs-on: ubuntu-latest
-    container: debian:sid-slim
+    container: debian:bullseye-slim
     name: ${{ matrix.name }}
     strategy:
       fail-fast: false
@@ -119,7 +119,7 @@ jobs:
       - name: Install CCache
         uses: vadz/ccache-action@51a14bafac785236dfc551c76c779429eaf85a13
         with:
-          key: ${{ matrix.name }}
+          key: bullseye-${{ matrix.name }}
           max-size: 900M
           verbose: 2
 
@@ -227,7 +227,7 @@ jobs:
           # but this is much simpler than extracting those MD5s from it and it
           # changes rarely enough that this shouldn't be a problem in practice.
           path: /srv/cache_for_lmi/downloads
-          key: miscellanea-${{ hashFiles('install_miscellanea.make') }}
+          key: misc-${{ hashFiles('install_miscellanea.make') }}
 
       - name: Build miscellanea
         run: make $coefficiency --output-sync=recurse -f install_miscellanea.make
@@ -240,7 +240,7 @@ jobs:
             /opt/lmi/local/${{ env.LMI_COMPILER }}_${{ env.LMI_TRIPLET }}
             /opt/lmi/local/include
             /opt/lmi/local/share
-          key: local-${{ env.LMI_COMPILER }}-${{ env.gcc_version }}-${{ env.LMI_TRIPLET }}-${{ hashFiles('install_xml_libraries.sh', 'install_wx.sh', 'install_wxpdfdoc.sh') }}-${{ env.xml2_sha1 }}-${{ env.xmlwrapp_sha1 }}-${{ env.xslt_sha1 }}-${{ env.wx_sha1 }}-${{ env.wxpdfdoc_sha1 }}
+          key: bullseye-local-${{ env.LMI_COMPILER }}-${{ env.gcc_version }}-${{ env.LMI_TRIPLET }}-${{ hashFiles('install_xml_libraries.sh', 'install_wx.sh', 'install_wxpdfdoc.sh') }}-${{ env.xml2_sha1 }}-${{ env.xmlwrapp_sha1 }}-${{ env.xslt_sha1 }}-${{ env.wx_sha1 }}-${{ env.wxpdfdoc_sha1 }}
 
       - name: Build XML libraries
         if: steps.cache-local.outputs.cache-hit != 'true'
