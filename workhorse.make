@@ -563,6 +563,7 @@ gcc_common_warnings := \
   -Wall \
   -Walloc-zero \
   -Walloca \
+  -Warith-conversion \
   -Wcast-align=strict \
   -Wcast-function-type \
   -Wconversion \
