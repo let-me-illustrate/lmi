@@ -752,7 +752,7 @@ ubsan_options := \
 # libstdc++ debugging macros
 
 every_libstdcxx_warning_macro := \
-  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC \
+  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_GLIBCXX_SANITIZE_VECTOR \
 
 test_targets := unit_tests cgi_tests cli_tests
 
