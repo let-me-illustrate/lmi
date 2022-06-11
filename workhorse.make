@@ -735,17 +735,13 @@ CXX_WARNINGS = \
 
 # Options for undefined-behavior sanitizer.
 #
-# 'leak' is specified here because it will probably be useful someday.
-# WX !! For now, it's inhibited by 'detect_leaks=0' in $ASAN_OPTIONS
-# until the next wx upgrade.
-#
 # These:
 #   pointer-compare,pointer-subtract
 # aren't necessarily usable with gcc--see:
 #   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00033.html
 
 ubsan_options := \
-  -fsanitize=address,undefined,leak,float-divide-by-zero,float-cast-overflow,bounds-strict \
+  -fsanitize=address,undefined,float-divide-by-zero,float-cast-overflow,bounds-strict \
   -Wno-duplicated-branches \
   -fno-omit-frame-pointer \
   -fno-var-tracking \

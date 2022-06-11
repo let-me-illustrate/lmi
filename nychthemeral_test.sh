@@ -370,6 +370,9 @@ then
 
   export UBSAN_OPTIONS=print_stacktrace=1
 
+  # WX !! Inhibit 'leak' by setting 'detect_leaks=0' in $ASAN_OPTIONS
+  # until the next wx upgrade.
+  #
   # Specify 'detect_invalid_pointer_pairs' even though that feature
   # isn't necessarily usable with gcc (see:
   #   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00033.html
