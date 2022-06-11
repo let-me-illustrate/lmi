@@ -134,19 +134,17 @@ T signum(T t)
 /// Asserts that both integer types have no padding, to rule out the
 ///   UINT_MAX == INT_MAX == -(INT_MIN+1)
 /// case that Daniel Fischer points out somewhere on the web.
-///
-/// The return type is specified explicitly because with 'auto'
-/// gcc deduces it incorrectly in the accompanying unit test.
 
 template<typename T>
-constexpr std::make_unsigned_t<T> u_abs(T t)
+constexpr auto u_abs(T t)
 {
     static_assert(std::is_integral_v<T>);
     static_assert(std::is_signed_v<T>);
     using U = std::make_unsigned_t<T>;
     static_assert(std::has_unique_object_representations_v<T>);
     static_assert(std::has_unique_object_representations_v<U>);
-    return (t < 0) ? -static_cast<U>(t) : static_cast<U>(t);
+    U const u {static_cast<U>(t)};
+    return (t < 0) ? static_cast<U>(-u) : u;
 }
 
 // Actuarial functions.
