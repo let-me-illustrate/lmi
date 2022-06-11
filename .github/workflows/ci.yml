@@ -404,5 +404,7 @@ jobs:
       - name: Run GUI tests
         if: matrix.mingw
         run: |
+            set -x
+            file /opt/lmi/bin/wx_test.exe
             . ./set_toolchain.sh
             $PERFORM /opt/lmi/bin/wx_test --ash_nazg --data_path=/opt/lmi/data
