@@ -137,7 +137,10 @@ jobs:
         run: wine cmd /c 'echo Hi'
 
       - name: Run test application under Wine
-        run: wine cw.exe
+        run: |
+          file cw.exe
+          wine --version
+          wine cw.exe
 
       - name: Checkout
         uses: actions/checkout@v2
