@@ -405,4 +405,4 @@ jobs:
         if: matrix.mingw
         run: |
             . ./set_toolchain.sh
-            $PERFORM /opt/lmi/bin/wx_test --ash_nazg --data_path=/opt/lmi/data
+            $PERFORM /opt/lmi/bin/wx_test.exe --ash_nazg --data_path=/opt/lmi/data

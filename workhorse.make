@@ -1364,7 +1364,7 @@ run_unit_tests: unit_tests_not_built $(addsuffix -run,$(unit_test_binaries))
 .PHONY: %$(EXEEXT)-run
 %$(EXEEXT)-run:
 	@printf '\n%s\n' "Running $*:"
-	@-$(PERFORM) ./$* --accept
+	@-$(PERFORM) ./$*$(EXEEXT) --accept
 
 ################################################################################
 
