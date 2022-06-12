@@ -259,6 +259,14 @@ nychthemeral_clutter='
 /^$/d
 '
 
+# Install a bland 'configurable_settings.xml' for all architectures.
+# This overwrites any existing file, but developers probably won't
+# care, and end users are unaffected. Without this step, the
+#   'test all "emit_*" output types supported by CLI'
+# test below may fail, e.g. if different calculation-summary columns
+# were selected.
+/opt/lmi/src/lmi/bland_configurable_settings.sh /opt/lmi/data
+
 lmi_build_type=$(/usr/share/misc/config.guess)
 
 case "$lmi_build_type" in
