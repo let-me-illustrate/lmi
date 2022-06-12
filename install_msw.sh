@@ -384,7 +384,7 @@ root_name=C:
 # "Z:" could be used instead, because that's where wine maps the
 # apparent root, but that wouldn't work with posix builds. Instead,
 # therefore, symlink the directories lmi uses as described in
-# 'README.schroot'.
+# 'lmi_setup_40.sh'.
 
 if [ "Cygwin" != "$platform" ] && [ "WSL" != "$platform" ]
 then
