@@ -68,9 +68,11 @@ class datum_sequence
 {
   public:
     datum_sequence();
+    datum_sequence(datum_sequence const&) = default;
     explicit datum_sequence(std::string const&);
     ~datum_sequence() override = 0;
 
+    datum_sequence& operator=(datum_sequence const&) = default;
     datum_sequence& operator=(std::string const&);
 
     void block_keyword_values(bool);
