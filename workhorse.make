@@ -645,10 +645,12 @@ gcc_cxx_warnings := \
   -Wc++14-compat \
   -Wc++1z-compat \
   -Wcatch-value=3 \
+  -Wcomma-subscript \
   -Wconditionally-supported \
   -Wctor-dtor-privacy \
   -Wdelete-non-virtual-dtor \
   -Wdeprecated \
+  -Wdeprecated-copy-dtor \
   -Wextra-semi \
   -Wnoexcept \
   -Wnoexcept-type \
@@ -665,12 +667,15 @@ gcc_cxx_warnings := \
   -Wsynth \
   -Wuseless-cast \
   -Wzero-as-null-pointer-constant \
+  -Wno-mismatched-tags \
   -Wno-sign-promo \
   -Wno-suggest-final-methods \
   -Wno-suggest-final-types \
 
 # Warnings that are not generally useful.
 #
+# -Wno-mismatched-tags: not helpful--see:
+#   https://lists.nongnu.org/archive/html/lmi/2016-05/msg00075.html
 # -Wsign-promo: too many false positives--see:
 #   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00016.html
 # -Wsuggest-final-methods, and
