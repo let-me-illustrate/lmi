@@ -1708,6 +1708,10 @@ show_flags:
 	@printf 'wx_library_paths        = "%s"\n' "$(wx_library_paths)"
 	@printf 'wx_predefinitions       = "%s"\n' "$(wx_predefinitions)"
 
+# For the /dev/null rationale, see:
+#   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91011#c7
+
 .PHONY: show_disabled_g++_warnings
 show_disabled_g++_warnings:
-	$(CXX) $(ALL_CXXFLAGS) -Q --help=warning | $(GREP) '[[]disabled[]]'
+	$(CXX) $(ALL_CXXFLAGS) -Q --help=warning -xc++ /dev/null \
+	  | $(GREP) '[[]disabled[]]'
