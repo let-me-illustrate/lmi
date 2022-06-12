@@ -292,26 +292,7 @@ jobs:
 
       - name: Setup lmi for tests
         run: |
-          cat >/opt/lmi/data/configurable_settings.xml <<EOF
-          <?xml version="1.0"?>
-          <configurable_settings version="2">
-            <calculation_summary_columns/>
-            <census_paste_palimpsestically>1</census_paste_palimpsestically>
-            <cgi_bin_log_filename>cgi_bin.log</cgi_bin_log_filename>
-            <custom_input_0_filename>custom.ini</custom_input_0_filename>
-            <custom_input_1_filename>custom.inix</custom_input_1_filename>
-            <custom_output_0_filename>custom.out0</custom_output_0_filename>
-            <custom_output_1_filename>custom.out1</custom_output_1_filename>
-            <default_input_filename>/etc/opt/lmi/default.ill</default_input_filename>
-            <libraries_to_preload/>
-            <offer_hobsons_choice>0</offer_hobsons_choice>
-            <print_directory>/opt/lmi/print</print_directory>
-            <seconds_to_pause_between_printouts>10</seconds_to_pause_between_printouts>
-            <skin_filename>skin.xrc</skin_filename>
-            <spreadsheet_file_extension>.tsv</spreadsheet_file_extension>
-            <use_builtin_calculation_summary>1</use_builtin_calculation_summary>
-          </configurable_settings>
-          EOF
+          ./bland_configurable_settings.sh /opt/lmi/data
 
           # Tests rely on the symlinks set up by this script, so run it.
           ./check_git_setup.sh
