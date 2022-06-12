@@ -635,8 +635,13 @@ gcc_c_warnings := \
   -Wold-style-definition \
   -Wstrict-prototypes \
   -Wtraditional-conversion \
-  -Wunsuffixed-float-constants \
   -Wwrite-strings \
+  -Wno-unsuffixed-float-constants \
+
+# Warnings that are not generally useful.
+#
+# -Wunsuffixed-float-constants: a migration aid to support an eventual
+#   FLOAT_CONST_DECIMAL64 pragma, but only a nuisance for now
 
 gcc_cxx_warnings := \
   $(cxx_standard) \

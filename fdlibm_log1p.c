@@ -30,7 +30,6 @@
 #if defined LMI_GCC
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wsign-conversion"
-#   pragma GCC diagnostic ignored "-Wunsuffixed-float-constants"
 #endif // defined LMI_GCC
 
 /* @(#)s_log1p.c 1.3 95/01/18 */

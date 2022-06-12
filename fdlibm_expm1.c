@@ -31,7 +31,6 @@
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wfloat-conversion"
 #   pragma GCC diagnostic ignored "-Wsign-conversion"
-#   pragma GCC diagnostic ignored "-Wunsuffixed-float-constants"
 #endif // defined LMI_GCC
 
 /* @(#)s_expm1.c 1.5 04/04/22 */
