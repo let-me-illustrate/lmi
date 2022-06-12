@@ -214,7 +214,10 @@ jobs:
 
       - name: Fix up TIFF submodule
         run: |
-          cd third_party/wx/src/tiff
+          cd third_party/wx
+          git fetch https://github.com/let-me-illustrate/wx.git master
+          git cherry-pick -n 3be68008319160e6f08153afdeffe6461250cd91
+          cd src/tiff
           git fetch origin
           git switch --detach af035310bddac3e2f58ae0a330bc6ef168e180f1
 
