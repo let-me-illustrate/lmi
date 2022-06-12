@@ -169,12 +169,6 @@ if test "$lmi_cv_cxx_features" = "no"; then
     AC_LANG_POP([C++])
 fi
 
-dnl These options must be always used for lmi unit tests to pass.
-common_options="-fno-ms-extensions -frounding-math -fsignaling-nans"
-
-CFLAGS="$CFLAGS $common_options"
-CXXFLAGS="$CXXFLAGS $common_options"
-
 LT_PATH_LD
 
 # This is a workaround for the harmless but annoying warning
@@ -206,6 +200,17 @@ AC_CACHE_CHECK([if using clang],
 )
 
 CLANG=$lmi_cv_prog_clang
+
+dnl These options must be always used for lmi unit tests to pass.
+common_options="-fno-ms-extensions -frounding-math"
+
+if test "$GCC" = "yes" -a "$CLANG" != "yes"; then
+    dnl This options is not understood by clang.
+    common_options="$common_options -fsignaling-nans"
+fi
+
+CFLAGS="$CFLAGS $common_options"
+CXXFLAGS="$CXXFLAGS $common_options"
 
 if test "$USE_WINDOWS" = "1"; then
     AC_CHECK_TOOL([WINDRES], [windres], no)
