@@ -132,7 +132,7 @@ jobs:
         uses: hendrikmuhs/ccache-action@v1.2.5
         with:
           key: ${{ matrix.compiler || 'gcc' }}-${{ matrix.triplet || 'x86_64-pc-linux-gnu' }}
-          max-size: 900M
+          max-size: 2G
           verbose: 2
 
       - name: Set up build environment
