@@ -576,6 +576,7 @@ gcc_common_warnings := \
   -Wformat-overflow=2 \
   -Wformat-security \
   -Wformat-signedness \
+  -Wformat-truncation \
   -Wformat-y2k \
   -Wimport \
   -Winit-self \
@@ -592,11 +593,13 @@ gcc_common_warnings := \
   -Wshift-overflow=2 \
   -Wsign-compare \
   -Wstack-protector \
+  -Wstrict-overflow \
   -Wstringop-overflow=4 \
   -Wswitch-enum \
   -Wtrampolines \
   -Wundef \
   -Wunreachable-code \
+  -Wunsafe-loop-optimizations \
   -Wunused-macros \
   -Wvector-operation-performance \
   -Wvla \
@@ -606,7 +609,6 @@ gcc_common_warnings := \
   -Wno-missing-declarations \
   -Wno-parentheses \
   -Wno-switch-default \
-  -Wno-unsafe-loop-optimizations \
 
 # Warnings that are not generally useful.
 #
@@ -619,7 +621,6 @@ gcc_common_warnings := \
 # -Wparentheses: its diagnostics are beyond pedantic
 # -Wswitch-default: false positives for switches on enums that
 #   include all cases (verified by -Wswitch-enum)
-# -Wunsafe-loop-optimizations: incompatible with ranged for-loops
 
 # Consider these later:
 postponed_gcc_common_warnings := \
