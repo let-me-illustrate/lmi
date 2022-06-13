@@ -555,18 +555,26 @@ treat_warnings_as_errors := -pedantic-errors -Werror
 
 # Write '-Wno' options at the end, with a rationale here.
 #
+# -Wabi: useful only for a special purpose
+# -Wanalyzer-too-complex: not actually helpful
 # -Wdate-time: only for "bit-wise-identical reproducible compilations"
 # -Wfloat-equal: too many warnings on correct code, e.g.,
 #   exact comparison to zero
 # -Winline: 'inline' now refers to linkage, not inlining
 # -Wmissing-declarations: for C++, this flags valid functions that
 #   arguably belong in an unnamed namespace
+# -Wpadded: useful only for low-level work
 # -Wparentheses: its diagnostics are beyond pedantic
+# -Wpsabi: undocumented--ARM only?
+# -Wsign-conversion: [see note elsewhere in this file]
+# -Wsuggest-attribute: too gcc-specific
+# -Wsystem-headers: not generally useful
 # -Wswitch-default: false positives for switches on enums that
 #   include all cases (verified by -Wswitch-enum)
 
 gcc_common_warnings := \
   $(treat_warnings_as_errors) \
+  -Waggregate-return \
   -Wall \
   -Walloc-zero \
   -Walloca \
@@ -613,11 +621,23 @@ gcc_common_warnings := \
   -Wunused-macros \
   -Wvector-operation-performance \
   -Wvla \
+  -Wno-abi \
+  -Wno-analyzer-too-complex \
   -Wno-date-time \
   -Wno-float-equal \
   -Wno-inline \
   -Wno-missing-declarations \
+  -Wno-padded \
   -Wno-parentheses \
+  -Wno-psabi \
+  -Wno-sign-conversion \
+  -Wno-suggest-attribute=pure \
+  -Wno-suggest-attribute=const \
+  -Wno-suggest-attribute=noreturn \
+  -Wno-suggest-attribute=malloc \
+  -Wno-suggest-attribute=format \
+  -Wno-suggest-attribute=cold \
+  -Wno-system-headers \
   -Wno-switch-default \
 
 # Consider these later:
@@ -634,6 +654,7 @@ gcc_c_warnings := \
   -Wbad-function-cast \
   -Wc++-compat \
   -Wjump-misses-init \
+  -Wmissing-braces \
   -Wmissing-prototypes \
   -Wnested-externs \
   -Wold-style-definition \
@@ -644,8 +665,13 @@ gcc_c_warnings := \
 
 # Write '-Wno' options at the end, with a rationale here.
 #
+# -Wabi-tag: useful only for a special purpose
+# -Waggregate-return: generally incompatible with C++
+# -Weffc++: obsolescent
 # -Wmismatched-tags: not helpful--see:
 #   https://lists.nongnu.org/archive/html/lmi/2016-05/msg00075.html
+# -Wmultiple-inheritance: forbids a useful feature
+# -Wnamespaces: forbids a useful feature
 # -Wsign-promo: too many false positives--see:
 #   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00016.html
 # -Wsuggest-final-methods, and
@@ -653,6 +679,8 @@ gcc_c_warnings := \
 #   work with '-Wsuggest-final-types' first, because making a class
 #   final may resolve '-Wsuggest-final-methods' suggestions for its
 #   members; but expect many false positives
+# -Wtemplates: forbids a useful feature
+# -Wvirtual-inheritance: forbids a useful feature
 
 gcc_cxx_warnings := \
   $(cxx_standard) \
@@ -683,10 +711,17 @@ gcc_cxx_warnings := \
   -Wsynth \
   -Wuseless-cast \
   -Wzero-as-null-pointer-constant \
+  -Wno-abi-tag \
+  -Wno-aggregate-return \
+  -Wno-effc++ \
   -Wno-mismatched-tags \
+  -Wno-multiple-inheritance \
+  -Wno-namespaces \
   -Wno-sign-promo \
   -Wno-suggest-final-methods \
   -Wno-suggest-final-types \
+  -Wno-templates \
+  -Wno-virtual-inheritance \
 
 # Consider these later:
 postponed_gcc_cxx_warnings := \
