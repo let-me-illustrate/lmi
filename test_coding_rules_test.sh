@@ -433,7 +433,7 @@ touch another.unexpected.file
 
 # Compare observed to expected. Note that directory '.' is ignored.
 
-2>&1 $PERFORM ./test_coding_rules \
+2>&1 ./test_coding_rules \
   . \
   a_nonexistent_file \
   an_expungible_file.bak \

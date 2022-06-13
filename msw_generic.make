@@ -105,7 +105,7 @@ WGET    := wget
 # Instead of requiring installation of the build system's own libxml2:
     XMLLINT := xmllint
 # use the one that lmi builds:
-#   XMLLINT := $(PERFORM) $(localbindir)/xmllint
+#   XMLLINT := $(PERFORM) $(localbindir)/xmllint$(EXEEXT)
 # but don't do that until 'wine' is fixed--see:
 #   https://lists.nongnu.org/archive/html/lmi/2019-01/msg00034.html
 

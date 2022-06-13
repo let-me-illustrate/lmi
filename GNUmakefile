@@ -429,13 +429,13 @@ uninstall:
 
 # Custom tools built from source.
 
-TEST_CODING_RULES := $(build_dir)/test_coding_rules$(EXEEXT)
+TEST_CODING_RULES := $(build_dir)/test_coding_rules
 
 .PHONY: custom_tools
 custom_tools:
 	@[ "$$LMI_TRIPLET" = "x86_64-pc-linux-gnu" ] \
 	  || ($(ECHO) "'$@' requires x86_64-pc-linux-gnu." && false)
-	@$(MAKE) test_coding_rules$(EXEEXT)
+	@$(MAKE) test_coding_rules
 	@$(INSTALL) -c -m 0775 $(TEST_CODING_RULES) $(localbindir)
 
 ################################################################################
@@ -501,7 +501,7 @@ check_concinnity: source_clean custom_tools
 	      || $(ECHO) "... in file $$z"; \
 	  done;
 	@$(ECHO) "  Miscellaneous problems:"
-	@-cd $(prefascicle_dir) && $(PERFORM) $(TEST_CODING_RULES) *
+	@-cd $(prefascicle_dir) && $(TEST_CODING_RULES) *
 
 ################################################################################
 

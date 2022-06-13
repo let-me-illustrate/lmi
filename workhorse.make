@@ -1293,7 +1293,7 @@ wrap_fardel:
 	@$(INSTALL) -m 0664 $(fardel_files) .
 	printf "$(j1) $(j2)" >expiry
 	@$(MD5SUM) --binary $(fardel_checksummed_files) >validated.md5
-	@$(PERFORM) $(bindir)/generate_passkey > passkey
+	@$(PERFORM) $(bindir)/generate_passkey$(EXEEXT) > passkey
 	@$(TAR) \
 	  --bzip2 \
 	  --create \
