@@ -124,7 +124,7 @@ jobs:
       - name: Install CCache
         uses: hendrikmuhs/ccache-action@v1.2.5
         with:
-          key: ${{ matrix.name }}
+          key: ${{ matrix.compiler || 'gcc' }}-${{ matrix.triplet || 'x86_64-pc-linux-gnu' }}
           max-size: 900M
           verbose: 2
 
