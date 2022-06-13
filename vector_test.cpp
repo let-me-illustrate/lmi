@@ -183,8 +183,14 @@ class simple_array0
     typedef binary_expression<double const*,double const*,plus> add_t;
     simple_array0& operator=(add_t e)
         {
-        for(double* i = begin(); i < end(); ++i, ++e)
-            {*i = *e;}
+    // With '-Wstrict-overflow', gcc complains about '<' here:
+    //   assuming pointer wraparound does not occur when comparing
+    //     P +- C1 with P +- C2
+//      for(double* i = begin(); i < end(); ++i, ++e)
+//          {*i = *e;}
+    // so write the loop this way instead:
+        for(int i = 0; i < length_; ++i, ++e)
+            {*(begin() + i) = *e;}
         return *this;
         }
 
