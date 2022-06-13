@@ -31,7 +31,14 @@ jobs:
           - name: MSW/make/mingw64
             triplet: x86_64-w64-mingw32
             mingw: true
+            gui_test: true
+          - name: MSW/make/mingw64 (so_test)
+            triplet: x86_64-w64-mingw32
+            build_type: so_test
+            mingw: true
           - name: Linux/make/gcc
+          - name: Linux/make/gcc (so_test)
+            build_type: so_test
           - name: Linux/autotools/gcc
             autotools: true
           - name: Linux/autotools/clang
@@ -282,12 +289,11 @@ jobs:
           if [ ${{ matrix.autotools }} ]; then
             make --keep-going V=1 $coefficiency -C ${lmi_build_dir}
           else
-            make $coefficiency --output-sync=recurse
+            if [ -n "${{ matrix.build_type }}" ]; then
+              build_type_arg=build_type=${{ matrix.build_type }}
+            fi
+            make $coefficiency --output-sync=recurse $build_type_arg
           fi
-
-      - name: Build lmi with SO attributes
-        if: matrix.autotools != true
-        run: make $coefficiency --output-sync=recurse build_type=so_test all
 
       - name: Setup lmi for tests
         run: |
@@ -354,7 +360,7 @@ jobs:
           fi
 
       - name: Launch Xvfb
-        if: matrix.mingw
+        if: matrix.gui_test
         run: |
             sudo mkdir /tmp/.X11-unix
             sudo chmod 1777 /tmp/.X11-unix
@@ -382,7 +388,7 @@ jobs:
             echo 'DISPLAY=:10' >> "$GITHUB_ENV"
 
       - name: Run GUI tests
-        if: matrix.mingw
+        if: matrix.gui_test
         run: |
             . ./set_toolchain.sh
             $PERFORM /opt/lmi/bin/wx_test"$EXEEXT" --ash_nazg --data_path=/opt/lmi/data
