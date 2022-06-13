@@ -553,7 +553,17 @@ endif
 
 treat_warnings_as_errors := -pedantic-errors -Werror
 
-# Write '-Wno' options at the end.
+# Write '-Wno' options at the end, with a rationale here.
+#
+# -Wdate-time: only for "bit-wise-identical reproducible compilations"
+# -Wfloat-equal: too many warnings on correct code, e.g.,
+#   exact comparison to zero
+# -Winline: 'inline' now refers to linkage, not inlining
+# -Wmissing-declarations: for C++, this flags valid functions that
+#   arguably belong in an unnamed namespace
+# -Wparentheses: its diagnostics are beyond pedantic
+# -Wswitch-default: false positives for switches on enums that
+#   include all cases (verified by -Wswitch-enum)
 
 gcc_common_warnings := \
   $(treat_warnings_as_errors) \
@@ -610,20 +620,13 @@ gcc_common_warnings := \
   -Wno-parentheses \
   -Wno-switch-default \
 
-# Warnings that are not generally useful.
-#
-# -Wdate-time: only for "bit-wise-identical reproducible compilations"
-# -Wfloat-equal: too many warnings on correct code, e.g.,
-#   exact comparison to zero
-# -Winline: 'inline' now refers to linkage, not inlining
-# -Wmissing-declarations: for C++, this flags valid functions that
-#   arguably belong in an unnamed namespace
-# -Wparentheses: its diagnostics are beyond pedantic
-# -Wswitch-default: false positives for switches on enums that
-#   include all cases (verified by -Wswitch-enum)
-
 # Consider these later:
 postponed_gcc_common_warnings := \
+
+# Write '-Wno' options at the end, with a rationale here.
+#
+# -Wunsuffixed-float-constants: a migration aid to support an eventual
+#   FLOAT_CONST_DECIMAL64 pragma, but only a nuisance for now
 
 gcc_c_warnings := \
   $(c_standard) \
@@ -639,10 +642,17 @@ gcc_c_warnings := \
   -Wwrite-strings \
   -Wno-unsuffixed-float-constants \
 
-# Warnings that are not generally useful.
+# Write '-Wno' options at the end, with a rationale here.
 #
-# -Wunsuffixed-float-constants: a migration aid to support an eventual
-#   FLOAT_CONST_DECIMAL64 pragma, but only a nuisance for now
+# -Wmismatched-tags: not helpful--see:
+#   https://lists.nongnu.org/archive/html/lmi/2016-05/msg00075.html
+# -Wsign-promo: too many false positives--see:
+#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00016.html
+# -Wsuggest-final-methods, and
+# -Wsuggest-final-types: use these only occasionally, like -Weffc++;
+#   work with '-Wsuggest-final-types' first, because making a class
+#   final may resolve '-Wsuggest-final-methods' suggestions for its
+#   members; but expect many false positives
 
 gcc_cxx_warnings := \
   $(cxx_standard) \
@@ -677,18 +687,6 @@ gcc_cxx_warnings := \
   -Wno-sign-promo \
   -Wno-suggest-final-methods \
   -Wno-suggest-final-types \
-
-# Warnings that are not generally useful.
-#
-# -Wno-mismatched-tags: not helpful--see:
-#   https://lists.nongnu.org/archive/html/lmi/2016-05/msg00075.html
-# -Wsign-promo: too many false positives--see:
-#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00016.html
-# -Wsuggest-final-methods, and
-# -Wsuggest-final-types: use these only occasionally, like -Weffc++;
-#   work with '-Wsuggest-final-types' first, because making a class
-#   final may resolve '-Wsuggest-final-methods' suggestions for its
-#   members; but expect many false positives
 
 # Consider these later:
 postponed_gcc_cxx_warnings := \
