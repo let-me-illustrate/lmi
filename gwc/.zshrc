@@ -56,6 +56,8 @@ export WINEDEBUG=-all,err+all,fixme+all
 
 # This UBSan option is generally useful.
 export UBSAN_OPTIONS=print_stacktrace=1
+# These ABSan options are generally useful.
+export ASAN_OPTIONS=detect_leaks=0:detect_invalid_pointer_pairs=1:strict_string_checks=1:detect_stack_use_after_return=1:check_initialization_order=1:strict_init_order=1
 
 # Use vim keybindings.
 bindkey -v
