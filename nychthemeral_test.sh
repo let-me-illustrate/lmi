@@ -332,7 +332,7 @@ make "$coefficiency" install check_physical_closure 2>&1 \
 if [ "x86_64-pc-linux-gnu" != "$LMI_TRIPLET" ]
 then
   printf '\n# GUI test\n\n'
-  xvfb-run "$PERFORM" "$prefix"/bin/wx_test --ash_nazg --data_path="$prefix"/data 2>&1 \
+  xvfb-run "$PERFORM" "$prefix"/bin/wx_test"$EXEEXT" --ash_nazg --data_path="$prefix"/data 2>&1 \
     | tee "$log_dir"/gui_test | sed -e "$build_clutter" -e "$gui_test_clutter"
 else
   printf '\n# GUI test skipped--it does not work properly with GTK\n'
@@ -453,13 +453,13 @@ printf '\n# test all "emit_*" output types supported by CLI\n\n'
 # target above; here, it's discarded (but stderr is not)
 
 # group-roster type omitted: sensible only for a census
-$PERFORM /opt/lmi/bin/lmi_cli_shared --file="$throwaway_dir"/sample.ill --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_to_pwd,emit_test_data,emit_spreadsheet,emit_text_stream,emit_custom_0,emit_custom_1,emit_calculation_summary_html,emit_calculation_summary_tsv >/dev/null
+$PERFORM /opt/lmi/bin/lmi_cli_shared"$EXEEXT" --file="$throwaway_dir"/sample.ill --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_to_pwd,emit_test_data,emit_spreadsheet,emit_text_stream,emit_custom_0,emit_custom_1,emit_calculation_summary_html,emit_calculation_summary_tsv >/dev/null
 
 # same output filename for '.cns' as for '.ill': uniquify it
 mv sample.tsv                       sample.ill.tsv
 
 # calculation-summary types omitted: not sensible for a census
-$PERFORM /opt/lmi/bin/lmi_cli_shared --file="$throwaway_dir"/sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_to_pwd,emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
+$PERFORM /opt/lmi/bin/lmi_cli_shared"$EXEEXT" --file="$throwaway_dir"/sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_to_pwd,emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
 
 # same output filename for '.cns' as for '.ill': uniquify it
 mv sample.tsv                       sample.cns.tsv
