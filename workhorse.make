@@ -522,8 +522,6 @@ else ifneq (,$(filter $(gcc_version), 10 10.0))
   gcc_version_specific_c_warnings :=
 
   gcc_version_specific_cxx_warnings := \
-    -Wredundant-tags \
-    -Wvolatile \
 
   ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
 # See:
@@ -545,8 +543,6 @@ else ifneq (,$(filter $(gcc_version), 11 11.0))
   gcc_version_specific_c_warnings :=
 
   gcc_version_specific_cxx_warnings := \
-    -Wredundant-tags \
-    -Wvolatile \
 
   cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++20
 endif
@@ -704,12 +700,14 @@ gcc_cxx_warnings := \
   -Woverloaded-virtual \
   -Wplacement-new=2 \
   -Wpmf-conversions \
+  -Wredundant-tags \
   -Wregister \
   -Wreorder \
   -Wstrict-null-sentinel \
   -Wsuggest-override \
   -Wsynth \
   -Wuseless-cast \
+  -Wvolatile \
   -Wzero-as-null-pointer-constant \
   -Wno-abi-tag \
   -Wno-aggregate-return \
