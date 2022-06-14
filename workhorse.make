@@ -1750,7 +1750,11 @@ show_flags:
 # For the /dev/null rationale, see:
 #   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91011#c7
 
-.PHONY: show_disabled_g++_warnings
-show_disabled_g++_warnings:
-	$(CXX) $(ALL_CXXFLAGS) -Q --help=warning -xc++ /dev/null \
-	  | $(GREP) '[[]disabled[]]'
+.PHONY: show_overlooked_cxx_warnings
+show_overlooked_cxx_warnings:
+	@$(CXX) $(ALL_CXXFLAGS) -Q --help=warning -xc++ /dev/null \
+	  | $(GREP) '[[]disabled[]]' \
+	  | $(SED) -e's/[ \t]*[[]disabled[]]//' -e's/^ *-W//' \
+	  > eraseme
+	@$(GREP) -of eraseme $(this_makefile) | $(GREP) -vxf - eraseme || true
+	@$(RM) eraseme
