@@ -172,7 +172,10 @@ void input_test::test_product_database()
     db.query_into(DB_ChildRiderMinAmt, a);
     LMI_TEST_EQUAL(25000, a);
 #endif // 0
-    // UBSAN doesn't complain about this; shouldn't it?
+    // UBSan complains about the example above, both with gcc and with
+    // clang. It complains about the next example only with clang, but
+    // not with gcc, even though the two examples are equivalent. See:
+    //   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00049.html
     auto const b {db.query<oenum_alb_or_anb>(DB_ChildRiderMinAmt)};
     LMI_TEST_EQUAL(25000, b);
 
