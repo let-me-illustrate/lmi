@@ -542,7 +542,17 @@ else ifneq (,$(filter $(gcc_version), 10 10.0))
 else ifneq (,$(filter $(gcc_version), 11 11.0))
   gcc_version_specific_c_warnings :=
 
+# g++-11 warnings not recognized by g++-10
+#
+# The gcc manual says that '-Wenum-conversion' is for C only,
+# but `make show_overlooked_cxx_warnings` disagreed.
+
   gcc_version_specific_cxx_warnings := \
+    -Wctad-maybe-unsupported \
+    -Wdeprecated-enum-enum-conversion \
+    -Wdeprecated-enum-float-conversion \
+    -Wenum-conversion \
+    -Winvalid-imported-macros \
 
   cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++20
 endif
