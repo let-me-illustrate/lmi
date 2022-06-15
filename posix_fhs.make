@@ -23,10 +23,7 @@
 ################################################################################
 
 system_root := /
-EXEEXT :=
 SHREXT := .so
-
-PERFORM :=
 
 EXTRA_LIBS := -ldw -lunwind -ldl
 
