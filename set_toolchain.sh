@@ -135,12 +135,17 @@ case "$lmi_build_type" in
                 LD_LIBRARY_PATH=.
                 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$locallibdir"
                 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$bindir"
-                # Nullify any leftover "wine" values.
+                # Nullify any leftover "wine" values: obligatorily for
+                # $EXEEXT and $PERFORM, and for $WINEPATH to ensure
+                # that native builds never depend upon it.
                 EXEEXT=
                 PERFORM=
+                WINEPATH=
                 ;;
             (*-*-mingw32)
-                # Nullify any leftover value from the native case above.
+                # Nullify any leftover $LD_LIBRARY_PATH value from the
+                # native case above, to ensure that lmi-built msw
+                # binaries never depend upon it.
                 LD_LIBRARY_PATH=
                 EXEEXT=".exe"
                 PERFORM="wine"
