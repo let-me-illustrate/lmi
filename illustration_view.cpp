@@ -145,30 +145,41 @@ char const* IllustrationView::menubar_xrc_resource() const
 }
 
 /// Pop up an input dialog; iff it's not cancelled, create a view.
+///
+/// Trap exceptions to ensure that this function returns 'false' on
+/// failure, lest wx's doc-view framework create a zombie view. See:
+///   https://lists.nongnu.org/archive/html/lmi/2008-12/msg00017.html
 
 bool IllustrationView::OnCreate(wxDocument* doc, long int flags)
 {
     bool has_view_been_created = false;
 
-    if(flags & LMI_WX_CHILD_DOCUMENT)
+    try
         {
-        is_phony_ = true;
+        if(flags & LMI_WX_CHILD_DOCUMENT)
+            {
+            is_phony_ = true;
+            has_view_been_created = ViewEx::DoOnCreate(doc, flags);
+            return has_view_been_created;
+            }
+
+        if(oe_mvc_dv_cancelled == edit_parameters())
+            {
+            return has_view_been_created;
+            }
+
         has_view_been_created = ViewEx::DoOnCreate(doc, flags);
-        return has_view_been_created;
-        }
+        if(!has_view_been_created)
+            {
+            return has_view_been_created;
+            }
 
-    if(oe_mvc_dv_cancelled == edit_parameters())
+        Run();
+        }
+    catch(...)
         {
-        return has_view_been_created;
+        report_exception();
         }
-
-    has_view_been_created = ViewEx::DoOnCreate(doc, flags);
-    if(!has_view_been_created)
-        {
-        return has_view_been_created;
-        }
-
-    Run();
 
     return has_view_been_created;
 }
