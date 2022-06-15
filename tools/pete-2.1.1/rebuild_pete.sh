@@ -23,7 +23,22 @@
 
 set -e
 
+export EXEEXT
+
+case "$LMI_TRIPLET" in
+    (x86_64-pc-linux-gnu)
+        EXEEXT=
+        ;;
+    (*-*-mingw32)
+        EXEEXT=".exe"
+        ;;
+    (*)
+        printf '%s\n' "Error: LMI_TRIPLET absent or unrecognized."
+        return 3;
+        ;;
+esac
+
 make -f Makefile maintainer-clean
 make -f Makefile
-./pete_vector_test
+./pete_vector_test${EXEEXT}
 make -f Makefile distclean

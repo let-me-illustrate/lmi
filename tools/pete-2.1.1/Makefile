@@ -21,19 +21,11 @@
 
 ################################################################################
 
-lmi_build_type := $(shell /usr/share/misc/config.guess)
-
-EXEEXT :=
-ifeq (cygwin,$(findstring cygwin,$(lmi_build_type)))
-  EXEEXT := .exe
-endif
-
 all: pete_vector_test$(EXEEXT)
 
 submake_options := \
   --directory=PETE/Tools/ \
   --file=makefile \
-  EXEEXT='$(EXEEXT)' \
 
 pete_vector_test$(EXEEXT): pete_vector_test.cpp
 	$(CXX) -I. $^ -o $@
