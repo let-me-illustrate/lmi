@@ -171,13 +171,13 @@ void input_test::test_product_database()
     // gcc adds a warning like clang's (pragma above).
     db.query_into(DB_ChildRiderMinAmt, a);
     LMI_TEST_EQUAL(25000, a);
-#endif // 0
     // UBSan complains about the example above, both with gcc and with
     // clang. It complains about the next example only with clang, but
     // not with gcc, even though the two examples are equivalent. See:
     //   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00049.html
     auto const b {db.query<oenum_alb_or_anb>(DB_ChildRiderMinAmt)};
     LMI_TEST_EQUAL(25000, b);
+#endif // 0
 
 #if defined LMI_CLANG
 #   pragma clang diagnostic pop
