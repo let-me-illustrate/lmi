@@ -148,25 +148,29 @@ char const* IllustrationView::menubar_xrc_resource() const
 
 bool IllustrationView::OnCreate(wxDocument* doc, long int flags)
 {
+    bool has_view_been_created = false;
+
     if(flags & LMI_WX_CHILD_DOCUMENT)
         {
         is_phony_ = true;
-        return ViewEx::DoOnCreate(doc, flags);
+        has_view_been_created = ViewEx::DoOnCreate(doc, flags);
+        return has_view_been_created;
         }
 
     if(oe_mvc_dv_cancelled == edit_parameters())
         {
-        return false;
+        return has_view_been_created;
         }
 
-    if(!ViewEx::DoOnCreate(doc, flags))
+    has_view_been_created = ViewEx::DoOnCreate(doc, flags);
+    if(!has_view_been_created)
         {
-        return false;
+        return has_view_been_created;
         }
 
     Run();
 
-    return true;
+    return has_view_been_created;
 }
 
 /// Place full illustration data on the clipboard as TSV.
