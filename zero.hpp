@@ -1153,11 +1153,6 @@ double brent_zero_reference
 // to 'driver.c'. The code here is a combination of 'driver.c'
 // and 'enclofx.c', edited extensively to make it work with lmi.
 
-/* Table of constant values */
-
-static int c2 = 2;
-static int c3 = 3;
-
 int tole_(double* b, double* tol, int* neps, double* eps);
 int func_(int* /* nprob */, double* x, double* fx);
 template<typename FunctionalType>
@@ -1227,6 +1222,11 @@ template<typename FunctionalType>
 int rroot_(FunctionalType& f, int* nprob, int* neps, double* eps,
         double* a, double* b, double* root, int* n_eval)
 {
+    /* Table of constant values */
+
+    static int c2 = 2;
+    static int c3 = 3;
+
     /* System generated locals */
     double d_1;
 

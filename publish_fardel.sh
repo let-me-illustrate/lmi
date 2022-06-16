@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# Rebuild PETE and run a simplistic unit test.
+# Customize a fardel.
 
-# Copyright (C) 2021 Gregory W. Chicares.
+# Copyright (C) 2022 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -21,24 +21,19 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-set -e
+# Customizations:
+#   - liberalize expiry range
+#   - include '.mst' files, without checksumming them
+# The resulting fardel is suitable for uploading to savannah, as a
+# "trial" version for people who are interested in lmi but cannot
+# easily build it from source. Only 'sample' products are included.
 
-export EXEEXT
+set -x
 
-case "$LMI_TRIPLET" in
-    (x86_64-pc-linux-gnu)
-        EXEEXT=
-        ;;
-    (*-*-mingw32)
-        EXEEXT=".exe"
-        ;;
-    (*)
-        printf '%s\n' "Error: LMI_TRIPLET absent or unrecognized."
-        return 3;
-        ;;
-esac
+if [ "greg" != "$(whoami)" ]; then
+  exit 0
+fi
 
-make -f Makefile maintainer-clean
-make -f Makefile
-./pete_vector_test${EXEEXT}
-make -f Makefile distclean
+srcdir=$(dirname "$(readlink --canonicalize "$0")")
+
+make j1=2450449 j2=2472011 extra_fardel_files="$srcdir/*.mst" fardel

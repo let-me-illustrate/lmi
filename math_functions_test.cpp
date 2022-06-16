@@ -566,7 +566,8 @@ void test_u_abs()
 
     LMI_TEST_EQUAL(128, u_abs(INT8_MIN));
 
-    for(std::int16_t j = INT8_MIN; j < INT8_MAX; ++j)
+    // Test all 256 possibilities.
+    for(std::int16_t j = INT8_MIN; j <= INT8_MAX; ++j)
         {
         std::uint16_t u = u_abs(j);
         if(0 <= j)

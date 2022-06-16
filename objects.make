@@ -352,13 +352,18 @@ endif
 
 # Override this variable to exclude tests that are inappropriate in
 # context--e.g., tests that don't even compile with a particular
-# toolchain. For example:
-#
-# ifeq (foobar,$(build_type))
-#   excluded_unit_test_targets += calendar_date_test
-# endif
+# toolchain.
 
 excluded_unit_test_targets :=
+
+ifeq (ubsan,$(build_type))
+  excluded_unit_test_targets += \
+    actuarial_table_test \
+    loads_test \
+    math_functions_test \
+    mortality_rates_test \
+
+endif
 
 unit_test_targets := \
   account_value_test \
@@ -1159,10 +1164,11 @@ rate_table_tool$(EXEEXT): \
   rate_table.o \
   rate_table_tool.o \
 
-test_coding_rules_test := PERFORM=$(PERFORM) $(srcdir)/test_coding_rules_test.sh
-test_coding_rules$(EXEEXT): EXTRA_LDFLAGS = $(pcre_ldflags)
-test_coding_rules$(EXEEXT): POST_LINK_COMMAND = $(test_coding_rules_test)
-test_coding_rules$(EXEEXT): \
+# pc-linux-gnu only:
+test_coding_rules_test := $(srcdir)/test_coding_rules_test.sh
+test_coding_rules: EXTRA_LDFLAGS = $(pcre_ldflags)
+test_coding_rules: POST_LINK_COMMAND = $(test_coding_rules_test)
+test_coding_rules: \
   $(main_auxiliary_common_objects) \
   miscellany.o \
   my_test_coding_rules.o \

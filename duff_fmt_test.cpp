@@ -230,19 +230,19 @@ int test_main(int, char*[])
 
     // Infinities and NaNs.
 
-    double volatile d = 0.0;
-    std::string pos_inf = duff_fmt( 1.0 / d, 2);
-    std::string neg_inf = duff_fmt(-1.0 / d, 2);
-    LMI_TEST( "inf" == pos_inf ||  "infinity" == pos_inf);
-    LMI_TEST("-inf" == neg_inf || "-infinity" == neg_inf);
+    constexpr double inf {std::numeric_limits<double>::infinity()};
+    std::string str_pos_inf = duff_fmt( inf, 2);
+    std::string str_neg_inf = duff_fmt(-inf, 2);
+    LMI_TEST( "inf" == str_pos_inf ||  "infinity" == str_pos_inf);
+    LMI_TEST("-inf" == str_neg_inf || "-infinity" == str_neg_inf);
 
     if(std::numeric_limits<double>::has_quiet_NaN)
         {
-        constexpr double quiet_NaN = std::numeric_limits<double>::quiet_NaN();
-        std::string qnan = duff_fmt(quiet_NaN, 2);
+        constexpr double qnan {std::numeric_limits<double>::quiet_NaN()};
+        std::string str_nan = duff_fmt(qnan, 2);
         // Test only "nan", disregarding any 'n-char-sequence' payload.
         // The sign of quiet_NaN() seems to be unspecified.
-        LMI_TEST(begins_with(qnan, "nan") || begins_with(qnan, "-nan"));
+        LMI_TEST(begins_with(str_nan, "nan") || begins_with(str_nan, "-nan"));
         }
 
     return 0;

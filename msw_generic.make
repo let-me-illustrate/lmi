@@ -88,6 +88,7 @@ TAR     := tar
 # FHS-2.2 would presumably put these in /usr/bin . However, debian
 # puts 'bzip2' and 'grep' in /bin .
 
+BSDTAR  := bsdtar
 BZIP2   := bzip2
 DIFF    := diff
 GREP    := grep
@@ -104,7 +105,7 @@ WGET    := wget
 # Instead of requiring installation of the build system's own libxml2:
     XMLLINT := xmllint
 # use the one that lmi builds:
-#   XMLLINT := $(PERFORM) $(localbindir)/xmllint
+#   XMLLINT := $(PERFORM) $(localbindir)/xmllint$(EXEEXT)
 # but don't do that until 'wine' is fixed--see:
 #   https://lists.nongnu.org/archive/html/lmi/2019-01/msg00034.html
 

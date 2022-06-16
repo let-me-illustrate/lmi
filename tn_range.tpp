@@ -204,9 +204,9 @@ namespace
             return
                    -z0   < t
                 &&         t < z0
-                && -z1lo < t
+                &&  z1lo < t
                 &&         t < z1hi
-                && t == static_cast<long long int>(t)
+                && t == static_cast<T>(static_cast<long long int>(t))
                 ;
 #if defined __GNUC__
 #   pragma GCC diagnostic pop

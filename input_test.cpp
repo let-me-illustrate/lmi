@@ -160,11 +160,24 @@ void input_test::test_product_database()
 #   pragma clang diagnostic ignored "-Wtautological-constant-out-of-range-compare"
 #endif // defined LMI_CLANG
 
-    // This value corresponds to no enumerator, but C++ allows that.
+#if 0
+    // This value corresponds to no enumerator. Formerly, the
+    // resulting value was unspecified:
+    //   https://cplusplus.github.io/CWG/issues/1094.html
+    // but now this is undefined behavior:
+    //   https://cplusplus.github.io/CWG/issues/1766.html
+    // and therefore the test is suppressed, but retained as
+    // a cautionary example, and as a convenient test in case
+    // gcc adds a warning like clang's (pragma above).
     db.query_into(DB_ChildRiderMinAmt, a);
     LMI_TEST_EQUAL(25000, a);
+    // UBSan complains about the example above, both with gcc and with
+    // clang. It complains about the next example only with clang, but
+    // not with gcc, even though the two examples are equivalent. See:
+    //   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00049.html
     auto const b {db.query<oenum_alb_or_anb>(DB_ChildRiderMinAmt)};
     LMI_TEST_EQUAL(25000, b);
+#endif // 0
 
 #if defined LMI_CLANG
 #   pragma clang diagnostic pop

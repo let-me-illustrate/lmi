@@ -187,9 +187,8 @@ $(srcdir)/local_options.make:: ;
 
 # Multiple build directories.
 
-# $(build_type) distinguishes optimized 'ship' builds from 'so_test'
-# and 'safestdlib' builds, which may be created by specifying them on
-# the make command line. Of course, other build types may be defined.
+# $(build_type) distinguishes optimized default 'ship' builds from
+# special-purpose ones that can be specified on the make command line.
 
 build_type ?= ship
 build_dir := $(exec_prefix)/build/$(build_type)
@@ -401,8 +400,8 @@ clobber: source_clean
 
 .PHONY: raze
 raze: source_clean
-	-$(RM) --force --recursive $(prefix)/gcc_x86_64-w64-mingw32/build
-	-$(RM) --force --recursive $(prefix)/gcc_x86_64-pc-linux-gnu/build
+	-$(RM) --force --recursive $(prefix)/gcc_x86_64-w64-mingw32
+	-$(RM) --force --recursive $(prefix)/gcc_x86_64-pc-linux-gnu
 
 .PHONY: eviscerate
 eviscerate: source_clean
@@ -430,13 +429,13 @@ uninstall:
 
 # Custom tools built from source.
 
-TEST_CODING_RULES := $(build_dir)/test_coding_rules$(EXEEXT)
+TEST_CODING_RULES := $(build_dir)/test_coding_rules
 
 .PHONY: custom_tools
 custom_tools:
 	@[ "$$LMI_TRIPLET" = "x86_64-pc-linux-gnu" ] \
 	  || ($(ECHO) "'$@' requires x86_64-pc-linux-gnu." && false)
-	@$(MAKE) test_coding_rules$(EXEEXT)
+	@$(MAKE) test_coding_rules
 	@$(INSTALL) -c -m 0775 $(TEST_CODING_RULES) $(localbindir)
 
 ################################################################################
@@ -502,7 +501,7 @@ check_concinnity: source_clean custom_tools
 	      || $(ECHO) "... in file $$z"; \
 	  done;
 	@$(ECHO) "  Miscellaneous problems:"
-	@-cd $(prefascicle_dir) && $(PERFORM) $(TEST_CODING_RULES) *
+	@-cd $(prefascicle_dir) && $(TEST_CODING_RULES) *
 
 ################################################################################
 
@@ -629,7 +628,7 @@ checkout:
 .PHONY: test_various_build_types
 test_various_build_types: source_clean
 	-$(MAKE) test build_type=safestdlib
-	-$(MAKE) all cgi_tests cli_tests build_type=so_test USE_SO_ATTRIBUTES=1
+	-$(MAKE) all cgi_tests cli_tests build_type=so_test
 	-$(MAKE) check_concinnity
 	-$(MAKE) check_physical_closure
 	-$(MAKE) all test

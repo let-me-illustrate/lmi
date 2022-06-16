@@ -422,11 +422,6 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     LMI_ASSERT(11                       == InvariantValues().MecMonth);
     LMI_ASSERT(BasicValues::GetLength() == InvariantValues().MecYear );
 
-    daily_interest_accounting = contains
-        (yare_input_.Comments
-        ,"idiosyncrasy_daily_interest_accounting"
-        );
-
     OldDBOpt = DeathBfts_->dbopt()[0];
     // TAXATION !! 'OldSA' and 'OldDB' need to be distinguished for 7702 and 7702A,
     // with inclusion of term dependent on 'TermIsDbFor7702' and 'TermIsDbFor7702A'.
@@ -611,6 +606,10 @@ void AccountValue::SetInitialValues()
 
     Year                  = InforceYear;
     Month                 = InforceMonth;
+    daily_interest_accounting = contains
+        (yare_input_.Comments
+        ,"idiosyncrasy_daily_interest_accounting"
+        );
     CoordinateCounters();
 
     DB7702A               = C0;  // TODO ?? TAXATION !! This seems silly.

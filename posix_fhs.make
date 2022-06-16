@@ -23,10 +23,7 @@
 ################################################################################
 
 system_root := /
-EXEEXT :=
 SHREXT := .so
-
-PERFORM :=
 
 EXTRA_LIBS := -ldw -lunwind -ldl
 
@@ -57,6 +54,7 @@ TAR     := tar
 
 # FHS-2.2 would put these in /usr/bin .
 
+BSDTAR  := bsdtar
 BZIP2   := bzip2
 DIFF    := diff
 GREP    := grep

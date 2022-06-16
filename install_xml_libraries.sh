@@ -74,6 +74,7 @@ export PKG_CONFIG_SYSROOT_DIR=
 xmlsoft_common_cflags=$(echo '
   -fno-ms-extensions
   -frounding-math
+  -fsignaling-nans
   -Wno-cpp
   -Wno-discarded-qualifiers
   -Wno-format

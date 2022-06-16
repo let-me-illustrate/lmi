@@ -254,7 +254,7 @@ make $coefficiency unit_tests 2>&1 | tee >(grep '\*\*\*') >(grep '????') >(grep 
 
   # other build types
 
-make $coefficiency all build_type=so_test USE_SO_ATTRIBUTES=1 2>&1 |less -S
+make $coefficiency all build_type=so_test 2>&1 |less -S
 make $coefficiency cgi_tests cli_tests build_type=safestdlib  2>&1 |less -S
 make $coefficiency unit_tests build_type=safestdlib 2>&1 | tee >(grep '\*\*\*') >(grep '????') >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >../log
 

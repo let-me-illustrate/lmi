@@ -87,6 +87,7 @@ apt-get --assume-yes install \
   g++-multilib \
   gdb \
   git \
+  gnupg \
   jing \
   libarchive-tools \
   libc6-dbg \

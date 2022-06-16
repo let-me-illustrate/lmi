@@ -65,6 +65,7 @@ concinnity_clutter='
 '
 
 install_clutter='
+/^install -m 0775 lmi_md5sum.*\/bin$/d
 /^Generating product files.$/d
 /^All product files written.$/d
 /^$/d
@@ -187,6 +188,15 @@ cli_cgi_clutter='
 /^  0 errors$/d
 '
 
+unit_test_stderr_clutter='
+/.*\/test_coding_rules_test\.sh$/d
+/^Testing .test_coding_rules.\.$/d
+/^  This message should appear on stderr\.$/d
+/^Integrity check failed for .coleridge.$/d
+/^Please report this: culminate() not called\.$/d
+/^sh: 1: xyzzy: not found$/d
+'
+
 schemata_clutter='
 /^  Test cell-subelement sorting\.$/d
 /^  Test schemata\.\.\.$/d
@@ -220,13 +230,17 @@ nychthemeral_clutter='
 /^All [1-9][0-9]* files match./d
 /^# unit tests/d
 /^[1-9][0-9]* tests succeeded/d
-/^# build with shared-object attributes/d
+/^# default targets with shared-object attributes/d
 /^# cgi and cli tests in libstdc++ debug mode/d
 /^Test common gateway interface:/d
 /^Test command line interface:/d
 /^Test sample.cns:/d
 /^Test sample.ill:/d
+/^# default targets in libstdc++ debug mode/d
 /^# unit tests in libstdc++ debug mode/d
+/^# default targets with UBSan/d
+/^# unit tests with UBSan/d
+/^# ubsan tests skipped--used with POSIX only/d
 /^[1-9][0-9]* tests succeeded/d
 /^# test concinnity/d
 /^  Problems detected by xmllint:/d
@@ -244,6 +258,14 @@ nychthemeral_clutter='
 /^# test PETE rebuild/d
 /^$/d
 '
+
+# Install a bland 'configurable_settings.xml' for all architectures.
+# This overwrites any existing file, but developers probably won't
+# care, and end users are unaffected. Without this step, the
+#   'test all "emit_*" output types supported by CLI'
+# test below may fail, e.g. if different calculation-summary columns
+# were selected.
+/opt/lmi/src/lmi/bland_configurable_settings.sh /opt/lmi/data
 
 lmi_build_type=$(/usr/share/misc/config.guess)
 
@@ -310,7 +332,7 @@ make "$coefficiency" install check_physical_closure 2>&1 \
 if [ "x86_64-pc-linux-gnu" != "$LMI_TRIPLET" ]
 then
   printf '\n# GUI test\n\n'
-  xvfb-run "$PERFORM" "$prefix"/bin/wx_test --ash_nazg --data_path="$prefix"/data 2>&1 \
+  xvfb-run "$PERFORM" "$prefix"/bin/wx_test"$EXEEXT" --ash_nazg --data_path="$prefix"/data 2>&1 \
     | tee "$log_dir"/gui_test | sed -e "$build_clutter" -e "$gui_test_clutter"
 else
   printf '\n# GUI test skipped--it does not work properly with GTK\n'
@@ -320,27 +342,26 @@ printf '\n# cgi and cli tests\n\n'
 make "$coefficiency" --output-sync=recurse cgi_tests cli_tests 2>&1 \
   | tee "$log_dir"/cgi_cli | sed -e "$build_clutter" -e "$cli_cgi_clutter"
 
-if [ "x86_64-w64-mingw32" = "$LMI_TRIPLET" ]
-then
-  printf '\n# system test\n\n'
-  make "$coefficiency" system_test 2>&1 \
-    | tee "$log_dir"/system_test | sed -e "$build_clutter" -e "$install_clutter"
-else
-  printf '\n# system test skipped--it succeeds only with the production architecture\n\n'
-fi
+printf '\n# system test\n\n'
+make "$coefficiency" system_test 2>&1 \
+  | tee "$log_dir"/system_test | sed -e "$build_clutter" -e "$install_clutter"
 
 printf '\n# unit tests\n\n'
 # shellcheck disable=SC2039,SC3001
 make "$coefficiency" --output-sync=recurse unit_tests 2>&1 \
   | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests
 
-printf '\n# build with shared-object attributes\n\n'
-make "$coefficiency" all build_type=so_test USE_SO_ATTRIBUTES=1 2>&1 \
-  | tee "$log_dir"/default_targets_so_test | sed -e "$build_clutter"
+printf '\n# default targets with shared-object attributes\n\n'
+make "$coefficiency" build_type=so_test 2>&1 \
+  | tee "$log_dir"/default_targets_so_test | sed -e "$build_clutter" -e "$concinnity_clutter" -e "$install_clutter"
 
 printf '\n# cgi and cli tests with shared-object attributes\n\n'
-make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=so_test USE_SO_ATTRIBUTES=1 2>&1 \
+make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=so_test 2>&1 \
   | tee "$log_dir"/cgi_cli_so_test | sed -e "$build_clutter" -e "$cli_cgi_clutter"
+
+printf '\n# default targets in libstdc++ debug mode\n\n'
+make "$coefficiency" build_type=safestdlib 2>&1 \
+  | tee "$log_dir"/default_targets_safestdlib | sed -e "$build_clutter" -e "$concinnity_clutter" -e "$install_clutter"
 
 printf '\n# cgi and cli tests in libstdc++ debug mode\n\n'
 make "$coefficiency" --output-sync=recurse cgi_tests cli_tests build_type=safestdlib 2>&1 \
@@ -350,6 +371,55 @@ printf '\n# unit tests in libstdc++ debug mode\n\n'
 # shellcheck disable=SC2039,SC3001
 make "$coefficiency" --output-sync=recurse unit_tests build_type=safestdlib 2>&1 \
   | tee >(grep '\*\*\*') >(grep \?\?\?\?) >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >"$log_dir"/unit_tests_safestdlib
+
+if [ "x86_64-pc-linux-gnu" = "$LMI_TRIPLET" ]
+then
+  printf '\n# default targets with UBSan\n\n'
+
+  export UBSAN_OPTIONS=print_stacktrace=1
+
+  # WX !! Inhibit 'leak' by setting 'detect_leaks=0' in $ASAN_OPTIONS
+  # until the next wx upgrade.
+  #
+  # Specify 'detect_invalid_pointer_pairs' even though that feature
+  # isn't necessarily usable with gcc (see:
+  #   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00033.html
+  # ) to support potential future experimentation. This has no effect
+  # unless an applicable '-fsanitize=' option is specified at build
+  # time; it's too confusing to have to change both a gcc option and
+  # an environment variable. Set its value to one because a value of
+  # two is known to give false positives.
+  export ASAN_OPTIONS=detect_leaks=0:detect_invalid_pointer_pairs=1:strict_string_checks=1:detect_stack_use_after_return=1:check_initialization_order=1:strict_init_order=1
+
+  make "$coefficiency" build_type=ubsan 2>&1 \
+    | tee "$log_dir"/default_targets_ubsan | sed -e "$build_clutter" -e "$concinnity_clutter" -e "$install_clutter"
+
+  printf '\n# unit tests with UBSan\n\n'
+  # shellcheck disable=SC3001
+  (setopt nomultios; \
+    ( \
+      (make "$coefficiency" --output-sync=recurse unit_tests \
+        build_type=ubsan \
+      | tee \
+        >(grep '\*\*\*') \
+        >(grep \?\?\?\?) \
+        >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') \
+      >"$log_dir"/unit_tests_ubsan_stdout \
+      ) \
+      3>&1 1>&2 2>&3 \
+      | tee "$log_dir"/unit_tests_ubsan_stderr \
+        | sed -e "$unit_test_stderr_clutter" \
+        | sed -e's/^/UBSan: /' \
+    ) 3>&1 1>&2 2>&3 \
+  );
+
+  printf '\n# system test with UBSan\n\n'
+  make "$coefficiency" system_test \
+    build_type=ubsan 2>&1 \
+    | tee "$log_dir"/system_test_ubsan | sed -e "$build_clutter" -e "$install_clutter"
+else
+  printf '\n# ubsan tests skipped--used with POSIX only\n\n'
+fi
 
 if [ "greg" = "$(whoami)" ]
 then
@@ -383,13 +453,13 @@ printf '\n# test all "emit_*" output types supported by CLI\n\n'
 # target above; here, it's discarded (but stderr is not)
 
 # group-roster type omitted: sensible only for a census
-$PERFORM /opt/lmi/bin/lmi_cli_shared --file="$throwaway_dir"/sample.ill --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_to_pwd,emit_test_data,emit_spreadsheet,emit_text_stream,emit_custom_0,emit_custom_1,emit_calculation_summary_html,emit_calculation_summary_tsv >/dev/null
+$PERFORM /opt/lmi/bin/lmi_cli_shared"$EXEEXT" --file="$throwaway_dir"/sample.ill --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_to_pwd,emit_test_data,emit_spreadsheet,emit_text_stream,emit_custom_0,emit_custom_1,emit_calculation_summary_html,emit_calculation_summary_tsv >/dev/null
 
 # same output filename for '.cns' as for '.ill': uniquify it
 mv sample.tsv                       sample.ill.tsv
 
 # calculation-summary types omitted: not sensible for a census
-$PERFORM /opt/lmi/bin/lmi_cli_shared --file="$throwaway_dir"/sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_to_pwd,emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
+$PERFORM /opt/lmi/bin/lmi_cli_shared"$EXEEXT" --file="$throwaway_dir"/sample.cns --accept --ash_nazg --data_path=/opt/lmi/data --emit=emit_to_pwd,emit_test_data,emit_spreadsheet,emit_group_roster,emit_text_stream,emit_custom_0,emit_custom_1 >/dev/null
 
 # same output filename for '.cns' as for '.ill': uniquify it
 mv sample.tsv                       sample.cns.tsv
@@ -422,6 +492,7 @@ for z in *.touchstone; do \
     --strip-trailing-cr \
     --ignore-matching-lines="^DatePrepared[ \t]*.*'[0-9-]*'$" \
     "$z" "$srcdir/$z" \
+    2>&1 | tee "$log_dir"/emit_cli \
   || true ; \
 done
 

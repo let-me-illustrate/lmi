@@ -79,38 +79,42 @@ $(srcdir)/objects.make:: ;
 
 ################################################################################
 
-# Effective default target (described above under "Default target").
-
-default_targets := \
-  antediluvian_cgi$(EXEEXT) \
-  antediluvian_cli$(EXEEXT) \
-  libantediluvian$(SHREXT) \
-  liblmi$(SHREXT) \
-  lmi_cli_shared$(EXEEXT) \
-
-# For targets that depend on wx, build type 'safestdlib' requires a
-# compatible wx build, which is not yet available.
-
-ifneq (safestdlib,$(findstring safestdlib,$(build_type)))
-  default_targets += \
-    lmi_wx_shared$(EXEEXT) \
-    skeleton$(SHREXT) \
-    wx_new$(SHREXT) \
-
-  ifneq (so_test,$(findstring so_test,$(build_type)))
-    default_targets += \
-      wx_test$(EXEEXT) \
-
-  endif
+ifneq (1,$(words $(build_type)))
+    $(error There must be exactly one build_type, not "$(build_type)")
 endif
 
-# The product_files target doesn't build with shared-library
-# 'attributes'.
-#
-# TODO ?? The gpt server, however, is important; it needs work anyway.
+ifeq (so_test,$(build_type))
+  USE_SO_ATTRIBUTES=1
+endif
 
-ifeq (,$(USE_SO_ATTRIBUTES))
-  default_targets += \
+# Override this variable to exclude targets that are inappropriate in
+# context--e.g., targets that don't even compile with a particular
+# $(build_type).
+
+excluded_default_targets :=
+
+# 'antediluvian' targets are incompatible with UBSan.
+
+ifeq (ubsan,$(build_type))
+  excluded_default_targets += \
+    antediluvian_cgi$(EXEEXT) \
+    antediluvian_cli$(EXEEXT) \
+    libantediluvian$(SHREXT) \
+
+endif
+
+# 'test_coding_rules' depends on PCRE2, which is installed only for
+# x86_64-pc-linux-gnu.
+
+ifneq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
+  excluded_default_targets += test_coding_rules$(EXEEXT)
+endif
+
+# Many targets are incompatible with $(USE_SO_ATTRIBUTES) because they
+# use no shared libraries.
+
+ifdef USE_SO_ATTRIBUTES
+  excluded_default_targets += \
     bcc_ar$(EXEEXT) \
     bcc_cc$(EXEEXT) \
     bcc_ld$(EXEEXT) \
@@ -119,23 +123,60 @@ ifeq (,$(USE_SO_ATTRIBUTES))
     generate_passkey$(EXEEXT) \
     ihs_crc_comp$(EXEEXT) \
     lmi_md5sum$(EXEEXT) \
+    product_files$(EXEEXT) \
     rate_table_tool$(EXEEXT) \
+    test_coding_rules$(EXEEXT) \
 
-  ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
-    default_targets += \
-      test_coding_rules$(EXEEXT) \
-
-  endif
-
-  ifneq (so_test,$(findstring so_test,$(build_type)))
-    default_targets += \
-      product_files$(EXEEXT) \
-
-  endif
 endif
+
+# For targets that depend on wx, build type 'safestdlib' requires a
+# compatible wx build, which is not yet available.
+
+ifeq (safestdlib,$(build_type))
+  excluded_default_targets += \
+    lmi_wx_shared$(EXEEXT) \
+    skeleton$(SHREXT) \
+    wx_new$(SHREXT) \
+    wx_test$(EXEEXT) \
+
+endif
+
+# Effective default target (described above under "Default target").
+
+default_targets := \
+  antediluvian_cgi$(EXEEXT) \
+  antediluvian_cli$(EXEEXT) \
+  bcc_ar$(EXEEXT) \
+  bcc_cc$(EXEEXT) \
+  bcc_ld$(EXEEXT) \
+  bcc_rc$(EXEEXT) \
+  elapsed_time$(EXEEXT) \
+  generate_passkey$(EXEEXT) \
+  ihs_crc_comp$(EXEEXT) \
+  libantediluvian$(SHREXT) \
+  liblmi$(SHREXT) \
+  lmi_cli_shared$(EXEEXT) \
+  lmi_md5sum$(EXEEXT) \
+  lmi_wx_shared$(EXEEXT) \
+  product_files$(EXEEXT) \
+  rate_table_tool$(EXEEXT) \
+  skeleton$(SHREXT) \
+  test_coding_rules$(EXEEXT) \
+  wx_new$(SHREXT) \
+  wx_test$(EXEEXT) \
+
+default_targets := \
+  $(filter-out $(excluded_default_targets), $(default_targets) \
+  ) \
 
 .PHONY: effective_default_target
 effective_default_target: $(default_targets)
+
+erroneous_targets := $(filter $(excluded_default_targets), $(MAKECMDGOALS))
+
+ifneq (,$(erroneous_targets))
+    $(error in context, cannot build "$(erroneous_targets)")
+endif
 
 ################################################################################
 
@@ -414,8 +455,8 @@ tutelary_flag :=
 # which causes harm while bringing no countervailing benefit--see:
 #   https://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
 
-c_standard   := -fno-ms-extensions -frounding-math -std=c99
-cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
+c_standard   := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c99
+cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++20
 
 # Specify these:
 #   $(gcc_version_specific_c_warnings)
@@ -458,12 +499,12 @@ else ifneq (,$(filter $(gcc_version), 6.3.0))
   gcc_version_specific_c_warnings   := -Wno-conversion
   gcc_version_specific_cxx_warnings := -Wno-conversion
 
-  cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
+  cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++17
 else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
   gcc_version_specific_c_warnings   :=
   gcc_version_specific_cxx_warnings :=
 
-  cxx_standard := -fno-ms-extensions -frounding-math -std=c++17
+  cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++17
 else ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0 9 9.3.0))
   gcc_version_specific_c_warnings   :=
   gcc_version_specific_cxx_warnings :=
@@ -476,13 +517,11 @@ else ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0 9 9.3.0))
     tutelary_flag := -fomit-frame-pointer
   endif
 
-  cxx_standard := -fno-ms-extensions -frounding-math -std=c++2a
+  cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++2a
 else ifneq (,$(filter $(gcc_version), 10 10.0))
   gcc_version_specific_c_warnings :=
 
   gcc_version_specific_cxx_warnings := \
-    -Wredundant-tags \
-    -Wvolatile \
 
   ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
 # See:
@@ -499,30 +538,54 @@ else ifneq (,$(filter $(gcc_version), 10 10.0))
     endif
   endif
 
-  cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
+  cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++20
 else ifneq (,$(filter $(gcc_version), 11 11.0))
   gcc_version_specific_c_warnings :=
 
-  gcc_version_specific_cxx_warnings := \
-    -Wredundant-tags \
-    -Wvolatile \
+# g++-11 warnings not recognized by g++-10
+#
+# The gcc manual says that '-Wenum-conversion' is for C only,
+# but `make show_overlooked_cxx_warnings` disagreed.
 
-  cxx_standard := -fno-ms-extensions -frounding-math -std=c++20
+  gcc_version_specific_cxx_warnings := \
+    -Wctad-maybe-unsupported \
+    -Wdeprecated-enum-enum-conversion \
+    -Wdeprecated-enum-float-conversion \
+    -Wenum-conversion \
+    -Winvalid-imported-macros \
+
+  cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++20
 endif
 
 treat_warnings_as_errors := -pedantic-errors -Werror
 
-# Write '-Wno' options at the end.
+# Write '-Wno' options at the end, with a rationale here.
 #
-# Rationale for specific warning options:
-# -Wno-parentheses [its diagnostics are beyond pedantic]
+# -Wabi: useful only for a special purpose
+# -Wanalyzer-too-complex: not actually helpful
+# -Wdate-time: only for "bit-wise-identical reproducible compilations"
+# -Wfloat-equal: too many warnings on correct code, e.g.,
+#   exact comparison to zero
+# -Winline: 'inline' now refers to linkage, not inlining
+# -Wmissing-declarations: for C++, this flags valid functions that
+#   arguably belong in an unnamed namespace
+# -Wpadded: useful only for low-level work
+# -Wparentheses: its diagnostics are beyond pedantic
+# -Wpsabi: undocumented--ARM only?
+# -Wsign-conversion: [see note elsewhere in this file]
+# -Wsuggest-attribute: too gcc-specific
+# -Wsystem-headers: not generally useful
+# -Wswitch-default: false positives for switches on enums that
+#   include all cases (verified by -Wswitch-enum)
 
 gcc_common_warnings := \
   $(treat_warnings_as_errors) \
+  -Waggregate-return \
   -Wall \
   -Walloc-zero \
   -Walloca \
-  -Wcast-align \
+  -Warith-conversion \
+  -Wcast-align=strict \
   -Wcast-function-type \
   -Wconversion \
   -Wdangling-else \
@@ -532,11 +595,15 @@ gcc_common_warnings := \
   -Wduplicated-branches \
   -Wduplicated-cond \
   -Wextra \
+  -Wformat=2 \
   -Wformat-nonliteral \
+  -Wformat-overflow=2 \
   -Wformat-security \
   -Wformat-signedness \
+  -Wformat-truncation \
   -Wformat-y2k \
   -Wimport \
+  -Winit-self \
   -Winvalid-pch \
   -Wlogical-op \
   -Wmissing-include-dirs \
@@ -547,40 +614,79 @@ gcc_common_warnings := \
   -Wredundant-decls \
   -Wrestrict \
   -Wshadow \
+  -Wshift-overflow=2 \
   -Wsign-compare \
   -Wstack-protector \
+  -Wstrict-overflow \
+  -Wstringop-overflow=4 \
   -Wswitch-enum \
   -Wtrampolines \
   -Wundef \
   -Wunreachable-code \
+  -Wunsafe-loop-optimizations \
   -Wunused-macros \
   -Wvector-operation-performance \
+  -Wvla \
+  -Wno-abi \
+  -Wno-analyzer-too-complex \
+  -Wno-date-time \
+  -Wno-float-equal \
+  -Wno-inline \
+  -Wno-missing-declarations \
+  -Wno-padded \
   -Wno-parentheses \
-
-# Warnings that are not generally useful.
-#
-# -Wdate-time: only for "bit-wise-identical reproducible compilations"
-# -Wmissing-declarations: for C++, this flags valid functions that
-#   arguably belong in an unnamed namespace
-# -Wunsafe-loop-optimizations: incompatible with ranged for-loops
+  -Wno-psabi \
+  -Wno-sign-conversion \
+  -Wno-suggest-attribute=pure \
+  -Wno-suggest-attribute=const \
+  -Wno-suggest-attribute=noreturn \
+  -Wno-suggest-attribute=malloc \
+  -Wno-suggest-attribute=format \
+  -Wno-suggest-attribute=cold \
+  -Wno-system-headers \
+  -Wno-switch-default \
 
 # Consider these later:
 postponed_gcc_common_warnings := \
+
+# Write '-Wno' options at the end, with a rationale here.
+#
+# -Wunsuffixed-float-constants: a migration aid to support an eventual
+#   FLOAT_CONST_DECIMAL64 pragma, but only a nuisance for now
 
 gcc_c_warnings := \
   $(c_standard) \
   $(gcc_common_warnings) \
   -Wbad-function-cast \
   -Wc++-compat \
-  -Winit-self \
   -Wjump-misses-init \
+  -Wmissing-braces \
   -Wmissing-prototypes \
   -Wnested-externs \
   -Wold-style-definition \
   -Wstrict-prototypes \
   -Wtraditional-conversion \
-  -Wunsuffixed-float-constants \
   -Wwrite-strings \
+  -Wno-unsuffixed-float-constants \
+
+# Write '-Wno' options at the end, with a rationale here.
+#
+# -Wabi-tag: useful only for a special purpose
+# -Waggregate-return: generally incompatible with C++
+# -Weffc++: obsolescent
+# -Wmismatched-tags: not helpful--see:
+#   https://lists.nongnu.org/archive/html/lmi/2016-05/msg00075.html
+# -Wmultiple-inheritance: forbids a useful feature
+# -Wnamespaces: forbids a useful feature
+# -Wsign-promo: too many false positives--see:
+#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00016.html
+# -Wsuggest-final-methods, and
+# -Wsuggest-final-types: use these only occasionally, like -Weffc++;
+#   work with '-Wsuggest-final-types' first, because making a class
+#   final may resolve '-Wsuggest-final-methods' suggestions for its
+#   members; but expect many false positives
+# -Wtemplates: forbids a useful feature
+# -Wvirtual-inheritance: forbids a useful feature
 
 gcc_cxx_warnings := \
   $(cxx_standard) \
@@ -589,10 +695,12 @@ gcc_cxx_warnings := \
   -Wc++14-compat \
   -Wc++1z-compat \
   -Wcatch-value=3 \
+  -Wcomma-subscript \
   -Wconditionally-supported \
   -Wctor-dtor-privacy \
   -Wdelete-non-virtual-dtor \
   -Wdeprecated \
+  -Wdeprecated-copy-dtor \
   -Wextra-semi \
   -Wnoexcept \
   -Wnoexcept-type \
@@ -602,25 +710,26 @@ gcc_cxx_warnings := \
   -Woverloaded-virtual \
   -Wplacement-new=2 \
   -Wpmf-conversions \
+  -Wredundant-tags \
   -Wregister \
   -Wreorder \
   -Wstrict-null-sentinel \
   -Wsuggest-override \
   -Wsynth \
   -Wuseless-cast \
+  -Wvolatile \
   -Wzero-as-null-pointer-constant \
-
-# Warnings that are not generally useful.
-#
-# -Wsign-promo: too many false positives--see:
-#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00016.html
-# -Wsuggest-final-methods, and
-# -Wsuggest-final-types: use these only occasionally, like -Weffc++;
-#   work with '-Wsuggest-final-types' first, because making a class
-#   final may resolve '-Wsuggest-final-methods' suggestions for its
-#   members; but expect many false positives
-# -Wfloat-equal: too many warnings on correct code, e.g.,
-#   exact comparison to zero
+  -Wno-abi-tag \
+  -Wno-aggregate-return \
+  -Wno-effc++ \
+  -Wno-mismatched-tags \
+  -Wno-multiple-inheritance \
+  -Wno-namespaces \
+  -Wno-sign-promo \
+  -Wno-suggest-final-methods \
+  -Wno-suggest-final-types \
+  -Wno-templates \
+  -Wno-virtual-inheritance \
 
 # Consider these later:
 postponed_gcc_cxx_warnings := \
@@ -635,7 +744,7 @@ $(cgicc_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
   -Wno-zero-as-null-pointer-constant \
 
-ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
+ifeq (safestdlib,$(build_type))
   ifeq (3.4.5,$(gcc_version))
     expression_template_0_test.o: gcc_common_extra_warnings += -Wno-unused-parameter
   endif
@@ -686,10 +795,26 @@ CXX_WARNINGS = \
 #  - gprof
 #  - libstdc++ debugging macros
 
+# Options for undefined-behavior sanitizer.
+#
+# These:
+#   pointer-compare,pointer-subtract
+# aren't necessarily usable with gcc--see:
+#   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00033.html
+
+ubsan_options := \
+  -fsanitize=address,undefined,float-divide-by-zero,float-cast-overflow,bounds-strict \
+  -Wno-duplicated-branches \
+  -fno-omit-frame-pointer \
+  -fno-var-tracking \
+  -fno-var-tracking-assignments \
+  -O3 \
+  --param max-gcse-memory=1000000 \
+
 # libstdc++ debugging macros
 
 every_libstdcxx_warning_macro := \
-  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC \
+  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_GLIBCXX_SANITIZE_VECTOR \
 
 test_targets := unit_tests cgi_tests cli_tests
 
@@ -698,10 +823,12 @@ test_targets := unit_tests cgi_tests cli_tests
 # See:
 #   https://lists.gnu.org/archive/html/lmi/2016-06/msg00091.html
 
-ifeq (gprof,$(findstring gprof,$(build_type)))
+ifeq (gprof,$(build_type))
   optimization_flag := -O0 -fno-omit-frame-pointer
-  gprof_flag := -pg
-else ifeq (safestdlib,$(findstring safestdlib,$(build_type)))
+  analyzer_flag := -pg
+else ifeq (ubsan,$(build_type))
+  analyzer_flag := $(ubsan_options)
+else ifeq (safestdlib,$(build_type))
   optimization_flag := -O0 -fno-omit-frame-pointer
   libstdcxx_warning_macros := $(every_libstdcxx_warning_macro)
 else
@@ -774,7 +901,7 @@ endif
 #   https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html#DOCF1
 # Yet another is 'debug_flag'.
 
-c_l_flags := $(debug_flag) $(gprof_flag)
+c_l_flags := $(debug_flag) $(analyzer_flag)
 
 ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
   c_l_flags += -fPIC
@@ -799,6 +926,10 @@ CXXFLAGS = \
   $(ggc_flags) $(optimization_flag) $(c_l_flags) \
 
 LDFLAGS = $(c_l_flags) -Wl,-Map,$@.map \
+
+ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
+  LDFLAGS += -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -Wl,-z,separate-code
+endif
 
 # Explicitly disable the infelicitous auto-import default. See:
 #   http://article.gmane.org/gmane.comp.gnu.mingw.user/19758
@@ -1054,10 +1185,8 @@ install: $(default_targets)
 	@$(INSTALL) -c -m 0664 $(data_files) $(datadir)
 	@$(INSTALL) -c -m 0664 $(help_files) $(datadir)
 	@datadir=$(datadir) srcdir=$(srcdir) $(srcdir)/mst_to_xst.sh
-ifeq (,$(USE_SO_ATTRIBUTES))
+ifndef USE_SO_ATTRIBUTES
 	@cd $(datadir); $(PERFORM) $(bindir)/product_files$(EXEEXT)
-else
-	@$(ECHO) "Can't build product_files$(EXEEXT) with USE_SO_ATTRIBUTES."
 endif
 
 ################################################################################
@@ -1121,16 +1250,16 @@ fardel_name := lmi-$(yyyymmddhhmm)
 fardel_root := $(prefix)/fardels
 fardel_dir  := $(fardel_root)/$(fardel_name)
 
+# The fardel will be valid from $(j1) to $(j2).
+#
 # The obvious y2038 problem is ignored because any breakage it causes
 # will be, well, obvious.
 
-fardel_date_script := \
-  d0=`$(DATE) +%Y-%m-01`; \
-  d1=`$(DATE) --utc --date="$$d0 + 1 month " +%s`; \
-  d2=`$(DATE) --utc --date="$$d0 + 2 months" +%s`; \
-  j1=`expr 2440588 + $$d1 / 86400`; \
-  j2=`expr 2440588 + $$d2 / 86400`; \
-  printf "$$j1 $$j2" >expiry; \
+d0 := $(shell $(DATE) +%Y-%m-01)
+d1 := $(shell $(DATE) --utc --date="$(d0) + 1 month " +%s)
+d2 := $(shell $(DATE) --utc --date="$(d0) + 2 months" +%s)
+j1 := $(shell expr 2440588 + $(d1) / 86400)
+j2 := $(shell expr 2440588 + $(d2) / 86400)
 
 # Several shared libraries are required by lmi, but there seems to be
 # no straightforward way to discover their individual names because
@@ -1204,15 +1333,22 @@ wrap_fardel:
 	@$(INSTALL) -m 0664 $(datadir)/group_quote_banner.png .
 	@$(INSTALL) -m 0775 $(fardel_binaries) .
 	@$(INSTALL) -m 0664 $(fardel_files) .
-	@$(fardel_date_script)
+	printf "$(j1) $(j2)" >expiry
 	@$(MD5SUM) --binary $(fardel_checksummed_files) >validated.md5
-	@$(PERFORM) $(bindir)/generate_passkey > passkey
+	@$(PERFORM) $(bindir)/generate_passkey$(EXEEXT) > passkey
 	@$(TAR) \
 	  --bzip2 \
 	  --create \
 	  --directory=$(fardel_root) \
 	  --file=$(fardel_root)/$(fardel_name).tar.bz2 \
 	  $(fardel_name)
+	@$(BSDTAR) \
+	  --create \
+	  --auto-compress \
+	  --directory=$(fardel_root) \
+	  --file=$(fardel_root)/$(fardel_name).zip \
+	  $(fardel_name)
+	@-$(srcdir)/publish.sh $(fardel_root)/$(fardel_name).zip
 
 ################################################################################
 
@@ -1290,7 +1426,7 @@ run_unit_tests: unit_tests_not_built $(addsuffix -run,$(unit_test_binaries))
 .PHONY: %$(EXEEXT)-run
 %$(EXEEXT)-run:
 	@printf '\n%s\n' "Running $*:"
-	@-$(PERFORM) ./$* --accept
+	@-$(PERFORM) ./$*$(EXEEXT) --accept
 
 ################################################################################
 
@@ -1619,6 +1755,14 @@ show_flags:
 	@printf 'wx_library_paths        = "%s"\n' "$(wx_library_paths)"
 	@printf 'wx_predefinitions       = "%s"\n' "$(wx_predefinitions)"
 
-.PHONY: show_disabled_g++_warnings
-show_disabled_g++_warnings:
-	$(CXX) $(ALL_CXXFLAGS) -Q --help=warning | $(GREP) '[[]disabled[]]'
+# For the /dev/null rationale, see:
+#   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91011#c7
+
+.PHONY: show_overlooked_cxx_warnings
+show_overlooked_cxx_warnings:
+	@$(CXX) $(ALL_CXXFLAGS) -Q --help=warning -xc++ /dev/null \
+	  | $(GREP) '[[]disabled[]]' \
+	  | $(SED) -e's/[ \t]*[[]disabled[]]//' -e's/^ *-W//' \
+	  > eraseme
+	@$(GREP) -of eraseme $(this_makefile) | $(GREP) -vxf - eraseme || true
+	@$(RM) eraseme

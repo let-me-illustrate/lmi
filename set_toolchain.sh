@@ -1,6 +1,6 @@
 #!/bin/sh this-script-must-be-sourced-not-run
 
-# Set $PATH variants and $PERFORM based on $LMI_COMPILER and $LMI_TRIPLET.
+# Set environment variables appropriate for $LMI_COMPILER and $LMI_TRIPLET.
 
 # Copyright (C) 2019, 2020, 2021, 2022 Gregory W. Chicares.
 #
@@ -108,6 +108,8 @@ export PATH="$localbindir":"$locallibdir":"$minimal_path"
 # It is okay to export these variables unconditionally.
 
 export LD_LIBRARY_PATH
+
+export EXEEXT
 export PERFORM
 export WINEPATH
 
@@ -133,12 +135,19 @@ case "$lmi_build_type" in
                 LD_LIBRARY_PATH=.
                 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$locallibdir"
                 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$bindir"
-                # Nullify any leftover "wine" value.
+                # Nullify any leftover "wine" values: obligatorily for
+                # $EXEEXT and $PERFORM, and for $WINEPATH to ensure
+                # that native builds never depend upon it.
+                EXEEXT=
                 PERFORM=
+                WINEPATH=
                 ;;
             (*-*-mingw32)
-                # Nullify any leftover value from the native case above.
+                # Nullify any leftover $LD_LIBRARY_PATH value from the
+                # native case above, to ensure that lmi-built msw
+                # binaries never depend upon it.
                 LD_LIBRARY_PATH=
+                EXEEXT=".exe"
                 PERFORM="wine"
                 w0="$(winepath -w "$localbindir" | sed -e's/\\/\\\\/g')"
                 w1="$(winepath -w "$locallibdir" | sed -e's/\\/\\\\/g')"

@@ -1,8 +1,8 @@
 #!/bin/sh
 
-# Rebuild PETE and run a simplistic unit test.
+# Upload a file.
 
-# Copyright (C) 2021 Gregory W. Chicares.
+# Copyright (C) 2022 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -21,24 +21,28 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-set -e
+set -x
 
-export EXEEXT
+if [ "greg" != "$(whoami)" ]; then
+  exit 0
+fi
 
-case "$LMI_TRIPLET" in
-    (x86_64-pc-linux-gnu)
-        EXEEXT=
-        ;;
-    (*-*-mingw32)
-        EXEEXT=".exe"
-        ;;
-    (*)
-        printf '%s\n' "Error: LMI_TRIPLET absent or unrecognized."
-        return 3;
-        ;;
-esac
+if [ "$#" -ne 1 ]; then
+  printf '%s arguments given, but exactly one expected.\n' "$#"
+  exit 2
+fi
 
-make -f Makefile maintainer-clean
-make -f Makefile
-./pete_vector_test${EXEEXT}
-make -f Makefile distclean
+filepath="$(readlink --canonicalize "$1")"
+
+if [ ! -f "$filepath" ]; then
+  printf 'No such file "%s"--exiting.\n' "$1"
+  exit 3
+fi
+
+gpg --local-user gchicares@sbcglobal.net --detach-sign "$filepath"
+chmod 644 "$filepath" "$filepath.sig"
+cd "$(dirname "$filepath")" || { printf 'fail: cd\n'; exit 4; }
+rsync -vv \
+  "$(basename "$filepath")" \
+  "$(basename "$filepath.sig")" \
+  chicares@dl.sv.nongnu.org:/releases/lmi/
