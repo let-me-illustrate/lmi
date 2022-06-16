@@ -634,11 +634,29 @@ void test_expm1_log1p()
     // 0.025940753546620676 = 3F9A903680771FB0  fdlibm
     // 0.025940753546620673 = 3F9A903680771FAF  glibc
 
+    constexpr double inf {std::numeric_limits<double>::infinity()};
+    constexpr double big {std::numeric_limits<double>::max()};
     // Absolute value of relative error.
     auto rel_err = [](double t, double u)
         {
-        return std::fabs(t - u) / std::min(std::fabs(t), std::fabs(u));
+        auto const denominator {std::min(std::fabs(t), std::fabs(u))};
+        return
+              (0.0 == t && 0.0 == u) ? 0.0
+            : (0.0 == denominator)   ? inf
+            :                          std::fabs(t - u) / denominator
+            ;
         };
+    LMI_TEST_EQUAL(inf, rel_err(0.0, -2.0));
+    LMI_TEST_EQUAL(inf, rel_err(0.0, -1.0));
+    LMI_TEST_EQUAL(inf, rel_err(0.0, -0.5));
+    LMI_TEST_EQUAL(0.0, rel_err(0.0,  0.0));
+    LMI_TEST_EQUAL(inf, rel_err(0.0,  0.5));
+    LMI_TEST_EQUAL(inf, rel_err(0.0,  1.0));
+    LMI_TEST_EQUAL(inf, rel_err(0.0,  2.0));
+    LMI_TEST_EQUAL(0.0, rel_err(1.0,  1.0));
+    LMI_TEST_EQUAL(2.0, rel_err(1.0, -1.0));
+    LMI_TEST_EQUAL(big, rel_err(1.0,  big));
+    LMI_TEST_EQUAL(inf, rel_err(big, -big));
 
     // Test fdlibm vs. C RTL for many parameters.
     int    err_count0 {0};
