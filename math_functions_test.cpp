@@ -634,6 +634,37 @@ void test_expm1_log1p()
     // 0.025940753546620676 = 3F9A903680771FB0  fdlibm
     // 0.025940753546620673 = 3F9A903680771FAF  glibc
 
+    // Monthly equivalent of a -0.999999 = -99.9999% interest rate.
+    // The transformation is, generally:
+    //   (1+i)^n - 1 <-> expm1(log1p(i) * n)
+    // Substituting i = -0.999999 and n = 1/12 :
+    //   (1-0.999999)^(1/12) - 1 <-> expm1(log1p(-0.999999) / 12.0)
+    // High-precision values:
+    //   https://www.wolframalpha.com/input?i=log1p(-0.999999)/12
+    //   -1.151292546497022842008995727342182103800550744314386488016
+    //   https://www.wolframalpha.com/input?i=expm1(log1p(-0.999999)/12)
+    //   -0.683772233983162066800110645556728146628044486067478317314
+    //   https://www.wolframalpha.com/input?i=(1-0.999999)^(1/12)-1
+    //   -0.683772233983162066800110645556728146628044486067478317314
+    // In this ill-conditioned case, we get something like eleven
+    // digits of precision--an error of about one million ulp.
+    double const i0 = std::log1p(-0.999999) / 12.0;
+    LMI_TEST(materially_equal( -1.1512925464970228, i0, 1.0e-11));
+    double const i1 = std::expm1(-1.1512925464970228);
+    LMI_TEST(materially_equal(-0.68377223398240425, i1, 1.0e-11));
+    // (Optionally, to see the platform-dependent actual values:
+    // i0 = -1.15129254649462642312585 i1 = -0.68377223398316200331237 MinGW-w32
+    // i0 = -1.15129254649462642312585 i1 = -0.68377223398316200331237 glibc
+    // [which are curiously identical], uncomment the next line.)
+//  std::cout << "i0 = " << i0 << " i1 = " << i1 << std::endl;
+    // Worse, we have UB--which UBSan detects when we build fdlibm
+    // ourselves, though not when we use the same code via glibc:
+    double const i2 = lmi::log1p(-0.999999) / 12.0;
+    LMI_TEST(materially_equal( -1.1512925464970228, i2, 1.0e-11));
+    // fdlibm_expm1.c:242:13: runtime error: left shift of negative value -2
+    double const i3 = lmi::expm1(-1.1512925464970228);
+    LMI_TEST(materially_equal(-0.68377223398240425, i3, 1.0e-11));
+
     constexpr double inf {std::numeric_limits<double>::infinity()};
     constexpr double big {std::numeric_limits<double>::max()};
     // Absolute value of relative error.
