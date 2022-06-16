@@ -200,7 +200,18 @@ constexpr std::make_unsigned_t<T> u_abs(T t)
     static_assert(std::has_unique_object_representations_v<T>);
     static_assert(std::has_unique_object_representations_v<U>);
     U const u {static_cast<U>(t)};
+
+#if defined LMI_MSC
+#   pragma warning(push)
+    // unary minus operator applied to unsigned type, result still unsigned
+#   pragma warning(disable : 4146)
+#endif // defined LMI_MSC
+
     return (t < 0) ? static_cast<U>(-u) : u;
+
+#if defined LMI_MSC
+#   pragma warning(pop)
+#endif // defined LMI_MSC
 }
 
 // Actuarial functions.
