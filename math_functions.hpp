@@ -25,7 +25,7 @@
 #include "config.hpp"
 
 #include <algorithm>                    // max(), min(), transform()
-#include <cmath>                        // signbit()
+#include <cmath>                        // fabs(), signbit()
 #include <limits>
 #include <numeric>                      // midpoint(), partial_sum()
 #include <stdexcept>
@@ -94,6 +94,39 @@ inline T outward_quotient(T numerator, T denominator)
     T x = numerator / denominator;
     T y = 0 != numerator % denominator;
     return (0 < numerator == 0 < denominator) ? x + y : x - y;
+}
+
+/// Absolute value of relative error.
+///
+/// Sometimes one of the arguments is a canonical expected value, and
+///   (observed-expected)/expected
+/// is wanted, with due regard to sign; in that case, code (o-e)/e
+/// directly. This function template, OTOH, is designed for the more
+/// general case where neither argument is favored; then a denominator
+/// must be chosen somehow, and the algebraic sign of the return value
+/// would generally not be useful.
+///
+/// Here the smaller of the absolute values of the arguments is chosen
+/// as the denominator. Alternatively, the greater, or some average,
+/// could have been chosen; but choosing the smaller gives a more
+/// conservative (i.e., larger) value.
+///
+/// Only floating point arguments are allowed, because no compelling
+/// use case for integer types is foreseen. Similarly, both arguments
+/// are constrained to be of the same type, because allowing different
+/// types seems unimportant.
+
+template<typename T>
+/*constexpr*/ T rel_err(T t, T u)
+{
+    static_assert(std::is_floating_point_v<T>);
+    constexpr T inf {std::numeric_limits<T>::infinity()};
+    auto const denominator {std::min(std::fabs(t), std::fabs(u))};
+    return
+          (0.0 == t && 0.0 == u) ? 0.0
+        : (0.0 == denominator)   ? inf
+        :                          std::fabs(t - u) / denominator
+        ;
 }
 
 /// Signed zeros, for comparison tests.
