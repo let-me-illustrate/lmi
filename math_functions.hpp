@@ -117,7 +117,7 @@ inline T outward_quotient(T numerator, T denominator)
 /// types seems unimportant.
 
 template<typename T>
-/*constexpr*/ T rel_err(T t, T u)
+/*constexpr*/ T relative_error(T t, T u)
 {
     static_assert(std::is_floating_point_v<T>);
     constexpr T inf {std::numeric_limits<T>::infinity()};

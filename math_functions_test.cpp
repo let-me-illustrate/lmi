@@ -482,17 +482,17 @@ void test_relative_error()
     constexpr double inf {std::numeric_limits<double>::infinity()};
     constexpr double big {std::numeric_limits<double>::max()};
 
-    LMI_TEST_EQUAL(inf, rel_err(0.0, -2.0));
-    LMI_TEST_EQUAL(inf, rel_err(0.0, -1.0));
-    LMI_TEST_EQUAL(inf, rel_err(0.0, -0.5));
-    LMI_TEST_EQUAL(0.0, rel_err(0.0,  0.0));
-    LMI_TEST_EQUAL(inf, rel_err(0.0,  0.5));
-    LMI_TEST_EQUAL(inf, rel_err(0.0,  1.0));
-    LMI_TEST_EQUAL(inf, rel_err(0.0,  2.0));
-    LMI_TEST_EQUAL(0.0, rel_err(1.0,  1.0));
-    LMI_TEST_EQUAL(2.0, rel_err(1.0, -1.0));
-    LMI_TEST_EQUAL(big, rel_err(1.0,  big));
-    LMI_TEST_EQUAL(inf, rel_err(big, -big));
+    LMI_TEST_EQUAL(inf, relative_error(0.0, -2.0));
+    LMI_TEST_EQUAL(inf, relative_error(0.0, -1.0));
+    LMI_TEST_EQUAL(inf, relative_error(0.0, -0.5));
+    LMI_TEST_EQUAL(0.0, relative_error(0.0,  0.0));
+    LMI_TEST_EQUAL(inf, relative_error(0.0,  0.5));
+    LMI_TEST_EQUAL(inf, relative_error(0.0,  1.0));
+    LMI_TEST_EQUAL(inf, relative_error(0.0,  2.0));
+    LMI_TEST_EQUAL(0.0, relative_error(1.0,  1.0));
+    LMI_TEST_EQUAL(2.0, relative_error(1.0, -1.0));
+    LMI_TEST_EQUAL(big, relative_error(1.0,  big));
+    LMI_TEST_EQUAL(inf, relative_error(big, -big));
 }
 
 void test_signed_zero()
@@ -710,10 +710,10 @@ void test_expm1_log1p()
         double const b2 = std::expm1(std::log1p(irate) / 12);
         double const b3 = std::expm1(std::log1p(irate) / 365);
         // relative error
-        double const e0 = rel_err(a0, b0);
-        double const e1 = rel_err(a1, b1);
-        double const e2 = rel_err(a2, b2);
-        double const e3 = rel_err(a3, b3);
+        double const e0 = relative_error(a0, b0);
+        double const e1 = relative_error(a1, b1);
+        double const e2 = relative_error(a2, b2);
+        double const e3 = relative_error(a3, b3);
         // comparison
         if(a0 != b0 || a1 != b1 || a2 != b2 || a3 != b3)
             {
