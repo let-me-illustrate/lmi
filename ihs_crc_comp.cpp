@@ -24,6 +24,7 @@
 
 #include "contains.hpp"
 #include "main_common.hpp"
+#include "math_functions.hpp"           // relative_error()
 #include "miscellany.hpp"
 #include "value_cast.hpp"
 
@@ -300,11 +301,7 @@ void f_3(std::string const& line1, std::string const& line2)
     long double abs_diff = std::fabs(d1 - d2);
     max_abs_diff = std::max(max_abs_diff, abs_diff);
 
-    long double rel_err =
-        std::fabs(
-                (d1 - d2)
-            /   ((0.0 == d1) ? d2 : d1)
-            );
+    long double rel_err = relative_error(d1, d2);
     max_rel_err = std::max(max_rel_err, rel_err);
 
     if(rel_err < 1.0E-11L)

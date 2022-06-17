@@ -35,6 +35,7 @@
 #include "round_to.hpp"
 
 #include "fenv_lmi.hpp"
+#include "math_functions.hpp"           // relative_error()
 #include "miscellany.hpp"               // floating_rep(), scoped_ios_format
 #include "test_tools.hpp"
 
@@ -152,29 +153,7 @@ bool test_one_case
     LMI_TEST_EQUAL(std::round(unrounded), observed);
 
     max_prec_real abs_error = std::fabs(observed - expected);
-    // Nonstandardly define relative error in terms of
-    // o(bserved) and e(xpected) as
-    //   |(o-e)/e| if e nonzero, else
-    //   |(o-e)/o| if o nonzero, else
-    //   zero
-    // in order to avoid division by zero.
-    max_prec_real rel_error(0.0);
-    if(max_prec_real(0.0) != expected)
-        {
-        rel_error = std::fabs
-            (
-              (observed - max_prec_real(expected))
-            / expected
-            );
-        }
-    else if(max_prec_real(0.0) != observed)
-        {
-        rel_error = std::fabs
-            (
-              (observed - max_prec_real(expected))
-            / observed
-            );
-        }
+    max_prec_real rel_error = relative_error(observed, expected);
 
     // In general, we can't hope for the relative error to be less than
     // epsilon for the floating-point type being rounded. Suppose a
