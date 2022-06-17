@@ -239,7 +239,9 @@ double fdlibm_expm1(double x)
         }
         if (k <= -2 || k>56) {     // suffice to return exp(x)-1
             y = one-(e-x);
-            SET_HIGH_WORD(y, hi_uint(y) + (k<<20));    // add k to y's exponent
+            // add k to y's exponent, casting to avoid undefined
+            // behavior (left shift of a negative signed integer)
+            SET_HIGH_WORD(y, hi_uint(y) + (int32_t)(((uint32_t)k)<<20));
             return y-one;
         }
         t = one;

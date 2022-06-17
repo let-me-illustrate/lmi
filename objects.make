@@ -360,7 +360,6 @@ ifeq (ubsan,$(build_type))
   excluded_unit_test_targets += \
     actuarial_table_test \
     loads_test \
-    math_functions_test \
     mortality_rates_test \
 
 endif
