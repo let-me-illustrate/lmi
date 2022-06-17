@@ -27,6 +27,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <cfloat>                       // DECIMAL_DIG
 #include <cmath>
 #include <cstdlib>
 #include <fstream>
@@ -311,7 +312,7 @@ void f_3(std::string const& line1, std::string const& line2)
         << '\n';
     std::streamsize const original_precision = std::cout.precision();
     std::cout
-        << std::setprecision(20)
+        << std::setprecision(DECIMAL_DIG)
         << rel_err
         << "  " << d1
         << " vs. " << d2
