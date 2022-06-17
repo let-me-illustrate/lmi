@@ -19,9 +19,6 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// Sample command line to compile:
-// /gcc-2.95.2-1/bin/g++ -Iming29521 ihs_crc_comp.cpp
-
 #include "contains.hpp"
 #include "main_common.hpp"
 #include "math_functions.hpp"           // relative_error()
