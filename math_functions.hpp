@@ -123,8 +123,8 @@ template<typename T>
     constexpr T inf {std::numeric_limits<T>::infinity()};
     auto const denominator {std::min(std::fabs(t), std::fabs(u))};
     return
-          (0.0 == t && 0.0 == u) ? 0.0
-        : (0.0 == denominator)   ? inf
+          (T{} == t && T{} == u) ? T{}
+        : (T{} == denominator)   ? inf
         :                          std::fabs(t - u) / denominator
         ;
 }

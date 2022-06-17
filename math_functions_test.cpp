@@ -493,6 +493,9 @@ void test_relative_error()
     LMI_TEST_EQUAL(2.0, relative_error(1.0, -1.0));
     LMI_TEST_EQUAL(big, relative_error(1.0,  big));
     LMI_TEST_EQUAL(inf, relative_error(big, -big));
+
+    LMI_TEST_EQUAL(2.0F, relative_error(1.0F, -1.0F));
+    LMI_TEST_EQUAL(2.0L, relative_error(1.0L, -1.0L));
 }
 
 void test_signed_zero()
