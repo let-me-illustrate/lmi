@@ -585,10 +585,20 @@ void test_u_abs()
 {
     LMI_TEST_EQUAL(9223372036854775808ULL, u_abs(INT64_MIN));
 
-    LMI_TEST_EQUAL(128, u_abs(INT8_MIN));
+    constexpr auto int8_min {std::numeric_limits<std::int8_t>::min()};
+    constexpr auto int8_max {std::numeric_limits<std::int8_t>::max()};
+
+    std::uint8_t additive_inverse_of_int8_min {u_abs(int8_min)};
+    LMI_TEST_EQUAL(128U, additive_inverse_of_int8_min);
+
+    LMI_TEST_EQUAL(128U, u_abs(int8_min));
+
+    // Incidentally, INT8_MIN is not of type std::int8_t, because it
+    // is converted according to the integer promotions.
+    LMI_TEST_EQUAL(128U, u_abs(INT8_MIN));
 
     // Test all 256 possibilities.
-    for(std::int16_t j = INT8_MIN; j <= INT8_MAX; ++j)
+    for(std::int16_t j = int8_min; j <= int8_max; ++j)
         {
         std::uint16_t u = u_abs(j);
         if(0 <= j)
