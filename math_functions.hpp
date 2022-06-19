@@ -167,6 +167,12 @@ T signum(T t)
 /// Asserts that both integer types have no padding, to rule out the
 ///   UINT_MAX == INT_MAX == -(INT_MIN+1)
 /// case that Daniel Fischer points out somewhere on the web.
+///
+/// The cast on the last line may appear superfluous, but it is not:
+/// unary '-' performs integral promotion on its operand and returns a
+/// result of the promoted type, which is (signed) 'int' if type T is
+/// narrower than 'int'. Without this cast, gcc would issue a warning
+/// in the accompanying unit test.
 
 template<typename T>
 constexpr auto u_abs(T t)
