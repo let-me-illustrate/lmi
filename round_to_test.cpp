@@ -152,6 +152,32 @@ class round_to_test
         );
 };
 
+namespace
+{
+template<typename T>
+/*constexpr*/ T next_outward(T t)
+{
+    static_assert(std::is_floating_point_v<T>);
+    constexpr T inf {std::numeric_limits<T>::infinity()};
+    T const outward_inf {t < 0 ? -inf : inf};
+    return std::nextafter(t, outward_inf);
+}
+
+/// |Distance| to next representable number away from zero.
+///
+/// When a limit on absolute error is wanted, it is important to
+/// choose the "outward" direction: for exact powers of two, the
+/// distance to the first number in the "inner" binade would be
+/// only half of one ULP.
+
+template<typename T>
+/*constexpr*/ T delta_outward(T t)
+{
+    static_assert(std::is_floating_point_v<T>);
+    return std::fabs(next_outward(t) - t);
+}
+} // Unnamed namespace.
+
 template<typename RealType>
 bool round_to_test::test_one_case
     (RealType       unrounded
