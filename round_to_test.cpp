@@ -211,18 +211,6 @@ bool round_to_test::test_one_case
              - unity
              ;
         }
-#if defined LMI_COMO_WITH_MINGW
-    // COMPILER !! This looks like a como porting defect: with mingw
-    // as the underlying C compiler, a long double should occupy
-    // twelve bytes, ten significant and two for padding.
-    if(8 == sizeof(long double))
-        {
-        tolerance = std::max
-            (tolerance
-            ,2.0L * (max_prec_real)std::numeric_limits<double>::epsilon()
-            );
-        }
-#endif // defined LMI_COMO_WITH_MINGW
     bool error_is_within_tolerance = rel_error <= tolerance;
 
     if(!error_is_within_tolerance)
