@@ -192,8 +192,8 @@ bool round_to_test::test_one_case
     max_prec_real abs_error = std::fabs(observed - expected);
     max_prec_real rel_error = relative_error(observed, expected);
 
-    // In general, we can't hope for the relative error to be less than
-    // epsilon for the floating-point type being rounded. Suppose a
+    // In general, we can't hope for the absolute error to be less than
+    // one ulp for the floating-point type being rounded. Suppose a
     // variable gets its value from a floating literal; 2.13.3/1 says
     //   "If the scaled value is in the range of representable values
     //   for its type, the result is the scaled value if representable,
@@ -205,7 +205,7 @@ bool round_to_test::test_one_case
     // direction, as can an expression like '5.0 / 1000.0'. C99 (but
     // not C++) requires evaluation of non-static floating-point
     // constants as if at runtime [F.7.4/1].
-    max_prec_real tolerance = std::numeric_limits<RealType>::epsilon();
+    max_prec_real tolerance = delta_outward(unrounded);
 
     // If the decimal scaling factor is not unity, then either it or
     // its reciprocal has no exact finite binary representation. Such
@@ -221,23 +221,12 @@ bool round_to_test::test_one_case
     // identity hold at runtime unless __STDC_IEC_559__ is defined.
     if(0 != decimals)
         {
-        // 'tolerance' is of the maximum-precision floating-point
-        // type so that it can more closely represent this quantity for
-        // types with less precision, without letting the cross-product
-        // term epsilon**2 vanish.
-        //
-        // TODO ?? Shouldn't one epsilon here be epsilon of
-        // max-precision-real type, as shown in a comment?
-        // But consider using std::nextafter instead of (1+epsilon).
-        RealType const unity = 1;
         tolerance =
-               (unity + std::numeric_limits<RealType>::epsilon())
-             * (unity + std::numeric_limits<RealType>::epsilon())
-//           * (unity + std::numeric_limits<max_prec_real>::epsilon())
-             - unity
-             ;
+              2 * delta_outward               (unrounded)
+            +     delta_outward<max_prec_real>(unrounded)
+            ;
         }
-    bool error_is_within_tolerance = rel_error <= tolerance;
+    bool error_is_within_tolerance = abs_error <= tolerance;
 
     if(!error_is_within_tolerance)
         {
