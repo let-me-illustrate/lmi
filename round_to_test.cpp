@@ -532,6 +532,17 @@ void round_to_test::test_all_modes(bool synchronize)
     test_rounding();
 }
 
+/// Compare 1e8 * e / 1e8 in double vs. long double precision.
+///
+/// For x86_64:
+///   d0 == d1 == d3 == d4 != d2
+/// so the round trip is exact unless the 'double' reciprocal is
+/// stored in a variable.
+///
+/// It might be interesting to test 10^±N more generally. Here,
+/// N=8 just because rounding to more than eight decimals is
+/// relatively uncommon.
+
 void round_to_test::test_scaling()
 {
     scoped_ios_format meaningless_name(std::cout);
