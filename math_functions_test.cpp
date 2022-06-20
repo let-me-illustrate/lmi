@@ -32,6 +32,7 @@
 
 #include <algorithm>                    // min()
 #include <cfloat>                       // DBL_EPSILON
+#include <climits>                      // CHAR_BIT
 #include <cmath>                        // fabs(), isnan(), pow()
 #include <cstdint>
 #include <iomanip>
@@ -591,11 +592,17 @@ void test_u_abs()
     std::uint8_t additive_inverse_of_int8_min {u_abs(int8_min)};
     LMI_TEST_EQUAL(128U, additive_inverse_of_int8_min);
 
-    LMI_TEST_EQUAL(128U, u_abs(int8_min));
+    static_assert(8 == CHAR_BIT);
+
+    LMI_TEST_EQUAL  (1   , sizeof       int8_min );
+    LMI_TEST_EQUAL  (1   , sizeof u_abs(int8_min));
+    LMI_TEST_EQUAL  (128U,        u_abs(int8_min));
 
     // Incidentally, INT8_MIN is not of type std::int8_t, because it
     // is converted according to the integer promotions.
-    LMI_TEST_EQUAL(128U, u_abs(INT8_MIN));
+    LMI_TEST_UNEQUAL(1   , sizeof       INT8_MIN );
+    LMI_TEST_UNEQUAL(1   , sizeof u_abs(INT8_MIN));
+    LMI_TEST_EQUAL  (128U,        u_abs(INT8_MIN));
 
     // Test all 256 possibilities.
     for(std::int16_t j = int8_min; j <= int8_max; ++j)
