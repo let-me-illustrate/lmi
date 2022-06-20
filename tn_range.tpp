@@ -220,7 +220,7 @@ namespace
         return is_exact_integer_tester<T>()(t);
     }
 
-    /// Like C99 nextafter(), but prevents range error, and returns
+    /// Like std::nextafter(), but prevents range error, and returns
     /// exact integral values unchanged.
 
     template<typename T>

@@ -33,7 +33,7 @@
 #include <algorithm>                    // max()
 #include <cfloat>                       // DECIMAL_DIG
 #include <climits>                      // INT_MIN
-#include <cmath>                        // fabs()
+#include <cmath>                        // fabs(), nextafter()
 #include <ios>
 #include <iostream>
 #include <limits>
@@ -547,8 +547,8 @@ void round_to_test::test_scaling()
 {
     scoped_ios_format meaningless_name(std::cout);
     double const volatile d0 = 2.71828'18284'59045'23536;
-    double const lo = nextafter(d0, -INFINITY);
-    double const hi = nextafter(d0,  INFINITY);
+    double const lo = std::nextafter(d0, -INFINITY);
+    double const hi = std::nextafter(d0,  INFINITY);
 
     double const volatile d1 = (d0 * 1.0e8) / 1.0e8;
     double const volatile dreciprocal = 1.0 / 1.0e8;
