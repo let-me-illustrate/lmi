@@ -583,7 +583,7 @@ void test_signum(char const* file, int line)
 
 void test_u_abs()
 {
-    LMI_TEST_EQUAL(9223372036854775808ULL, u_abs(INT64_MIN));
+    LMI_TEST_EQUAL(0x8000000000000000, u_abs(INT64_MIN));
 
     constexpr auto int8_min {std::numeric_limits<std::int8_t>::min()};
     constexpr auto int8_max {std::numeric_limits<std::int8_t>::max()};
