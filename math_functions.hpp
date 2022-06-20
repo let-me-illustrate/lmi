@@ -162,20 +162,37 @@ T signum(T t)
     return (0 == t) ? 0 : std::signbit(t) ? -1 : 1;
 }
 
-/// Unsigned |signed value|. Needed because std::abs(INT_MIN) is UB.
+/// (Unsigned) absolute value of a signed integer.
+///
+/// Returns the absolute value of a signed integer, as a value of the
+/// corresponding unsigned type. Notably, the additive inverse of a
+/// negative integer is this absolute value.
+///
+/// Motivation: Attempting to take the absolute value of INT_MIN
+/// directly, as "std::abs(INT_MIN)", entails undefined behavior.
+/// So does attempting to take the additive inverse of INT_MIN by
+/// direct negation, as "-INT_MIN".
 ///
 /// Asserts that both integer types have no padding, to rule out the
 ///   UINT_MAX == INT_MAX == -(INT_MIN+1)
 /// case that Daniel Fischer points out somewhere on the web.
 ///
-/// The cast on the last line may appear superfluous, but it is not:
-/// unary '-' performs integral promotion on its operand and returns a
-/// result of the promoted type, which is (signed) 'int' if type T is
-/// narrower than 'int'. Without this cast, gcc would issue a warning
-/// in the accompanying unit test.
+/// Postconditions: for u = u_abs(t),
+///  - u is of an unsigned type
+///  - sizeof u == sizeof t
+/// and, if t is negative, then
+///  - 0 == t + u == u + t [for t < 0; incidentally, also for 0 == t]
+///
+/// If the cast on the last line is removed, then unary '-' performs
+/// integral promotion on its operand and returns a result of the
+/// promoted type, which is (signed) 'int' if type T is narrower than
+/// 'int', so the conditional operator returns a result of that type,
+/// which the function implicitly casts to its (narrower) return type.
+/// Thus, the cast has no actual effect; it serves only to clarify the
+/// intention.
 
 template<typename T>
-constexpr auto u_abs(T t)
+constexpr std::make_unsigned_t<T> u_abs(T t)
 {
     static_assert(std::is_integral_v<T>);
     static_assert(std::is_signed_v<T>);

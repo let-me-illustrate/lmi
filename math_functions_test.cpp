@@ -609,9 +609,15 @@ void test_u_abs()
         {
         std::uint16_t u = u_abs(j);
         if(0 <= j)
-            {LMI_TEST_EQUAL(u,  j);}
+            {
+            LMI_TEST_EQUAL(u,  j);
+            }
         if(j <= 0)
-            {LMI_TEST_EQUAL(u, -j);}
+            {
+            LMI_TEST_EQUAL(u, -j);
+            LMI_TEST_EQUAL(0, u + j);
+            LMI_TEST_EQUAL(0, j + u);
+            }
         }
 }
 
