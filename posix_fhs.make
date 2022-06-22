@@ -36,4 +36,9 @@ LD      := g++
 # that msw resources aren't used on this platform.
 RC      :=
 
-XMLLINT := xmllint
+# Programs for which FHS doesn't specify a location.
+
+# The 'xmllint' lmi builds matches the libxml2 version lmi uses:
+#   XMLLINT := $(localbindir)/xmllint
+# while the build system's own 'xmllint', if installed, may differ:
+    XMLLINT := xmllint

@@ -84,10 +84,10 @@ compiler_runtime_files := \
 
 # Programs for which FHS doesn't specify a location.
 
-# Instead of requiring installation of the build system's own libxml2:
+# The 'xmllint' lmi builds matches the libxml2 version lmi uses:
+    XMLLINT := $(localbindir)/xmllint
+# while the build system's own 'xmllint', if installed, may differ:
 #   XMLLINT := xmllint
-# use the one that lmi builds:
-XMLLINT := $(localbindir)/xmllint
 
 ################################################################################
 
