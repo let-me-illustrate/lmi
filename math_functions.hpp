@@ -177,11 +177,11 @@ T signum(T t)
 ///   UINT_MAX == INT_MAX == -(INT_MIN+1)
 /// case that Daniel Fischer points out somewhere on the web.
 ///
-/// Postconditions: for u = u_abs(t),
-///  - u is of an unsigned type
-///  - sizeof u == sizeof t
+/// Postconditions: for r = u_abs(t),
+///  - r is of an unsigned type
+///  - sizeof r == sizeof t
 /// and, if t is negative, then
-///  - 0 == t + u == u + t [for t < 0; incidentally, also for 0 == t]
+///  - 0 == t + r == r + t [for t < 0; incidentally, also for 0 == t]
 ///
 /// If the cast on the last line is removed, then unary '-' performs
 /// integral promotion on its operand and returns a result of the
