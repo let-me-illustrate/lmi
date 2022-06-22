@@ -65,7 +65,7 @@ compiler_runtime_files := \
 # Programs for which FHS doesn't specify a location.
 
 # Instead of requiring installation of the build system's own libxml2:
-    XMLLINT := $(localbindir)/xmllint.exe
+    XMLLINT := $(localbindir)/xmllint$(EXEEXT)
 
 ################################################################################
 
