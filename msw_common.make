@@ -40,10 +40,3 @@ platform_defines := \
 platform_gui_ldflags := -mwindows
 
 platform_cgicc_libraries :=
-
-################################################################################
-
-# HTML server's cgi-bin directory. Not used yet. Eventually, an
-# 'install' target might copy cgi-bin binaries thither.
-#
-#cgi_bin_dir := $(system_root)/unspecified/cgi-bin
