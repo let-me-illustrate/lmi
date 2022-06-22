@@ -47,6 +47,40 @@ $(srcdir)/$(platform_makefile):: ;
 
 ################################################################################
 
+# Standard utilities.
+
+# Required in /bin (if anywhere) by FHS-2.2 .
+
+CHMOD   := chmod
+CP      := cp
+DATE    := date
+ECHO    := echo
+GZIP    := gzip
+INSTALL := install
+LS      := ls
+MKDIR   := mkdir
+MV      := mv
+RM      := rm
+SED     := sed
+TAR     := tar
+
+# FHS-2.2 would presumably put these in /usr/bin . However, debian
+# puts 'bzip2' and 'grep' in /bin .
+
+BSDTAR  := bsdtar
+BZIP2   := bzip2
+DIFF    := diff
+GREP    := grep
+MD5SUM  := md5sum
+PATCH   := patch
+SORT    := sort
+TOUCH   := touch
+TR      := tr
+WC      := wc
+WGET    := wget
+
+################################################################################
+
 # GNU tools for special purposes.
 
 # Always use the GNU C++ compiler and preprocessor, version 3.x or

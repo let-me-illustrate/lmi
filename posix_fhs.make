@@ -36,32 +36,4 @@ LD      := g++
 # that msw resources aren't used on this platform.
 RC      :=
 
-# Required in /bin (if anywhere) by FHS-2.2 .
-
-CHMOD   := chmod
-CP      := cp
-DATE    := date
-ECHO    := echo
-GZIP    := gzip
-INSTALL := install
-LS      := ls
-MKDIR   := mkdir
-MV      := mv
-RM      := rm
-SED     := sed
-TAR     := tar
-
-# FHS-2.2 would put these in /usr/bin .
-
-BSDTAR  := bsdtar
-BZIP2   := bzip2
-DIFF    := diff
-GREP    := grep
-MD5SUM  := md5sum
-PATCH   := patch
-SORT    := sort
-TOUCH   := touch
-TR      := tr
-WC      := wc
-WGET    := wget
 XMLLINT := xmllint
