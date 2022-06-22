@@ -72,6 +72,13 @@ CXX     := $(gcc_bin_dir)$(host_hyphen)g++
 LD      := $(gcc_bin_dir)$(host_hyphen)g++
 RC      := $(gcc_bin_dir)$(host_hyphen)windres
 
+# Programs for which FHS doesn't specify a location.
+
+# The 'xmllint' lmi builds matches the libxml2 version lmi uses:
+    XMLLINT := $(localbindir)/xmllint
+# while the build system's own 'xmllint', if installed, may differ:
+#   XMLLINT := xmllint
+
 # Identify run-time libraries for redistribution. See:
 #   https://cygwin.com/ml/cygwin/2010-09/msg00553.html
 # Of course manipulating an lmi user's $PATH is out of the question.
@@ -81,13 +88,6 @@ compiler_sysroot := $(mingw_dir)/$(LMI_TRIPLET)/lib
 compiler_runtime_files := \
   $(wildcard $(compiler_sysroot)/libgcc*.dll) \
   $(wildcard $(compiler_sysroot)/libstdc++*.dll) \
-
-# Programs for which FHS doesn't specify a location.
-
-# The 'xmllint' lmi builds matches the libxml2 version lmi uses:
-    XMLLINT := $(localbindir)/xmllint
-# while the build system's own 'xmllint', if installed, may differ:
-#   XMLLINT := xmllint
 
 ################################################################################
 

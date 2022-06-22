@@ -45,6 +45,15 @@ CXX     := $(gcc_bin_dir)$(host_hyphen)g++
 LD      := $(gcc_bin_dir)$(host_hyphen)g++
 RC      := $(gcc_bin_dir)$(host_hyphen)windres
 
+# Programs for which FHS doesn't specify a location.
+
+# The 'xmllint' lmi builds matches the libxml2 version lmi uses:
+#   XMLLINT := $(PERFORM) $(localbindir)/xmllint$(EXEEXT)
+# while the build system's own 'xmllint', if installed, may differ:
+    XMLLINT := xmllint
+# Don't use the one lmi builds until 'wine' is fixed--see:
+#   https://lists.nongnu.org/archive/html/lmi/2019-01/msg00034.html
+
 # Identify run-time libraries for redistribution. See:
 #   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00046.html
 # Perhaps gcc's '-print-sysroot' would be more suitable, but that
@@ -61,15 +70,6 @@ compiler_sysroot := $(dir $(shell $(CXX) -print-libgcc-file-name))
 compiler_runtime_files := \
   $(wildcard $(compiler_sysroot)/libgcc*.dll) \
   $(wildcard $(compiler_sysroot)/libstdc++*.dll) \
-
-# Programs for which FHS doesn't specify a location.
-
-# The 'xmllint' lmi builds matches the libxml2 version lmi uses:
-#   XMLLINT := $(PERFORM) $(localbindir)/xmllint$(EXEEXT)
-# while the build system's own 'xmllint', if installed, may differ:
-    XMLLINT := xmllint
-# Don't use the one lmi builds until 'wine' is fixed--see:
-#   https://lists.nongnu.org/archive/html/lmi/2019-01/msg00034.html
 
 ################################################################################
 
