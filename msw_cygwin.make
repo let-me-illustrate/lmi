@@ -38,10 +38,6 @@ endif
 
 ################################################################################
 
-system_root := /cygdrive/c
-
-################################################################################
-
 # Use cygwin as a quasi-cross-compiler for --host=*-w64-mingw32.
 
 # For autotoolized libraries, pass flags such as these to 'configure':

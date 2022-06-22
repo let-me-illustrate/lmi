@@ -29,10 +29,6 @@ endif
 
 ################################################################################
 
-system_root := /
-
-################################################################################
-
 # Compiler, linker, and so on.
 
 # Full path to gcc binaries, slash-terminated if nonempty. Setting it
