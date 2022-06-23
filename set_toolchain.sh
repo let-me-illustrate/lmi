@@ -49,6 +49,8 @@
 # and likewise for all other directories. Depending on symlinks
 # didn't seem like a good idea.
 
+# Unimplemented alternative: custom triplets
+#
 # This alternative for future consideration trades some complexity of
 # implementation for mitigation of confusion and convenience of use.
 #
@@ -61,7 +63,6 @@
 # Supported values:
 #   LMI_COMPILER : gcc, clang
 #   LMI_TRIPLET  : x86_64-pc-linux-gnu, x86_64-w64-mingw32
-# (clang not yet tested).
 #
 # Examples:
 #
