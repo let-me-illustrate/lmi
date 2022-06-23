@@ -27,8 +27,9 @@
 # used in production if they were unset or null beforehand. They can
 # be overridden at the command line, e.g.:
 #
-#   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-pc-linux-gnu ; . /opt/lmi/src/lmi/set_toolchain.sh
-#   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-w64-mingw32  ; . /opt/lmi/src/lmi/set_toolchain.sh
+# LMI_COMPILER=gcc   ; LMI_TRIPLET=x86_64-pc-linux-gnu ; . /opt/lmi/src/lmi/set_toolchain.sh
+# LMI_COMPILER=clang ; LMI_TRIPLET=x86_64-pc-linux-gnu ; . /opt/lmi/src/lmi/set_toolchain.sh
+# LMI_COMPILER=gcc   ; LMI_TRIPLET=x86_64-w64-mingw32  ; . /opt/lmi/src/lmi/set_toolchain.sh
 #
 # Implemented as a function that runs and then erases itself, so that
 # sourcing this script changes the environment only as intended. This
@@ -170,6 +171,7 @@ export LMI_TRIPLET
 
 case "$LMI_COMPILER" in
     (gcc) ;;
+    (clang) ;;
     (*)
         printf '%s\n' "Changed nothing because compiler '$LMI_COMPILER' is untested."
         return 2;
