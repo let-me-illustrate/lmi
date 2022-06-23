@@ -24,15 +24,9 @@
 
 SHREXT := .so
 
-EXTRA_LIBS := -ldw -lunwind -ldl
+gcc_proclitic :=
 
-AR      := ar
-CC      := gcc
-CPP     := cpp
-CXX     := g++
-LD      := g++
-# Not used--no value necessary:
-RC      :=
+EXTRA_LIBS := -ldw -lunwind -ldl
 
 # Programs for which FHS doesn't specify a location.
 

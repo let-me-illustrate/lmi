@@ -78,17 +78,3 @@ TOUCH   := touch
 TR      := tr
 WC      := wc
 WGET    := wget
-
-################################################################################
-
-# GNU tools for special purposes.
-
-# Always use the GNU C++ compiler and preprocessor, version 3.x or
-# later, for testing physical closure and generating autodependencies.
-# This obviates figuring out how other toolchains support these needs.
-#
-# Override these definitions to specify GNU tools when using a
-# toolchain other than gcc-3.x or later.
-
-GNU_CPP := $(CPP)
-GNU_CXX := $(CXX)

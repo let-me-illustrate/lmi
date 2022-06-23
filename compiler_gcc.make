@@ -19,6 +19,50 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+AR      := $(gcc_proclitic)ar
+CC      := $(gcc_proclitic)gcc
+CPP     := $(gcc_proclitic)cpp
+CXX     := $(gcc_proclitic)g++
+LD      := $(gcc_proclitic)g++
+# For GNU/Linux, $(RC) is never invoked.
+RC      := $(gcc_proclitic)windres
+
+################################################################################
+
+# GNU tools for special purposes.
+
+# Always use the GNU C++ compiler and preprocessor, version 3.x or
+# later, for testing physical closure and generating autodependencies.
+# This obviates figuring out how other toolchains support these needs.
+#
+# Override these definitions to specify GNU tools when using a
+# toolchain other than gcc-3.x or later.
+
+GNU_CPP := $(CPP)
+GNU_CXX := $(CXX)
+
+################################################################################
+
+# Identify run-time libraries for redistribution. See:
+#   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00046.html
+# Perhaps gcc's '-print-sysroot' would be more suitable, but that
+# option returns an empty string with debian cross compilers.
+#
+# It might seem more robust to write something like
+#   compiler_sysroot := $(shell readlink -fn /usr/lib/gcc/$(LMI_TRIPLET)/*-win32)
+# but that would actually weaken makefile portability, and there
+# is no guarantee that this directory will be named similarly in
+# future debian releases, much less on other OSs.
+
+ifeq (mingw32,$(findstring mingw32,$(LMI_TRIPLET)))
+compiler_sysroot := $(dir $(shell $(CXX) -print-libgcc-file-name))
+
+compiler_runtime_files := \
+  $(wildcard $(compiler_sysroot)/libgcc*.dll) \
+  $(wildcard $(compiler_sysroot)/libstdc++*.dll) \
+
+endif
+
 ################################################################################
 
 # $(subst): workaround for debian, whose MinGW-w64 identifies its
