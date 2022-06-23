@@ -80,10 +80,17 @@ RC      := $(gcc_bin_dir)$(host_hyphen)windres
 #   XMLLINT := xmllint
 
 # Identify run-time libraries for redistribution. See:
-#   https://cygwin.com/ml/cygwin/2010-09/msg00553.html
-# Of course manipulating an lmi user's $PATH is out of the question.
+#   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00046.html
+# Perhaps gcc's '-print-sysroot' would be more suitable, but that
+# option returns an empty string with debian cross compilers.
+#
+# It might seem more robust to write something like
+#   compiler_sysroot := $(shell readlink -fn /usr/lib/gcc/$(LMI_TRIPLET)/*-win32)
+# but that would actually weaken makefile portability, and there
+# is no guarantee that this directory will be named similarly in
+# future debian releases, much less on other OSs.
 
-compiler_sysroot := $(mingw_dir)/$(LMI_TRIPLET)/lib
+compiler_sysroot := $(dir $(shell $(CXX) -print-libgcc-file-name))
 
 compiler_runtime_files := \
   $(wildcard $(compiler_sysroot)/libgcc*.dll) \
