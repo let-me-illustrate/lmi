@@ -131,7 +131,7 @@ InputSequence::InputSequence
     assert_sane_and_ordered_partition(intervals_, a_years_to_maturity);
 }
 
-/// Construct from vector: e.g, a a a b b --> a[0,3); b[3,4).
+/// Construct from vector: e.g., a a a b b --> a[0,3); b[3,4).
 ///
 /// Accessible only by unit test or through free function template
 /// canonicalized_input_sequence().
@@ -147,7 +147,7 @@ InputSequence::InputSequence(std::vector<std::string> const& v)
     assert_sane_and_ordered_partition(intervals_, years_to_maturity_);
 }
 
-/// Construct from vector: e.g, 1 1 1 2 2 --> 1[0,3); 2[3,4).
+/// Construct from vector: e.g., 1 1 1 2 2 --> 1[0,3); 2[3,4).
 ///
 /// Accessible only by unit test or through free function template
 /// canonicalized_input_sequence().

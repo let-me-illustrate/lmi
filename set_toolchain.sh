@@ -43,7 +43,7 @@
 # similarly overridable, along with other directories--perhaps even
 # platform-specific ones like $mingw_bin_dir.
 
-# Unimplemented alternative: use symlinks, e.g:
+# Unimplemented alternative: use symlinks, e.g.:
 #   ln --symbolic --force --no-dereference \
 #   /opt/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/bin /opt/lmi/bin
 # and likewise for all other directories. Depending on symlinks
