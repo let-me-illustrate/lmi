@@ -104,7 +104,8 @@ local locallibdir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib"
 # debian's default in '/etc/login.defs' adds silly 'games' directories
 # but omits '/usr/sbin' and '/sbin', for instance.
 
-minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
+local minimal_path
+      minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
 export PATH="$localbindir":"$locallibdir":"$minimal_path"
 
 # It is okay to export these variables unconditionally.
