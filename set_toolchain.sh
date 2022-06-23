@@ -96,6 +96,15 @@ local      bindir="$prefix/bin"
 local localbindir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/bin"
 local locallibdir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib"
 
+# Directory where clang can find gcc-built '*-config' scripts.
+local clanggccdir
+case "$LMI_COMPILER" in
+    (clang)
+        clanggccdir="$prefix/local/gcc_${LMI_TRIPLET}/bin"
+        ;;
+    (*) ;;
+esac
+
 # Running a command like this many times:
 #   export PATH="$localbindir":"$locallibdir":"$PATH"
 # would cause $PATH to grow without bound.
@@ -106,6 +115,7 @@ local locallibdir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib"
 
 local minimal_path
       minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
+      minimal_path="${clanggccdir:+${clanggccdir}:}""$minimal_path"
 export PATH="$localbindir":"$locallibdir":"$minimal_path"
 
 # It is okay to export these variables unconditionally.
