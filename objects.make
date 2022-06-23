@@ -341,7 +341,7 @@ wx_test_objects := \
   wx_test_pdf_create.o \
   wx_test_validate_output.o \
 
-ifneq (,$(RC))
+ifeq (mingw32,$(findstring mingw32,$(LMI_TRIPLET)))
   lmi_wx_objects  += lmi_msw_res.o
   wx_test_objects += lmi_msw_res.o
 endif

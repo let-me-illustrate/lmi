@@ -31,9 +31,7 @@ CC      := gcc
 CPP     := cpp
 CXX     := g++
 LD      := g++
-
-# Don't set RC to anything: elsewhere, this is taken as indicating
-# that msw resources aren't used on this platform.
+# Not used--no value necessary:
 RC      :=
 
 # Programs for which FHS doesn't specify a location.
