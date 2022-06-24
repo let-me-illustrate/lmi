@@ -86,6 +86,11 @@
 # That remains the motivation for this design even though i686 builds
 # are no longer supported.
 
+strip_colons()
+{
+    printf '%s' "$1" | sed -e 's/::*/:/g' -e's/::*$//'
+}
+
 foo()
 {
 local   lmi_build_type
@@ -118,8 +123,8 @@ esac
 
 local minimal_path
       minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
-      minimal_path="${clanggccbindir:+${clanggccbindir}:}""$minimal_path"
-export PATH="$localbindir":"$locallibdir":"$minimal_path"
+export PATH="$localbindir":"$locallibdir":"$clanggccbindir":"$minimal_path"
+PATH=$( strip_colons "$PATH" )
 
 # It is okay to export these variables unconditionally.
 
@@ -151,7 +156,8 @@ case "$lmi_build_type" in
                 LD_LIBRARY_PATH=.
                 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$locallibdir"
                 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$bindir"
-                LD_LIBRARY_PATH="$LD_LIBRARY_PATH${clanggcclibdir:+:${clanggcclibdir}}"
+                LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$clanggcclibdir"
+                LD_LIBRARY_PATH=$( strip_colons "$LD_LIBRARY_PATH" )
                 # Nullify any leftover "wine" values: obligatorily for
                 # $EXEEXT and $PERFORM, and for $WINEPATH to ensure
                 # that native builds never depend upon it.
@@ -204,4 +210,5 @@ esac
 
 foo
 
+unset -f strip_colons
 unset -f foo
