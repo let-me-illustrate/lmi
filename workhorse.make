@@ -1102,7 +1102,6 @@ show_flags:
 	@printf 'ALL_CFLAGS              = "%s"\n' "$(ALL_CFLAGS)"
 	@printf 'ALL_CXXFLAGS            = "%s"\n' "$(ALL_CXXFLAGS)"
 	@printf 'ALL_ARFLAGS             = "%s"\n' "$(ALL_ARFLAGS)"
-	@printf 'REQUIRED_LDFLAGS        = "%s"\n' "$(REQUIRED_LDFLAGS)"
 	@printf 'EXTRA_LDFLAGS           = "%s"\n' "$(EXTRA_LDFLAGS)"
 	@printf 'EXTRA_LIBS              = "%s"\n' "$(EXTRA_LIBS)"
 	@printf 'ALL_LDFLAGS             = "%s"\n' "$(ALL_LDFLAGS)"
