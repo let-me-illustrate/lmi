@@ -400,17 +400,16 @@ clobber: source_clean
 
 .PHONY: raze
 raze: source_clean
-	-$(RM) --force --recursive $(prefix)/gcc_x86_64-w64-mingw32
 	-$(RM) --force --recursive $(prefix)/gcc_x86_64-pc-linux-gnu
+	-$(RM) --force --recursive $(prefix)/clang_x86_64-pc-linux-gnu
+	-$(RM) --force --recursive $(prefix)/gcc_x86_64-w64-mingw32
 
 .PHONY: eviscerate
-eviscerate: source_clean
+eviscerate: source_clean raze
 	-$(RM) --force --recursive $(prefix)/bin
 	-$(RM) --force --recursive $(prefix)/local
 	-$(RM) --force --recursive $(prefix)/third_party
 	-$(RM) --force --recursive $(prefix)/zzz
-	-$(RM) --force --recursive $(prefix)/gcc_x86_64-w64-mingw32
-	-$(RM) --force --recursive $(prefix)/gcc_x86_64-pc-linux-gnu
 
 # A simple '$(RM) --force --recursive $(bindir)' would remove the
 # directory as well as its contents. However, if $(bindir) is the
