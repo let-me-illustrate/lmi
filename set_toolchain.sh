@@ -98,9 +98,12 @@ local locallibdir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib"
 
 # Directory where clang can find gcc-built '*-config' scripts.
 local clanggccbindir
+# Directory where clang can find gcc-built libraries.
+local clanggcclibdir
 case "$LMI_COMPILER" in
     (clang)
         clanggccbindir="$prefix/local/gcc_${LMI_TRIPLET}/bin"
+        clanggcclibdir="$prefix/local/gcc_${LMI_TRIPLET}/lib"
         ;;
     (*) ;;
 esac
@@ -148,6 +151,7 @@ case "$lmi_build_type" in
                 LD_LIBRARY_PATH=.
                 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$locallibdir"
                 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$bindir"
+                LD_LIBRARY_PATH="$LD_LIBRARY_PATH${clanggcclibdir:+:${clanggcclibdir}}"
                 # Nullify any leftover "wine" values: obligatorily for
                 # $EXEEXT and $PERFORM, and for $WINEPATH to ensure
                 # that native builds never depend upon it.
