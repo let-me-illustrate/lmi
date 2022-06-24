@@ -974,7 +974,12 @@ $(testdecks):
 system_test: $(datadir)/configurable_settings.xml $(touchstone_md5sums) install
 	@$(ECHO) System test:
 	@$(RM) --force $(addprefix $(test_dir)/*., $(test_result_suffixes))
-	@[ "$(strip $(testdecks))" != "" ] || ( $(ECHO) No testdecks. && false )
+	@[ "$(strip $(testdecks))" != "" ] \
+	  || ( \
+	     $(ECHO) "No testdecks. Do something like this:\\n \
+	     cp -aiu $(touchstone_dir)/*.{cns,ill,ini,inix,mec,gpt} $(test_dir)" \
+	     && false \
+	     )
 	@testdecks=`$(LS) --sort=size $(testdecks) || $(ECHO) $(testdecks)` \
 	  && $(MAKE) --file=$(this_makefile) --directory=$(test_dir) $$testdecks
 	@$(SORT) --output=$(system_test_analysis) $(system_test_analysis)
