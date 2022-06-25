@@ -93,7 +93,10 @@ endif
 
 REQUIRED_COMPILER_FLAGS := \
   $(c_l_flags) \
-  -ffp-model=strict \
+  -Woverriding-t-option \
+    -ffp-model=strict \
+    -ffp-exception-behavior=ignore \
+  -Wno-overriding-t-option \
   -fno-ms-compatibility \
   -fno-ms-extensions \
 
