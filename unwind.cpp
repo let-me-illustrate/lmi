@@ -197,6 +197,12 @@ void __cxa_throw(void* thrown_exception, std::type_info* tinfo, void (*dest)(voi
         print_backtrace();
         }
     original_cxa_throw(thrown_exception, tinfo, dest);
+// Work around a clang anomaly--see:
+//   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00067.html
+// et seqq.
+#if defined LMI_CLANG
+    throw "Unreachable--silences a compiler diagnostic.";
+#endif // defined LMI_CLANG
 }
 
 #   if defined LMI_GCC
