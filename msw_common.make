@@ -38,5 +38,3 @@ platform_defines := \
   -DSTRICT \
 
 platform_gui_ldflags := -mwindows
-
-platform_cgicc_libraries :=
