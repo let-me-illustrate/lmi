@@ -587,15 +587,6 @@ $(product_file_sources): tutelary_flag += $(product_file_flags)
 
 debug_flag := -ggdb
 
-# MinGW gcc-3.4.2 writes dwarf2 debug records if '-ggdb' is specified,
-# but the version of gdb packaged with it expects stabs format.
-#
-ifeq (3.4.2,$(gcc_version))
-  debug_flag := -g
-  gcc_version_specific_c_warnings   := -Wno-uninitialized
-  gcc_version_specific_cxx_warnings := -Wno-uninitialized
-endif
-
 # Compiler-and-linker flags.
 #
 # 'c_l_flags' are to be used in both compiler and linker commands.
