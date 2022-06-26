@@ -630,7 +630,6 @@ ifneq (,$(USE_SO_ATTRIBUTES))
   ifeq (mingw32,$(findstring mingw32,$(LMI_TRIPLET)))
     LDFLAGS += -Wl,--disable-auto-import -static-libstdc++
   endif
-  actually_used_lmi_so_attributes = -DLMI_USE_SO_ATTRIBUTES $(lmi_so_attributes)
 endif
 
 # C preprocessor flags.
@@ -644,11 +643,14 @@ REQUIRED_CPPFLAGS = \
   $(addprefix -I , $(lmi_include_directories)) \
   $(addprefix -isystem , $(sys_include_directories)) \
   $(lmi_wx_new_so_attributes) \
-  $(actually_used_lmi_so_attributes) \
   $(platform_defines) \
   $(libstdcxx_warning_macros) \
   $(wx_predefinitions) \
   -D_FILE_OFFSET_BITS=64 \
+
+ifneq (,$(USE_SO_ATTRIBUTES))
+  REQUIRED_CPPFLAGS += -DLMI_USE_SO_ATTRIBUTES $(lmi_so_attributes)
+endif
 
 # C compiler flags.
 
