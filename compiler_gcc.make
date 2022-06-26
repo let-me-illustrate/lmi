@@ -702,10 +702,6 @@ REQUIRED_RCFLAGS = \
   $(subst -isystem,--include-dir,$(ALL_CPPFLAGS)) \
   --use-temp-file \
 
-# To create msw import libraries, use '-Wl,--out-implib,$@.a'. There
-# seems to be no advantage to that anymore as of 2005-01, but keeping
-# the ancient incantation in a comment here does no harm.
-
 ALL_ARFLAGS  = $(REQUIRED_ARFLAGS)  $(ARFLAGS)
 ALL_CPPFLAGS = $(REQUIRED_CPPFLAGS) $(CPPFLAGS)
 ALL_CXXFLAGS = $(REQUIRED_CXXFLAGS) $(CXXFLAGS) $(tutelary_flag)
