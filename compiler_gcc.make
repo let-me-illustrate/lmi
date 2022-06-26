@@ -493,11 +493,6 @@ ubsan_options := \
   -O3 \
   --param max-gcse-memory=1000000 \
 
-# libstdc++ debugging macros
-
-every_libstdcxx_warning_macro := \
-  -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_GLIBCXX_SANITIZE_VECTOR \
-
 # Since gcc version 4.6, '-fomit-frame-pointer' has apparently been
 # the default. Don't use that because it makes debugging difficult.
 # See:
@@ -510,7 +505,6 @@ else ifeq (ubsan,$(build_type))
   analyzer_flag := $(ubsan_options)
 else ifeq (safestdlib,$(build_type))
   optimization_flag := -O0 -fno-omit-frame-pointer
-  libstdcxx_warning_macros := $(every_libstdcxx_warning_macro)
 else
   optimization_flag := -O2 -fno-omit-frame-pointer
 endif
@@ -644,12 +638,19 @@ REQUIRED_CPPFLAGS = \
   $(addprefix -isystem , $(sys_include_directories)) \
   $(lmi_wx_new_so_attributes) \
   $(platform_defines) \
-  $(libstdcxx_warning_macros) \
   $(wx_predefinitions) \
   -D_FILE_OFFSET_BITS=64 \
 
 ifneq (,$(USE_SO_ATTRIBUTES))
   REQUIRED_CPPFLAGS += -DLMI_USE_SO_ATTRIBUTES $(lmi_so_attributes)
+endif
+
+ifeq (safestdlib,$(build_type))
+  REQUIRED_CPPFLAGS += \
+    -D_GLIBCXX_DEBUG \
+    -D_GLIBCXX_DEBUG_PEDANTIC \
+    -D_GLIBCXX_SANITIZE_VECTOR \
+
 endif
 
 # C compiler flags.
