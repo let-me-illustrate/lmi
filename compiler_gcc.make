@@ -68,6 +68,33 @@ endif
 # /\w*EXTRA_/ variables such as $(EXTRA_LDFLAGS) are set by other
 # makefiles, and used here without modification.
 
+# C preprocessor flags.
+#
+# wx sets _FILE_OFFSET_BITS to 64; this definition is explicitly
+# repeated below to make assurance doubly sure--see:
+#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00039.html
+# et seq.
+
+REQUIRED_CPPFLAGS = \
+  $(addprefix -I , $(lmi_include_directories)) \
+  $(addprefix -isystem , $(sys_include_directories)) \
+  $(lmi_wx_new_so_attributes) \
+  $(platform_defines) \
+  $(wx_predefinitions) \
+  -D_FILE_OFFSET_BITS=64 \
+
+ifneq (,$(USE_SO_ATTRIBUTES))
+  REQUIRED_CPPFLAGS += -DLMI_USE_SO_ATTRIBUTES $(lmi_so_attributes)
+endif
+
+ifeq (safestdlib,$(build_type))
+  REQUIRED_CPPFLAGS += \
+    -D_GLIBCXX_DEBUG \
+    -D_GLIBCXX_DEBUG_PEDANTIC \
+    -D_GLIBCXX_SANITIZE_VECTOR \
+
+endif
+
 # Compiler version.
 
 # $(subst): workaround for debian, whose MinGW-w64 identifies its
@@ -624,33 +651,6 @@ ifneq (,$(USE_SO_ATTRIBUTES))
   ifeq (mingw32,$(findstring mingw32,$(LMI_TRIPLET)))
     LDFLAGS += -Wl,--disable-auto-import -static-libstdc++
   endif
-endif
-
-# C preprocessor flags.
-#
-# wx sets _FILE_OFFSET_BITS to 64; this definition is explicitly
-# repeated below to make assurance doubly sure--see:
-#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00039.html
-# et seq.
-
-REQUIRED_CPPFLAGS = \
-  $(addprefix -I , $(lmi_include_directories)) \
-  $(addprefix -isystem , $(sys_include_directories)) \
-  $(lmi_wx_new_so_attributes) \
-  $(platform_defines) \
-  $(wx_predefinitions) \
-  -D_FILE_OFFSET_BITS=64 \
-
-ifneq (,$(USE_SO_ATTRIBUTES))
-  REQUIRED_CPPFLAGS += -DLMI_USE_SO_ATTRIBUTES $(lmi_so_attributes)
-endif
-
-ifeq (safestdlib,$(build_type))
-  REQUIRED_CPPFLAGS += \
-    -D_GLIBCXX_DEBUG \
-    -D_GLIBCXX_DEBUG_PEDANTIC \
-    -D_GLIBCXX_SANITIZE_VECTOR \
-
 endif
 
 # C compiler flags.
