@@ -27,16 +27,14 @@ LD      := $(gcc_proclitic)g++
 # For GNU/Linux, $(RC) is never invoked.
 RC      := $(gcc_proclitic)windres
 
-################################################################################
-
-# GNU tools for special purposes.
-
-# Always use the GNU C++ compiler and preprocessor, version 3.x or
-# later, for testing physical closure and generating autodependencies.
+# GNU tools (or workalikes) for special purposes.
+#
+# For testing physical closure and generating autodependencies, use
+# either GNU tools or closely compatible equivalents such as clang.
 # This obviates figuring out how other toolchains support these needs.
 #
-# Override these definitions to specify GNU tools when using a
-# toolchain other than gcc-3.x or later.
+# Override these definitions to specify GNU tools when using an
+# incompatible toolchain.
 
 GNU_CPP := $(CPP)
 GNU_CXX := $(CXX)
@@ -64,6 +62,13 @@ compiler_runtime_files := \
 endif
 
 ################################################################################
+
+# EXTRA variables.
+#
+# /\w*EXTRA_/ variables such as $(EXTRA_LDFLAGS) are set by other
+# makefiles, and used here without modification.
+
+# Compiler version.
 
 # $(subst): workaround for debian, whose MinGW-w64 identifies its
 # version 7.x.0 as "7.x-win32".
@@ -570,11 +575,17 @@ ifeq (3.4.2,$(gcc_version))
   gcc_version_specific_cxx_warnings := -Wno-uninitialized
 endif
 
+# Compiler-and-linker flags.
+#
 # 'c_l_flags' are to be used in both compiler and linker commands.
 # The gprof '-pg' flag is one example. Another is '-fPIC', which
 # pc-linux-gnu requires for '-shared':
 #   https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html#DOCF1
-# Yet another is 'debug_flag'.
+# Yet another is 'debug_flag': the GNU Coding Standards
+#   https://www.gnu.org/prep/standards/html_node/Command-Variables.html
+# suggest including flags such as '-g' in $(CFLAGS) because they
+# are "not required for proper compilation", but lmi supports
+# multiple build types that transcend that "proper" notion.
 
 c_l_flags := $(debug_flag) $(analyzer_flag)
 
@@ -622,6 +633,8 @@ ifneq (,$(USE_SO_ATTRIBUTES))
   actually_used_lmi_so_attributes = -DLMI_USE_SO_ATTRIBUTES $(lmi_so_attributes)
 endif
 
+# C preprocessor flags.
+#
 # wx sets _FILE_OFFSET_BITS to 64; this definition is explicitly
 # repeated below to make assurance doubly sure--see:
 #   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00039.html
@@ -637,14 +650,22 @@ REQUIRED_CPPFLAGS = \
   $(wx_predefinitions) \
   -D_FILE_OFFSET_BITS=64 \
 
+# C compiler flags.
+
 REQUIRED_CFLAGS = \
   $(C_WARNINGS) \
+
+# C++ compiler flags.
 
 REQUIRED_CXXFLAGS = \
   $(CXX_WARNINGS) \
 
+# Archiver flags.
+
 REQUIRED_ARFLAGS = \
   -rus
+
+# Linker flags.
 
 # Prefer to invoke GNU 'ld' through the compiler frontends 'gcc' and
 # 'g++' because that takes care of linking the required libraries for
@@ -692,6 +713,8 @@ REQUIRED_LDFLAGS = \
   $(EXTRA_LDFLAGS) \
   $(EXTRA_LIBS) \
 
+# Resource compiler (msw) flags.
+#
 # The '--use-temp-file' windres option seems to be often helpful and
 # never harmful.
 #
@@ -701,6 +724,19 @@ REQUIRED_LDFLAGS = \
 REQUIRED_RCFLAGS = \
   $(subst -isystem,--include-dir,$(ALL_CPPFLAGS)) \
   --use-temp-file \
+
+# Only these /ALL_[A-Z]*FLAGS/ are both set here and used for targets.
+# This casual command is useful for testing that:
+#   git grep FLAGS workhorse.make| grep -o '\w*FLAGS' | sort -u
+#
+# The GNU Coding Standards
+#   https://www.gnu.org/prep/standards/html_node/Command-Variables.html
+# say
+#   "Put CFLAGS last in the compilation command, after other
+#    variables containing compiler options, so the user can
+#    use CFLAGS to override the others."
+# Going one step beyond that idea, lmi puts $(tutelary_flag) last,
+# after even $(CFLAGS), for flags that must not be overridden.
 
 ALL_ARFLAGS  = $(REQUIRED_ARFLAGS)  $(ARFLAGS)
 ALL_CPPFLAGS = $(REQUIRED_CPPFLAGS) $(CPPFLAGS)
