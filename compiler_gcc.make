@@ -146,62 +146,7 @@ cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++20
 #   $(gcc_version_specific_cxx_warnings)
 # last, in order to override other options.
 
-ifeq (3.4.4,$(gcc_version))
-  # Suppress spurious gcc-3.4.4 warnings:
-  #   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=22207
-  gcc_version_specific_c_warnings   := -Wno-uninitialized
-  gcc_version_specific_cxx_warnings := -Wno-uninitialized
-  cxx_standard := -std=c++98
-else ifeq (3.4.5,$(gcc_version))
-  # Suppress spurious gcc-3.4.5 warnings:
-  #   http://gcc.gnu.org/bugzilla/show_bug.cgi?id=22207
-  gcc_version_specific_c_warnings   := -Wno-uninitialized
-  gcc_version_specific_cxx_warnings := -Wno-uninitialized
-  # Fix "hello world":
-  #   http://sourceforge.net/tracker/index.php?func=detail&aid=2373234&group_id=2435&atid=102435
-  cxx_standard := -std=gnu++98
-  # Use a correct snprintf() implementation:
-  #   http://article.gmane.org/gmane.comp.gnu.mingw.user/27539
-  cxx_standard += -posix
-else ifneq (,$(filter $(gcc_version), 4.9.1 4.9.2))
-  # See:
-  #   https://lists.nongnu.org/archive/html/lmi/2015-12/msg00028.html
-  #   https://lists.nongnu.org/archive/html/lmi/2015-12/msg00040.html
-  gcc_version_specific_c_warnings := \
-    -Wno-conversion \
-    -Wno-unused-local-typedefs \
-    -Wno-unused-variable \
-
-  gcc_version_specific_cxx_warnings := \
-    -Wno-conversion \
-    -Wno-unused-local-typedefs \
-    -Wno-unused-variable \
-
-  cxx_standard := -std=c++11
-else ifneq (,$(filter $(gcc_version), 6.3.0))
-  gcc_version_specific_c_warnings   := -Wno-conversion
-  gcc_version_specific_cxx_warnings := -Wno-conversion
-
-  cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++17
-else ifneq (,$(filter $(gcc_version), 7.2.0 7.3.0))
-  gcc_version_specific_c_warnings   :=
-  gcc_version_specific_cxx_warnings :=
-
-  cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++17
-else ifneq (,$(filter $(gcc_version), 8 8.1.0 8.2.0 8.3.0 9 9.3.0))
-  gcc_version_specific_c_warnings   :=
-  gcc_version_specific_cxx_warnings :=
-
-  ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
-# See:
-#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00026.html
-#   https://lists.nongnu.org/archive/html/lmi/2020-12/msg00000.html
-#   https://lists.nongnu.org/archive/html/lmi/2020-12/msg00002.html
-    tutelary_flag := -fomit-frame-pointer
-  endif
-
-  cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++2a
-else ifneq (,$(filter $(gcc_version), 10 10.0))
+ifneq (,$(filter $(gcc_version), 10 10.0))
   gcc_version_specific_c_warnings :=
 
   gcc_version_specific_cxx_warnings := \
