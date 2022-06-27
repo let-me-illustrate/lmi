@@ -52,7 +52,7 @@ GNU_CXX := $(CXX)
 
 ################################################################################
 
-# Identify run-time libraries for redistribution. See:
+# Identify msw run-time libraries for redistribution. See:
 #   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00046.html
 # Perhaps gcc's '-print-sysroot' would be more suitable, but that
 # option returns an empty string with debian cross compilers.
@@ -64,7 +64,7 @@ GNU_CXX := $(CXX)
 # future debian releases, much less on other OSs.
 
 ifeq (mingw32,$(findstring mingw32,$(LMI_TRIPLET)))
-compiler_sysroot := $(dir $(shell $(CXX) -print-libgcc-file-name))
+compiler_sysroot := $(dir $(shell $(gcc_proclitic)g++ -print-libgcc-file-name))
 
 compiler_runtime_files := \
   $(wildcard $(compiler_sysroot)/libgcc*.dll) \
