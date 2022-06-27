@@ -58,7 +58,7 @@ all: effective_default_target
 
 # Other makefiles included; makefiles not to be remade.
 
-# Don't remake this file.
+# Don't remake this makefile.
 
 $(srcdir)/workhorse.make:: ;
 

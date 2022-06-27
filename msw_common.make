@@ -19,7 +19,9 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-################################################################################
+# Don't remake this makefile.
+
+$(srcdir)/msw_common.make:: ;
 
 SHREXT := .dll
 

@@ -19,6 +19,10 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+# Don't remake this makefile.
+
+$(srcdir)/objects.make:: ;
+
 ################################################################################
 
 # External libraries whose source is compiled here. Their source

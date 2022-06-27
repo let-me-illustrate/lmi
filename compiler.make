@@ -19,6 +19,12 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+# Other makefiles included; makefiles not to be remade.
+
+# Don't remake this makefile.
+
+$(srcdir)/compiler.make:: ;
+
 ifeq      (gcc,$(LMI_COMPILER))
   compiler_makefile := compiler_gcc.make
 else ifeq (clang,$(LMI_COMPILER))

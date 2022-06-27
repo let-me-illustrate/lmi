@@ -21,6 +21,12 @@
 
 ################################################################################
 
+# Other makefiles included; makefiles not to be remade.
+
+# Don't remake this makefile.
+
+$(srcdir)/autodependency.make:: ;
+
 # Configuration.
 
 include $(srcdir)/configuration.make

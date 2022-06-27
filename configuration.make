@@ -21,7 +21,13 @@
 
 ################################################################################
 
-# Include platform-specific makefile.
+# Other makefiles included; makefiles not to be remade.
+
+# Don't remake this makefile.
+
+$(srcdir)/configuration.make:: ;
+
+# Platform-specific makefile.
 
 lmi_build_type := $(shell /usr/share/misc/config.guess)
 

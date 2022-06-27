@@ -19,6 +19,17 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+# Other makefiles included; makefiles not to be remade.
+
+# Don't remake this makefile.
+
+$(srcdir)/compiler_gcc.make:: ;
+
+include $(srcdir)/compiler_gcc_warnings.make
+$(srcdir)/compiler_gcc_warnings.make:: ;
+
+# Aliases for tools used in targets elsewhere.
+
 AR      := $(gcc_proclitic)ar
 CC      := $(gcc_proclitic)gcc
 CPP     := $(gcc_proclitic)cpp
