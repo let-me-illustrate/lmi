@@ -141,15 +141,10 @@ tutelary_flag :=
 c_standard   := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c99
 cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++20
 
-# Specify these:
-#   $(gcc_version_specific_c_warnings)
-#   $(gcc_version_specific_cxx_warnings)
-# last, in order to override other options.
+gcc_version_specific_c_warnings :=
+gcc_version_specific_cxx_warnings :=
 
 ifneq (,$(filter $(gcc_version), 10 10.0))
-  gcc_version_specific_c_warnings :=
-
-  gcc_version_specific_cxx_warnings := \
 
   ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
 # See:
@@ -166,9 +161,7 @@ ifneq (,$(filter $(gcc_version), 10 10.0))
     endif
   endif
 
-  cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++20
 else ifneq (,$(filter $(gcc_version), 11 11.0))
-  gcc_version_specific_c_warnings :=
 
 # g++-11 warnings not recognized by g++-10
 #
@@ -182,7 +175,6 @@ else ifneq (,$(filter $(gcc_version), 11 11.0))
     -Wenum-conversion \
     -Winvalid-imported-macros \
 
-  cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++20
 endif
 
 treat_warnings_as_errors := -pedantic-errors -Werror
@@ -405,6 +397,8 @@ wno_sign_conv_objects := \
 #   grep 'error:' | sed -e '/size_type/d'
 
 $(wno_sign_conv_objects): gcc_common_extra_warnings += -Wno-sign-conversion
+
+# Keep version-specific warnings last, so that they override others.
 
 C_WARNINGS = \
   $(gcc_c_warnings) \
