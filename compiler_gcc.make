@@ -52,28 +52,6 @@ GNU_CXX := $(CXX)
 
 ################################################################################
 
-# Identify msw run-time libraries for redistribution. See:
-#   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00046.html
-# Perhaps gcc's '-print-sysroot' would be more suitable, but that
-# option returns an empty string with debian cross compilers.
-#
-# It might seem more robust to write something like
-#   compiler_sysroot := $(shell readlink -fn /usr/lib/gcc/$(LMI_TRIPLET)/*-win32)
-# but that would actually weaken makefile portability, and there
-# is no guarantee that this directory will be named similarly in
-# future debian releases, much less on other OSs.
-
-ifeq (mingw32,$(findstring mingw32,$(LMI_TRIPLET)))
-compiler_sysroot := $(dir $(shell $(gcc_proclitic)g++ -print-libgcc-file-name))
-
-compiler_runtime_files := \
-  $(wildcard $(compiler_sysroot)/libgcc*.dll) \
-  $(wildcard $(compiler_sysroot)/libstdc++*.dll) \
-
-endif
-
-################################################################################
-
 # EXTRA variables.
 #
 # /\w*EXTRA_/ variables such as $(EXTRA_LDFLAGS) are set by other
