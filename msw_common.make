@@ -23,6 +23,8 @@
 
 $(srcdir)/msw_common.make:: ;
 
+platform_gui_ldflags := -mwindows
+
 SHREXT := .dll
 
 # Libraries and associated options.
@@ -39,4 +41,3 @@ platform_defines := \
   -DXSLTWRAPP_USE_DLL \
   -DSTRICT \
 
-platform_gui_ldflags := -mwindows
