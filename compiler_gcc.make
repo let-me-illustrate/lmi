@@ -525,14 +525,13 @@ ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
   LDFLAGS += -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -Wl,-z,separate-code
 endif
 
-# Explicitly disable the infelicitous auto-import default. See:
-#   http://article.gmane.org/gmane.comp.gnu.mingw.user/19758
-#     [2006-05-18T11:38:01Z from Earnie Boyd]
-# Do not disable it for MinGW-w64, which seems to require it.
-
-ifeq (3.4.5,$(gcc_version))
-  LDFLAGS += -Wl,--disable-auto-import
-endif
+# By infelicitous default, MinGW enables auto-import. See, e.g.:
+#   https://sourceforge.net/p/mingw/mailman/message/16354653/
+# Disabling it globally, thus:
+#   LDFLAGS += -Wl,--disable-auto-import
+# worked with mingw.org's gcc, but the more recent MinGW-w64
+# versions seem to require it unless $(USE_SO_ATTRIBUTES) is
+# defined.
 
 ifneq (,$(USE_SO_ATTRIBUTES))
   ifeq (mingw32,$(findstring mingw32,$(LMI_TRIPLET)))
