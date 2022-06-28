@@ -25,6 +25,13 @@
 
 $(srcdir)/compiler_clang.make:: ;
 
+# Ascertain compiler version.
+
+include $(srcdir)/compiler_clang_version.make
+$(srcdir)/compiler_clang_version.make:: ;
+
+# Warnings.
+
 include $(srcdir)/compiler_clang_warnings.make
 $(srcdir)/compiler_clang_warnings.make:: ;
 

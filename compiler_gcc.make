@@ -25,6 +25,13 @@
 
 $(srcdir)/compiler_gcc.make:: ;
 
+# Ascertain compiler version.
+
+include $(srcdir)/compiler_gcc_version.make
+$(srcdir)/compiler_gcc_version.make:: ;
+
+# Warnings.
+
 include $(srcdir)/compiler_gcc_warnings.make
 $(srcdir)/compiler_gcc_warnings.make:: ;
 
