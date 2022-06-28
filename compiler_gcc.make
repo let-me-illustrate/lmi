@@ -353,12 +353,6 @@ $(cgicc_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
   -Wno-zero-as-null-pointer-constant \
 
-ifeq (safestdlib,$(build_type))
-  ifeq (3.4.5,$(gcc_version))
-    expression_template_0_test.o: gcc_common_extra_warnings += -Wno-unused-parameter
-  endif
-endif
-
 # XMLWRAPP !! Remove these workarounds after updating xmlwrapp. See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00018.html
 # et seqq.:
