@@ -120,7 +120,7 @@ endif
 
 tutelary_flag :=
 
-# Dialect and warning options for gcc.
+# Dialect options for gcc.
 
 # The default '-fno-rounding-math' means something like
 #   #pragma STDC FENV ACCESS OFF
@@ -129,6 +129,8 @@ tutelary_flag :=
 
 c_standard   := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c99
 cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++20
+
+# Warnings for gcc.
 
 gcc_version_specific_c_warnings :=
 gcc_version_specific_cxx_warnings :=
@@ -264,7 +266,6 @@ postponed_gcc_common_warnings := \
 #   FLOAT_CONST_DECIMAL64 pragma, but only a nuisance for now
 
 gcc_c_warnings := \
-  $(c_standard) \
   $(gcc_common_warnings) \
   -Wbad-function-cast \
   -Wc++-compat \
@@ -298,7 +299,6 @@ gcc_c_warnings := \
 # -Wvirtual-inheritance: forbids a useful feature
 
 gcc_cxx_warnings := \
-  $(cxx_standard) \
   $(gcc_common_warnings) \
   -Wc++11-compat \
   -Wc++14-compat \
@@ -549,11 +549,13 @@ endif
 # C compiler flags.
 
 REQUIRED_CFLAGS = \
+  $(c_standard) \
   $(C_WARNINGS) \
 
 # C++ compiler flags.
 
 REQUIRED_CXXFLAGS = \
+  $(cxx_standard) \
   $(CXX_WARNINGS) \
 
 # Archiver flags.
