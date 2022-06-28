@@ -501,23 +501,21 @@ ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
   c_l_flags += -fPIC
 endif
 
-# As this is written in 2012, lmi is often built on machines with less
-# RAM per core than gcc wants. Experiments show that these flags cut
-# gcc's RAM appetite by fifty percent, in return for a ten-percent
-# speed penalty that can be overcome by increasing parallelism. There
-# seems to be no need for them with gcc-4.x, which uses less RAM.
-
-ifeq (gcc,$(LMI_COMPILER))
-  ifeq (3.4.5,$(gcc_version))
-    ggc_flags := --param ggc-min-expand=25 --param ggc-min-heapsize=32768
-  endif
-endif
+# Around 2012 it was profitable to use flags such as
+#   --param ggc-min-expand=25 --param ggc-min-heapsize=32768
+# with older, more RAM-hungry versions of gcc, on older hardware
+# that didn't have as much RAM per core as gcc wanted. Experiments
+# showed that these flags cut gcc's RAM appetite by fifty percent,
+# in return for a ten-percent speed penalty that could be overcome
+# by increasing parallelism. They became unnecessary with gcc-4.x,
+# which used less RAM. They might become useful again in future
+# circumstances that cannot be foreseen.
 
 CFLAGS = \
-  $(ggc_flags) $(optimization_flag) $(c_l_flags) \
+  $(optimization_flag) $(c_l_flags) \
 
 CXXFLAGS = \
-  $(ggc_flags) $(optimization_flag) $(c_l_flags) \
+  $(optimization_flag) $(c_l_flags) \
 
 LDFLAGS = $(c_l_flags) -Wl,-Map,$@.map \
 
