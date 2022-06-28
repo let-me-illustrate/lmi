@@ -35,28 +35,6 @@ $(srcdir)/compiler_clang_version.make:: ;
 include $(srcdir)/compiler_clang_warnings.make
 $(srcdir)/compiler_clang_warnings.make:: ;
 
-# Aliases for tools used in targets elsewhere.
-
-AR      := ar
-CC      := clang
-CPP     := cpp
-CXX     := clang++
-LD      := clang++
-# For GNU/Linux, $(RC) is never invoked.
-RC      := windres
-
-# GNU tools (or workalikes) for special purposes.
-#
-# For testing physical closure and generating autodependencies, use
-# either GNU tools or closely compatible equivalents such as clang.
-# This obviates figuring out how other toolchains support these needs.
-#
-# Override these definitions to specify GNU tools when using an
-# incompatible toolchain.
-
-GNU_CPP := $(CPP)
-GNU_CXX := $(CXX)
-
 # EXTRA variables.
 #
 # /\w*EXTRA_/ variables such as $(EXTRA_LDFLAGS) are set by other

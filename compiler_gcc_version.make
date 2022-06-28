@@ -22,3 +22,55 @@
 # Don't remake this makefile.
 
 $(srcdir)/compiler_gcc_version.make:: ;
+
+# Aliases for tools used in targets elsewhere.
+
+AR      := $(gcc_proclitic)ar
+CC      := $(gcc_proclitic)gcc
+CPP     := $(gcc_proclitic)cpp
+CXX     := $(gcc_proclitic)g++
+LD      := $(gcc_proclitic)g++
+# For GNU/Linux, $(RC) is never invoked.
+RC      := $(gcc_proclitic)windres
+
+# GNU tools (or workalikes) for special purposes.
+#
+# For testing physical closure and generating autodependencies, use
+# either GNU tools or closely compatible equivalents such as clang.
+# This obviates figuring out how other toolchains support these needs.
+#
+# Override these definitions to specify GNU tools when using an
+# incompatible toolchain.
+
+GNU_CPP := $(CPP)
+GNU_CXX := $(CXX)
+
+# Compiler version.
+
+# $(subst): workaround for debian, whose MinGW-w64 identifies its
+# version 7.x.0 as "7.x-win32".
+
+ifeq (gcc,$(LMI_COMPILER))
+  gcc_version   := $(subst -win32,.0,$(shell $(CXX)     -dumpversion))
+endif
+
+# These are defined even for toolchains other than gcc.
+
+gnu_cpp_version := $(subst -win32,.0,$(shell $(GNU_CPP) -dumpversion))
+gnu_cxx_version := $(subst -win32,.0,$(shell $(GNU_CXX) -dumpversion))
+
+ifeq      (10,$(gnu_cpp_version))
+else ifeq (10.0,$(gnu_cpp_version))
+else ifeq (11,$(gnu_cpp_version))
+else ifeq (11.0,$(gnu_cpp_version))
+else
+  $(warning Untested $(GNU_CPP) version '$(gnu_cpp_version)')
+endif
+
+ifeq      (10,$(gnu_cxx_version))
+else ifeq (10.0,$(gnu_cxx_version))
+else ifeq (11,$(gnu_cxx_version))
+else ifeq (11.0,$(gnu_cxx_version))
+else
+  $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
+endif
