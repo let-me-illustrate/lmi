@@ -35,7 +35,7 @@ mc_enum_base::mc_enum_base(int cardinality_of_the_enumeration)
 /// Permit or forbid a particular enumerative choice.
 ///
 /// The 'index' argument is the index of the enumerator within the
-/// enumeration (i.e, what ordinal() returns), which does not
+/// enumeration (i.e., what ordinal() returns), which does not
 /// necessarily equal the value of the enumerator.
 ///
 /// Throws (via at()) if 'index' is out of range.

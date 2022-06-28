@@ -6,6 +6,7 @@ b='cd /opt/lmi/src/lmi'
 c='git ls-files --deleted | xargs -t git checkout --'
 d='for z in *(m-1) ; do touch --reference=$z /opt/lmi/free/src/lmi/$z; done'
 e='make $coefficiency LMI_COMPILER=gcc LMI_TRIPLET=x86_64-pc-linux-gnu check_concinnity 2>&1 |less -S -N'
+f='git checkout -- Speed_*'
 u='eval `ssh-agent`'
 v='ssh-agent $SHELL'
 w='ssh-add ~/.ssh/id_rsa'
@@ -16,6 +17,7 @@ print -rs $b ; echo $b ; eval $b
 print -rs $c ; echo $c
 print -rs $d ; echo $d
 print -rs $e ; echo $e
+print -rs $f ; echo $f
 # 'ssh-agent' not presently used in chroot:
 #print -rs $u ; echo $u ; eval $u
 # /dev/clipboard is a cygwinism, though GNU/Linux alternatives exist
@@ -31,6 +33,7 @@ unset b
 unset c
 unset d
 unset e
+unset f
 unset u
 unset v
 unset w

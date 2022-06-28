@@ -19,7 +19,11 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-################################################################################
+# Don't remake this makefile.
+
+$(srcdir)/msw_common.make:: ;
+
+platform_gui_ldflags := -mwindows
 
 SHREXT := .dll
 
@@ -37,13 +41,29 @@ platform_defines := \
   -DXSLTWRAPP_USE_DLL \
   -DSTRICT \
 
-platform_gui_ldflags := -mwindows
-
-platform_cgicc_libraries :=
-
-################################################################################
-
-# HTML server's cgi-bin directory. Not used yet. Eventually, an
-# 'install' target might copy cgi-bin binaries thither.
+# Identify msw run-time libraries for redistribution. See:
+#   https://lists.nongnu.org/archive/html/lmi/2017-05/msg00046.html
+# Perhaps gcc's '-print-sysroot' would be more suitable, but that
+# option returns an empty string with debian cross compilers.
 #
-#cgi_bin_dir := $(system_root)/unspecified/cgi-bin
+# It might seem more robust to write something like
+#   compiler_sysroot := $(shell readlink -fn /usr/lib/gcc/$(LMI_TRIPLET)/*-win32)
+# but that would actually weaken makefile portability, and there
+# is no guarantee that this directory will be named similarly in
+# future debian releases, much less on other OSs.
+#
+# Invoke the C++ compiler in a direct fashion because $(CXX) has not
+# yet been defined. 'GNUmakefile' needs to install the runtime files
+# to make sure they're always available, but it has no reason to know
+# how $(CXX) is defined. Making any target that uses $(CXX), e.g.:
+#   make unit_tests unit_test_targets=sandbox_test
+# thus ensures that the runtime files are available on $WINEPATH.
+
+ifeq (mingw32,$(findstring mingw32,$(LMI_TRIPLET)))
+compiler_sysroot := $(dir $(shell $(gcc_proclitic)g++ -print-libgcc-file-name))
+
+compiler_runtime_files := \
+  $(wildcard $(compiler_sysroot)/libgcc*.dll) \
+  $(wildcard $(compiler_sysroot)/libstdc++*.dll) \
+
+endif

@@ -32,6 +32,7 @@
 
 #include <algorithm>                    // min()
 #include <cfloat>                       // DBL_EPSILON
+#include <climits>                      // CHAR_BIT
 #include <cmath>                        // fabs(), isnan(), pow()
 #include <cstdint>
 #include <iomanip>
@@ -477,6 +478,27 @@ void test_compound_interest()
         );
 }
 
+void test_relative_error()
+{
+    constexpr double inf {std::numeric_limits<double>::infinity()};
+    constexpr double big {std::numeric_limits<double>::max()};
+
+    LMI_TEST_EQUAL(inf, relative_error(0.0, -2.0));
+    LMI_TEST_EQUAL(inf, relative_error(0.0, -1.0));
+    LMI_TEST_EQUAL(inf, relative_error(0.0, -0.5));
+    LMI_TEST_EQUAL(0.0, relative_error(0.0,  0.0));
+    LMI_TEST_EQUAL(inf, relative_error(0.0,  0.5));
+    LMI_TEST_EQUAL(inf, relative_error(0.0,  1.0));
+    LMI_TEST_EQUAL(inf, relative_error(0.0,  2.0));
+    LMI_TEST_EQUAL(0.0, relative_error(1.0,  1.0));
+    LMI_TEST_EQUAL(2.0, relative_error(1.0, -1.0));
+    LMI_TEST_EQUAL(big, relative_error(1.0,  big));
+    LMI_TEST_EQUAL(inf, relative_error(big, -big));
+
+    LMI_TEST_EQUAL(2.0F, relative_error(1.0F, -1.0F));
+    LMI_TEST_EQUAL(2.0L, relative_error(1.0L, -1.0L));
+}
+
 void test_signed_zero()
 {
     constexpr double inf  {std::numeric_limits<double>::infinity ()};
@@ -562,18 +584,40 @@ void test_signum(char const* file, int line)
 
 void test_u_abs()
 {
-    LMI_TEST_EQUAL(9223372036854775808ULL, u_abs(INT64_MIN));
+    LMI_TEST_EQUAL(0x8000000000000000, u_abs(INT64_MIN));
 
-    LMI_TEST_EQUAL(128, u_abs(INT8_MIN));
+    constexpr auto int8_min {std::numeric_limits<std::int8_t>::min()};
+    constexpr auto int8_max {std::numeric_limits<std::int8_t>::max()};
+
+    std::uint8_t additive_inverse_of_int8_min {u_abs(int8_min)};
+    LMI_TEST_EQUAL(128U, additive_inverse_of_int8_min);
+
+    static_assert(8 == CHAR_BIT);
+
+    LMI_TEST_EQUAL  (1   , sizeof       int8_min );
+    LMI_TEST_EQUAL  (1   , sizeof u_abs(int8_min));
+    LMI_TEST_EQUAL  (128U,        u_abs(int8_min));
+
+    // Incidentally, INT8_MIN is not of type std::int8_t, because it
+    // is converted according to the integer promotions.
+    LMI_TEST_UNEQUAL(1   , sizeof       INT8_MIN );
+    LMI_TEST_UNEQUAL(1   , sizeof u_abs(INT8_MIN));
+    LMI_TEST_EQUAL  (128U,        u_abs(INT8_MIN));
 
     // Test all 256 possibilities.
-    for(std::int16_t j = INT8_MIN; j <= INT8_MAX; ++j)
+    for(std::int16_t j = int8_min; j <= int8_max; ++j)
         {
         std::uint16_t u = u_abs(j);
         if(0 <= j)
-            {LMI_TEST_EQUAL(u,  j);}
+            {
+            LMI_TEST_EQUAL(u,  j);
+            }
         if(j <= 0)
-            {LMI_TEST_EQUAL(u, -j);}
+            {
+            LMI_TEST_EQUAL(u, -j);
+            LMI_TEST_EQUAL(0, u + j);
+            LMI_TEST_EQUAL(0, j + u);
+            }
         }
 }
 
@@ -634,11 +678,36 @@ void test_expm1_log1p()
     // 0.025940753546620676 = 3F9A903680771FB0  fdlibm
     // 0.025940753546620673 = 3F9A903680771FAF  glibc
 
-    // Absolute value of relative error.
-    auto rel_err = [](double t, double u)
-        {
-        return std::fabs(t - u) / std::min(std::fabs(t), std::fabs(u));
-        };
+    // Monthly equivalent of a -0.999999 = -99.9999% interest rate.
+    // The transformation is, generally:
+    //   (1+i)^n - 1 <-> expm1(log1p(i) * n)
+    // Substituting i = -0.999999 and n = 1/12 :
+    //   (1-0.999999)^(1/12) - 1 <-> expm1(log1p(-0.999999) / 12.0)
+    // High-precision values:
+    //   https://www.wolframalpha.com/input?i=log1p(-0.999999)/12
+    //   -1.151292546497022842008995727342182103800550744314386488016
+    //   https://www.wolframalpha.com/input?i=expm1(log1p(-0.999999)/12)
+    //   -0.683772233983162066800110645556728146628044486067478317314
+    //   https://www.wolframalpha.com/input?i=(1-0.999999)^(1/12)-1
+    //   -0.683772233983162066800110645556728146628044486067478317314
+    // In this ill-conditioned case, we get something like eleven
+    // digits of precision--an error of about one million ulp.
+    double const i0 = std::log1p(-0.999999) / 12.0;
+    LMI_TEST(materially_equal( -1.1512925464970228, i0, 1.0e-11));
+    double const i1 = std::expm1(-1.1512925464970228);
+    LMI_TEST(materially_equal(-0.68377223398240425, i1, 1.0e-11));
+    // (Optionally, to see the platform-dependent actual values:
+    // i0 = -1.15129254649462642312585 i1 = -0.68377223398316200331237 MinGW-w32
+    // i0 = -1.15129254649462642312585 i1 = -0.68377223398316200331237 glibc
+    // [which are curiously identical], uncomment the next line.)
+//  std::cout << "i0 = " << i0 << " i1 = " << i1 << std::endl;
+    // Worse, we have UB--which UBSan detects when we build fdlibm
+    // ourselves, though not when we use the same code via glibc:
+    double const i2 = lmi::log1p(-0.999999) / 12.0;
+    LMI_TEST(materially_equal( -1.1512925464970228, i2, 1.0e-11));
+    // fdlibm_expm1.c:242:13: runtime error: left shift of negative value -2
+    double const i3 = lmi::expm1(-1.1512925464970228);
+    LMI_TEST(materially_equal(-0.68377223398240425, i3, 1.0e-11));
 
     // Test fdlibm vs. C RTL for many parameters.
     int    err_count0 {0};
@@ -667,10 +736,10 @@ void test_expm1_log1p()
         double const b2 = std::expm1(std::log1p(irate) / 12);
         double const b3 = std::expm1(std::log1p(irate) / 365);
         // relative error
-        double const e0 = rel_err(a0, b0);
-        double const e1 = rel_err(a1, b1);
-        double const e2 = rel_err(a2, b2);
-        double const e3 = rel_err(a3, b3);
+        double const e0 = relative_error(a0, b0);
+        double const e1 = relative_error(a1, b1);
+        double const e2 = relative_error(a2, b2);
+        double const e3 = relative_error(a3, b3);
         // comparison
         if(a0 != b0 || a1 != b1 || a2 != b2 || a3 != b3)
             {
@@ -788,6 +857,8 @@ int test_main(int, char*[])
     test_outward_quotient();
 
     test_compound_interest();
+
+    test_relative_error();
 
     test_signed_zero();
 

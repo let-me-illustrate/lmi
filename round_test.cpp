@@ -35,12 +35,13 @@
 #include "round_to.hpp"
 
 #include "fenv_lmi.hpp"
+#include "math_functions.hpp"           // relative_error()
 #include "miscellany.hpp"               // floating_rep(), scoped_ios_format
 #include "test_tools.hpp"
 
 #include <algorithm>                    // max()
 #include <cfloat>                       // DECIMAL_DIG
-#include <cmath>                        // round()
+#include <cmath>                        // nextafter(), round()
 #include <ios>
 #include <iostream>
 #include <limits>
@@ -152,29 +153,7 @@ bool test_one_case
     LMI_TEST_EQUAL(std::round(unrounded), observed);
 
     max_prec_real abs_error = std::fabs(observed - expected);
-    // Nonstandardly define relative error in terms of
-    // o(bserved) and e(xpected) as
-    //   |(o-e)/e| if e nonzero, else
-    //   |(o-e)/o| if o nonzero, else
-    //   zero
-    // in order to avoid division by zero.
-    max_prec_real rel_error(0.0);
-    if(max_prec_real(0.0) != expected)
-        {
-        rel_error = std::fabs
-            (
-              (observed - max_prec_real(expected))
-            / expected
-            );
-        }
-    else if(max_prec_real(0.0) != observed)
-        {
-        rel_error = std::fabs
-            (
-              (observed - max_prec_real(expected))
-            / observed
-            );
-        }
+    max_prec_real rel_error = relative_error(observed, expected);
 
     // In general, we can't hope for the relative error to be less than
     // epsilon for the floating-point type being rounded. Suppose a
@@ -374,20 +353,20 @@ void test_rounding()
     // | 4503599627370498.
     //
     // The number above that's very close to one-half is in fact
-    //   nextafter(0.5, 0.0)
+    //   std::nextafter(0.5, 0.0)
     // both of which are ffffffffffffdf3f / 3fdfffffffffffff internally.
 
     test_various_float_types(4503599627370497.0L, 4503599627370497.0L);
 
     // This test:
-//    test_various_float_types(nextafter(0.5L, 0.0L), 0.0L);
+//    test_various_float_types(std::nextafter(0.5L, 0.0L), 0.0L);
     // mustn't be run as such because, e.g., the value
-    //   static_cast<float>(nextafter(0.5L, 0.0L))
+    //   static_cast<float>(std::nextafter(0.5L, 0.0L))
     // need not be distinct from 0.0F.
 
-    LMI_TEST((test_one_case(nextafterf(0.5F, 0.0F), 0.0F)));
-    LMI_TEST((test_one_case(nextafter (0.5 , 0.0 ), 0.0 )));
-    LMI_TEST((test_one_case(nextafterl(0.5L, 0.0L), 0.0L)));
+    LMI_TEST((test_one_case(std::nextafterf(0.5F, 0.0F), 0.0F)));
+    LMI_TEST((test_one_case(std::nextafter (0.5 , 0.0 ), 0.0 )));
+    LMI_TEST((test_one_case(std::nextafterl(0.5L, 0.0L), 0.0L)));
 }
 
 int test_all_modes(bool synchronize)

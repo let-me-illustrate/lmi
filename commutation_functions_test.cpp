@@ -26,6 +26,7 @@
 #include "cso_table.hpp"
 #include "et_vector.hpp"
 #include "math_functions.hpp"
+#include "miscellany.hpp"               // stifle_unused_warning()
 #include "ssize_lmi.hpp"
 #include "test_tools.hpp"
 #include "timer.hpp"                    // TimeAnAliquot()
@@ -828,9 +829,11 @@ void mete_reserve
 {
     for(int j = 0; j < 100; ++j)
         {
-        volatile double premium = (10.0 * ulcf.aDomega() + ulcf.kM()[0]) / ulcf.aN()[0];
+        double premium = (10.0 * ulcf.aDomega() + ulcf.kM()[0]) / ulcf.aN()[0];
         reserve <<= premium * ulcf.aD() - ulcf.kC();
         reserve <<= fwd_sum(reserve) / ulcf.EaD();
+        volatile double last = reserve.back();
+        stifle_unused_warning(last);
         }
 }
 

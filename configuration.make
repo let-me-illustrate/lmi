@@ -21,7 +21,13 @@
 
 ################################################################################
 
-# Include platform-specific makefile.
+# Other makefiles included; makefiles not to be remade.
+
+# Don't remake this makefile.
+
+$(srcdir)/configuration.make:: ;
+
+# Platform-specific makefile.
 
 lmi_build_type := $(shell /usr/share/misc/config.guess)
 
@@ -47,14 +53,34 @@ $(srcdir)/$(platform_makefile):: ;
 
 ################################################################################
 
-# GNU tools for special purposes.
+# Standard utilities.
 
-# Always use the GNU C++ compiler and preprocessor, version 3.x or
-# later, for testing physical closure and generating autodependencies.
-# This obviates figuring out how other toolchains support these needs.
-#
-# Override these definitions to specify GNU tools when using a
-# toolchain other than gcc-3.x or later.
+# Required in /bin (if anywhere) by FHS-2.2 .
 
-GNU_CPP := $(CPP)
-GNU_CXX := $(CXX)
+CHMOD   := chmod
+CP      := cp
+DATE    := date
+ECHO    := echo
+GZIP    := gzip
+INSTALL := install
+LS      := ls
+MKDIR   := mkdir
+MV      := mv
+RM      := rm
+SED     := sed
+TAR     := tar
+
+# FHS-2.2 would presumably put these in /usr/bin . However, debian
+# puts 'bzip2' and 'grep' in /bin .
+
+BSDTAR  := bsdtar
+BZIP2   := bzip2
+DIFF    := diff
+GREP    := grep
+MD5SUM  := md5sum
+PATCH   := patch
+SORT    := sort
+TOUCH   := touch
+TR      := tr
+WC      := wc
+WGET    := wget

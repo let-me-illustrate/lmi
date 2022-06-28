@@ -19,6 +19,10 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+# Don't remake this makefile.
+
+$(srcdir)/objects.make:: ;
+
 ################################################################################
 
 # External libraries whose source is compiled here. Their source
@@ -341,7 +345,7 @@ wx_test_objects := \
   wx_test_pdf_create.o \
   wx_test_validate_output.o \
 
-ifneq (,$(RC))
+ifeq (mingw32,$(findstring mingw32,$(LMI_TRIPLET)))
   lmi_wx_objects  += lmi_msw_res.o
   wx_test_objects += lmi_msw_res.o
 endif
@@ -360,7 +364,6 @@ ifeq (ubsan,$(build_type))
   excluded_unit_test_targets += \
     actuarial_table_test \
     loads_test \
-    math_functions_test \
     mortality_rates_test \
 
 endif

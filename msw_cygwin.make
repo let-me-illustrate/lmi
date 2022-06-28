@@ -19,6 +19,10 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+# Don't remake this makefile.
+
+$(srcdir)/msw_cygwin.make:: ;
+
 ################################################################################
 
 # Sanity checks.
@@ -35,10 +39,6 @@ endif
 ifeq (,$(wildcard /opt/lmi/*))
   $(warning Installation may be invalid: /opt/lmi/ missing or empty. )
 endif
-
-################################################################################
-
-system_root := /cygdrive/c
 
 ################################################################################
 
@@ -69,63 +69,14 @@ gcc_bin_dir := $(mingw_dir)/bin/
 #host_hyphen := $(LMI_TRIPLET)-
 host_hyphen :=
 
-AR      := $(gcc_bin_dir)$(host_hyphen)ar
-CC      := $(gcc_bin_dir)$(host_hyphen)gcc
-CPP     := $(gcc_bin_dir)$(host_hyphen)cpp
-CXX     := $(gcc_bin_dir)$(host_hyphen)g++
-LD      := $(gcc_bin_dir)$(host_hyphen)g++
-RC      := $(gcc_bin_dir)$(host_hyphen)windres
-
-# Identify run-time libraries for redistribution. See:
-#   https://cygwin.com/ml/cygwin/2010-09/msg00553.html
-# Of course manipulating an lmi user's $PATH is out of the question.
-
-compiler_sysroot := $(mingw_dir)/$(LMI_TRIPLET)/lib
-
-compiler_runtime_files := \
-  $(wildcard $(compiler_sysroot)/libgcc*.dll) \
-  $(wildcard $(compiler_sysroot)/libstdc++*.dll) \
-
-################################################################################
-
-# Standard utilities.
-
-# Required in /bin (if anywhere) by FHS-2.2 .
-
-CHMOD   := chmod
-CP      := cp
-DATE    := date
-ECHO    := echo
-GZIP    := gzip
-INSTALL := install
-LS      := ls
-MKDIR   := mkdir
-MV      := mv
-RM      := rm
-SED     := sed
-TAR     := tar
-
-# FHS-2.2 would presumably put these in /usr/bin . However, debian
-# puts 'bzip2' and 'grep' in /bin .
-
-BSDTAR  := bsdtar
-BZIP2   := bzip2
-DIFF    := diff
-GREP    := grep
-MD5SUM  := md5sum
-PATCH   := patch
-SORT    := sort
-TOUCH   := touch
-TR      := tr
-WC      := wc
-WGET    := wget
+gcc_proclitic := $(gcc_bin_dir)$(host_hyphen)
 
 # Programs for which FHS doesn't specify a location.
 
-# Instead of requiring installation of the build system's own libxml2:
+# The 'xmllint' lmi builds matches the libxml2 version lmi uses:
+    XMLLINT := $(localbindir)/xmllint
+# while the build system's own 'xmllint', if installed, may differ:
 #   XMLLINT := xmllint
-# use the one that lmi builds:
-XMLLINT := $(localbindir)/xmllint
 
 ################################################################################
 

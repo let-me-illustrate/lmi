@@ -27,8 +27,9 @@
 # used in production if they were unset or null beforehand. They can
 # be overridden at the command line, e.g.:
 #
-#   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-pc-linux-gnu ; . /opt/lmi/src/lmi/set_toolchain.sh
-#   LMI_COMPILER=gcc ; LMI_TRIPLET=x86_64-w64-mingw32  ; . /opt/lmi/src/lmi/set_toolchain.sh
+# LMI_COMPILER=gcc   ; LMI_TRIPLET=x86_64-pc-linux-gnu ; . /opt/lmi/src/lmi/set_toolchain.sh
+# LMI_COMPILER=clang ; LMI_TRIPLET=x86_64-pc-linux-gnu ; . /opt/lmi/src/lmi/set_toolchain.sh
+# LMI_COMPILER=gcc   ; LMI_TRIPLET=x86_64-w64-mingw32  ; . /opt/lmi/src/lmi/set_toolchain.sh
 #
 # Implemented as a function that runs and then erases itself, so that
 # sourcing this script changes the environment only as intended. This
@@ -43,12 +44,14 @@
 # similarly overridable, along with other directories--perhaps even
 # platform-specific ones like $mingw_bin_dir.
 
-# Unimplemented alternative: use symlinks, e.g:
+# Unimplemented alternative: use symlinks, e.g.:
 #   ln --symbolic --force --no-dereference \
 #   /opt/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/bin /opt/lmi/bin
 # and likewise for all other directories. Depending on symlinks
 # didn't seem like a good idea.
 
+# Unimplemented alternative: custom triplets
+#
 # This alternative for future consideration trades some complexity of
 # implementation for mitigation of confusion and convenience of use.
 #
@@ -61,7 +64,6 @@
 # Supported values:
 #   LMI_COMPILER : gcc, clang
 #   LMI_TRIPLET  : x86_64-pc-linux-gnu, x86_64-w64-mingw32
-# (clang not yet tested).
 #
 # Examples:
 #
@@ -84,6 +86,11 @@
 # That remains the motivation for this design even though i686 builds
 # are no longer supported.
 
+strip_colons()
+{
+    printf '%s' "$1" | sed -e 's/::*/:/g' -e's/::*$//'
+}
+
 foo()
 {
 local   lmi_build_type
@@ -94,6 +101,18 @@ local      bindir="$prefix/bin"
 local localbindir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/bin"
 local locallibdir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib"
 
+# Directory where clang can find gcc-built '*-config' scripts.
+local clanggccbindir
+# Directory where clang can find gcc-built libraries.
+local clanggcclibdir
+case "$LMI_COMPILER" in
+    (clang)
+        clanggccbindir="$prefix/local/gcc_${LMI_TRIPLET}/bin"
+        clanggcclibdir="$prefix/local/gcc_${LMI_TRIPLET}/lib"
+        ;;
+    (*) ;;
+esac
+
 # Running a command like this many times:
 #   export PATH="$localbindir":"$locallibdir":"$PATH"
 # would cause $PATH to grow without bound.
@@ -102,8 +121,10 @@ local locallibdir="$prefix/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib"
 # debian's default in '/etc/login.defs' adds silly 'games' directories
 # but omits '/usr/sbin' and '/sbin', for instance.
 
-minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
-export PATH="$localbindir":"$locallibdir":"$minimal_path"
+local minimal_path
+      minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
+export PATH="$localbindir":"$locallibdir":"$clanggccbindir":"$minimal_path"
+PATH=$( strip_colons "$PATH" )
 
 # It is okay to export these variables unconditionally.
 
@@ -135,6 +156,8 @@ case "$lmi_build_type" in
                 LD_LIBRARY_PATH=.
                 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$locallibdir"
                 LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$bindir"
+                LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$clanggcclibdir"
+                LD_LIBRARY_PATH=$( strip_colons "$LD_LIBRARY_PATH" )
                 # Nullify any leftover "wine" values: obligatorily for
                 # $EXEEXT and $PERFORM, and for $WINEPATH to ensure
                 # that native builds never depend upon it.
@@ -169,6 +192,7 @@ export LMI_TRIPLET
 
 case "$LMI_COMPILER" in
     (gcc) ;;
+    (clang) ;;
     (*)
         printf '%s\n' "Changed nothing because compiler '$LMI_COMPILER' is untested."
         return 2;
@@ -186,4 +210,5 @@ esac
 
 foo
 
+unset -f strip_colons
 unset -f foo

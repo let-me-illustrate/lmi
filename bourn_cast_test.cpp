@@ -55,7 +55,7 @@ inline To bourn_cast(From from)
 #include "timer.hpp"
 
 #include <climits>                      // INT_MIN, LLONG_MIN, SCHAR_MIN
-#include <cmath>                        // isnormal()
+#include <cmath>                        // isnormal(), nextafterf()
 
 /// Test trivial casts between identical types.
 

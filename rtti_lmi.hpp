@@ -68,7 +68,7 @@ namespace lmi
 ///   CopyConstructible
 ///   EqualityComparable
 ///   LessThanComparable
-/// and may therefore be used, e.g, in containers and with standard
+/// and may therefore be used, e.g., in containers and with standard
 /// algorithms. It is not
 ///   DefaultConstructible
 /// because that does not seem useful. It is

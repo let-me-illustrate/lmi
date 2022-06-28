@@ -19,16 +19,15 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-// Sample command line to compile:
-// /gcc-2.95.2-1/bin/g++ -Iming29521 ihs_crc_comp.cpp
-
 #include "contains.hpp"
 #include "main_common.hpp"
+#include "math_functions.hpp"           // relative_error()
 #include "miscellany.hpp"
 #include "value_cast.hpp"
 
 #include <algorithm>
 #include <cctype>
+#include <cfloat>                       // DECIMAL_DIG
 #include <cmath>
 #include <cstdlib>
 #include <fstream>
@@ -54,14 +53,14 @@
 //
 // [1] "crc": zero-based index of cell, whitespace, 32-bit CRC
 //   the composite is defined to have index -1
-// regexp: ^[-0-9][0-9]*[ \t][-0-9][0-9]*$ TODO ?? Right?
+// regexp: ^[-0-9][0-9]*[ \t][-0-9][0-9]*$
 // sed -e'/^[-0-9][0-9]*[[:blank:]][-0-9][0-9]*$/!d'
 // examples:
 //   0  2753575139
 //   -1 1560388799
 //
 // [2] "name": name of a composite yearly variable
-// regexp: ^[A-Za-z][0-9A-Za-z]*$ TODO ?? Right?
+// regexp: ^[A-Za-z][0-9A-Za-z]*$
 // example:
 //   EeGrossPmt
 // except that this regexp would also get the following values:
@@ -83,7 +82,7 @@ std::vector<std::string> const& get_special_type_3_not_2()
 // which are yearly elements instead. No other yearly quantity has
 // a non-numeric value at this time.
 //
-// TODO ?? It would be more maintainable to include enums.hpp here, but
+// It would be more maintainable to include enumerations here, but
 // that would force us to compile other .cpp files and link their
 // object code. For now at least, I've chosen the straightforward
 // approach.
@@ -125,7 +124,7 @@ bool const transition_matrix[6][6] =
     /*        to: 0  1  2  3  4  5 */
     /* from 0 */ {0, 1, 1, 0, 0, 0,},
     /* from 1 */ {0, 1, 1, 0, 0, 0,},
-    /* from 2 */ {0, 0, 1, 1, 1, 1,},   // TODO ?? Think about 2 -> 2,4 some more.
+    /* from 2 */ {0, 0, 1, 1, 1, 1,},   // SOMEDAY !! Think about 2 -> 2,4 some more.
     /* from 3 */ {0, 0, 1, 1, 1, 0,},
     /* from 4 */ {0, 0, 1, 0, 1, 0,},
     /* from 5 */ {0, 0, 0, 0, 0, 0,},
@@ -229,7 +228,7 @@ void f_2(std::string const& line1, std::string const& line2)
 {
     if
         (   line1 != line2
-// TODO ?? Fix this kludge, which strives to ignore fund names.
+// SOMEDAY !! Fix this kludge, which strives to ignore fund names.
         &&  contains(line1, " ")
         )
         {
@@ -260,7 +259,7 @@ void f12(std::string const& line1, std::string const& line2)
 }
 
 //============================================================================
-// TODO ?? Think about this one some more.
+// SOMEDAY !! Think about this one some more.
 void f22(std::string const& line1, std::string const& line2)
 {
     f_2(line1, line2);
@@ -300,11 +299,7 @@ void f_3(std::string const& line1, std::string const& line2)
     long double abs_diff = std::fabs(d1 - d2);
     max_abs_diff = std::max(max_abs_diff, abs_diff);
 
-    long double rel_err =
-        std::fabs(
-                (d1 - d2)
-            /   ((0.0 == d1) ? d2 : d1)
-            );
+    long double rel_err = relative_error(d1, d2);
     max_rel_err = std::max(max_rel_err, rel_err);
 
     if(rel_err < 1.0E-11L)
@@ -317,7 +312,7 @@ void f_3(std::string const& line1, std::string const& line2)
         << '\n';
     std::streamsize const original_precision = std::cout.precision();
     std::cout
-        << std::setprecision(20)
+        << std::setprecision(DECIMAL_DIG)
         << rel_err
         << "  " << d1
         << " vs. " << d2
@@ -421,7 +416,7 @@ int try_main(int argc, char* argv[])
     max_abs_diff = 0.0L;
     max_rel_err  = 0.0L;
 
-    // TODO ?? Want different things that match no type.
+    // Want different things that match no type.
     std::string line1 = "";
     std::string line2 = "";
 

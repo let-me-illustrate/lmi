@@ -26,13 +26,14 @@
 #include "bin_exp.hpp"
 #include "currency.hpp"                 // currency::cents_digits
 #include "fenv_lmi.hpp"
+#include "math_functions.hpp"           // relative_error()
 #include "miscellany.hpp"               // floating_rep(), scoped_ios_format
 #include "test_tools.hpp"
 
 #include <algorithm>                    // max()
 #include <cfloat>                       // DECIMAL_DIG
 #include <climits>                      // INT_MIN
-#include <cmath>                        // fabs()
+#include <cmath>                        // fabs(), nextafter()
 #include <ios>
 #include <iostream>
 #include <limits>
@@ -151,6 +152,32 @@ class round_to_test
         );
 };
 
+namespace
+{
+template<typename T>
+/*constexpr*/ T next_outward(T t)
+{
+    static_assert(std::is_floating_point_v<T>);
+    constexpr T inf {std::numeric_limits<T>::infinity()};
+    T const outward_inf {t < 0 ? -inf : inf};
+    return std::nextafter(t, outward_inf);
+}
+
+/// |Distance| to next representable number away from zero.
+///
+/// When a limit on absolute error is wanted, it is important to
+/// choose the "outward" direction: for exact powers of two, the
+/// distance to the first number in the "inner" binade would be
+/// only half of one ULP.
+
+template<typename T>
+/*constexpr*/ T delta_outward(T t)
+{
+    static_assert(std::is_floating_point_v<T>);
+    return std::fabs(next_outward(t) - t);
+}
+} // Unnamed namespace.
+
 template<typename RealType>
 bool round_to_test::test_one_case
     (RealType       unrounded
@@ -163,32 +190,10 @@ bool round_to_test::test_one_case
     RealType observed = f(unrounded);
 
     max_prec_real abs_error = std::fabs(observed - expected);
-    // Nonstandardly define relative error in terms of
-    // o(bserved) and e(xpected) as
-    //   |(o-e)/e| if e nonzero, else
-    //   |(o-e)/o| if o nonzero, else
-    //   zero
-    // in order to avoid division by zero.
-    max_prec_real rel_error(0.0);
-    if(max_prec_real(0.0) != expected)
-        {
-        rel_error = std::fabs
-            (
-              (observed - max_prec_real(expected))
-            / expected
-            );
-        }
-    else if(max_prec_real(0.0) != observed)
-        {
-        rel_error = std::fabs
-            (
-              (observed - max_prec_real(expected))
-            / observed
-            );
-        }
+    max_prec_real rel_error = relative_error(observed, expected);
 
-    // In general, we can't hope for the relative error to be less than
-    // epsilon for the floating-point type being rounded. Suppose a
+    // In general, we can't hope for the absolute error to be less than
+    // one ulp for the floating-point type being rounded. Suppose a
     // variable gets its value from a floating literal; 2.13.3/1 says
     //   "If the scaled value is in the range of representable values
     //   for its type, the result is the scaled value if representable,
@@ -200,7 +205,7 @@ bool round_to_test::test_one_case
     // direction, as can an expression like '5.0 / 1000.0'. C99 (but
     // not C++) requires evaluation of non-static floating-point
     // constants as if at runtime [F.7.4/1].
-    max_prec_real tolerance = std::numeric_limits<RealType>::epsilon();
+    max_prec_real tolerance = delta_outward(unrounded);
 
     // If the decimal scaling factor is not unity, then either it or
     // its reciprocal has no exact finite binary representation. Such
@@ -216,35 +221,12 @@ bool round_to_test::test_one_case
     // identity hold at runtime unless __STDC_IEC_559__ is defined.
     if(0 != decimals)
         {
-        // 'tolerance' is of the maximum-precision floating-point
-        // type so that it can more closely represent this quantity for
-        // types with less precision, without letting the cross-product
-        // term epsilon**2 vanish.
-        //
-        // TODO ?? Shouldn't one epsilon here be epsilon of
-        // max-precision-real type, as shown in a comment?
-        // But consider using std::nextafter instead of (1+epsilon).
-        RealType const unity = 1;
         tolerance =
-               (unity + std::numeric_limits<RealType>::epsilon())
-             * (unity + std::numeric_limits<RealType>::epsilon())
-//           * (unity + std::numeric_limits<max_prec_real>::epsilon())
-             - unity
-             ;
+              2 * delta_outward               (unrounded)
+            +     delta_outward<max_prec_real>(unrounded)
+            ;
         }
-#if defined LMI_COMO_WITH_MINGW
-    // COMPILER !! This looks like a como porting defect: with mingw
-    // as the underlying C compiler, a long double should occupy
-    // twelve bytes, ten significant and two for padding.
-    if(8 == sizeof(long double))
-        {
-        tolerance = std::max
-            (tolerance
-            ,2.0L * (max_prec_real)std::numeric_limits<double>::epsilon()
-            );
-        }
-#endif // defined LMI_COMO_WITH_MINGW
-    bool error_is_within_tolerance = rel_error <= tolerance;
+    bool error_is_within_tolerance = abs_error <= tolerance;
 
     if(!error_is_within_tolerance)
         {
@@ -553,12 +535,23 @@ void round_to_test::test_all_modes(bool synchronize)
     test_rounding();
 }
 
+/// Compare 1e8 * e / 1e8 in double vs. long double precision.
+///
+/// For x86_64:
+///   d0 == d1 == d3 == d4 != d2
+/// so the round trip is exact unless the 'double' reciprocal is
+/// stored in a variable.
+///
+/// It might be interesting to test 10^±N more generally. Here,
+/// N=8 just because rounding to more than eight decimals is
+/// relatively uncommon.
+
 void round_to_test::test_scaling()
 {
     scoped_ios_format meaningless_name(std::cout);
     double const volatile d0 = 2.71828'18284'59045'23536;
-    double const lo = nextafter(d0, -INFINITY);
-    double const hi = nextafter(d0,  INFINITY);
+    double const lo = std::nextafter(d0, -INFINITY);
+    double const hi = std::nextafter(d0,  INFINITY);
 
     double const volatile d1 = (d0 * 1.0e8) / 1.0e8;
     double const volatile dreciprocal = 1.0 / 1.0e8;

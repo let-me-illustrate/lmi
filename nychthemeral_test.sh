@@ -52,6 +52,8 @@ build_clutter='
 /^[^ ]*cpp  *-x /d
 /^[^ ]*g++  *-[Mo]/d
 /^[^ ]*gcc  *-[Mo]/d
+/^[^ ]*clang++  *-[Mo]/d
+/^[^ ]*clang  *-[Mo]/d
 /^[^ ]*windres -o /d
 '
 
@@ -278,20 +280,38 @@ esac
 # This for-loop can iterate over as many toolchains as desired.
 # Make sure the current production architecture is built last, so that
 # it's the one installed to /opt/lmi/bin/ when this script ends.
-triplets="x86_64-w64-mingw32"
+lmi_toolchains="gcc_msw64"
 if [ "Cygwin" != "$platform" ] && [ "WSL" != "$platform" ]
 then
-# 'triplets' really is used, but in a zsh-specific way
+# 'lmi_toolchains' really is used, but in a zsh-specific way
 # shellcheck disable=SC2034
-  triplets="x86_64-pc-linux-gnu x86_64-w64-mingw32"
+  lmi_toolchains="clang_gnu64 gcc_gnu64 gcc_msw64"
 fi
-export LMI_COMPILER=gcc
+export LMI_COMPILER
 export LMI_TRIPLET
 # shellcheck disable=SC2043
 # "${=...} expansion--see zsh faq 3.1:
 #  "Why does $var where var="foo bar" not do what I expect?"
-for LMI_TRIPLET in ${=triplets} ;
+for toolchain in ${=lmi_toolchains} ;
 do
+case "$toolchain" in
+    (clang_gnu64)
+        LMI_COMPILER="clang"
+        LMI_TRIPLET="x86_64-pc-linux-gnu"
+        ;;
+    (gcc_gnu64)
+        LMI_COMPILER="gcc"
+        LMI_TRIPLET="x86_64-pc-linux-gnu"
+        ;;
+    (gcc_msw64)
+        LMI_COMPILER="gcc"
+        LMI_TRIPLET="x86_64-w64-mingw32"
+        ;;
+    (*)
+        printf 'Unknown toolchain "%s".\n' "$toolchain"
+        return 1;
+        ;;
+esac
 # Directory for test logs.
 #
 # It seems redundant to construct yet another $prefix and $exec_prefix here;
@@ -301,7 +321,7 @@ exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
 log_dir="$exec_prefix"/logs
 mkdir --parents "$log_dir"
 {
-printf 'LMI_TRIPLET = "%s"\n' "$LMI_TRIPLET" > /dev/tty
+printf 'toolchain: %s\n' "${LMI_COMPILER}_${LMI_TRIPLET}" > /dev/tty
 
 # Cannot recursively check script on path determined at runtime, so
 # a directive like 'source="$srcdir"' doesn't work.
