@@ -123,8 +123,6 @@ else ifneq (,$(filter $(gcc_version), 11 11.0))
 
 endif
 
-treat_warnings_as_errors := -pedantic-errors -Werror
-
 # Write '-Wno' options at the end, with a rationale here.
 #
 # -Wabi: useful only for a special purpose
@@ -143,6 +141,8 @@ treat_warnings_as_errors := -pedantic-errors -Werror
 # -Wsystem-headers: not generally useful
 # -Wswitch-default: false positives for switches on enums that
 #   include all cases (verified by -Wswitch-enum)
+
+treat_warnings_as_errors := -pedantic-errors -Werror
 
 gcc_common_warnings := \
   $(treat_warnings_as_errors) \
