@@ -36,6 +36,7 @@
 #   include <bit>                       // endian
 #endif //  202002 <= __cplusplus
 #include <climits>                      // ULLONG_MAX
+#include <cstdint>                      // intmax_t
 #include <cstdlib>                      // strtoull()
 #include <cstring>                      // memcpy(), strncmp()
 #include <iomanip>
@@ -338,14 +339,23 @@ char const* table_type_as_string(table_type tt)
 // Represents location in the input, possibly invalid if it's not available.
 struct location_info
 {
-    explicit location_info(int line_num = 0, long long int position = 0)
+    explicit location_info(int line_num = 0, int position = 0)
         :line_num_ {line_num}
         ,position_ {position}
         {
         }
 
-    int           const line_num_ = 0;
-    long long int const position_ = 0;
+    // Some invocations pass a 'position' of a wide type. Ideally
+    // each would be rewritten; this overload is an expedient stopgap
+    // to trap any ludicrous value.
+    explicit location_info(int line_num, std::intmax_t position)
+        :line_num_ {line_num}
+        ,position_ {bourn_cast<int>(position)}
+        {
+        }
+
+    int const line_num_ = 0;
+    int const position_ = 0;
 };
 
 inline
