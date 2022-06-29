@@ -240,7 +240,6 @@ wno_conv_objects := \
 $(wno_conv_objects): gcc_common_extra_warnings += -Wno-conversion -Wfloat-conversion
 
 wno_sign_conv_objects := \
-  $(wx_dependent_objects) \
   crc32.o \
   getopt.o \
   md5.o \
