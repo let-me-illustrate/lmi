@@ -338,14 +338,14 @@ char const* table_type_as_string(table_type tt)
 // Represents location in the input, possibly invalid if it's not available.
 struct location_info
 {
-    explicit location_info(int line_num = 0, int position = 0)
+    explicit location_info(int line_num = 0, long long int position = 0)
         :line_num_ {line_num}
         ,position_ {position}
         {
         }
 
-    int const line_num_ = 0;
-    int const position_ = 0;
+    int           const line_num_ = 0;
+    long long int const position_ = 0;
 };
 
 inline
