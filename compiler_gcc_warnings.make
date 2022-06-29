@@ -231,13 +231,6 @@ $(cgicc_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
   -Wno-zero-as-null-pointer-constant \
 
-# SOMEDAY !! Address some of these '-Wconversion' issues.
-
-wno_conv_objects := \
-  round_glibc.o \
-
-$(wno_conv_objects): gcc_common_extra_warnings += -Wno-conversion -Wfloat-conversion
-
 wno_sign_conv_objects := \
   crc32.o \
   getopt.o \
