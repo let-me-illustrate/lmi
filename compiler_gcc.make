@@ -75,16 +75,6 @@ endif
 
 tutelary_flag :=
 
-# Dialect options for gcc.
-
-# The default '-fno-rounding-math' means something like
-#   #pragma STDC FENV ACCESS OFF
-# which causes harm while bringing no countervailing benefit--see:
-#   https://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
-
-c_standard   := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c99
-cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++20
-
 ################################################################################
 
 # Build type governs
@@ -220,31 +210,18 @@ endif
 # which used less RAM. They might become useful again in future
 # circumstances that cannot be foreseen.
 
+# Dialect options for gcc.
+
+# The default '-fno-rounding-math' means something like
+#   #pragma STDC FENV ACCESS OFF
+# which causes harm while bringing no countervailing benefit--see:
+#   https://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
+
+c_standard   := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c99
+cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++20
+
 CFLAGS = \
   $(optimization_flag) $(c_l_flags) \
-
-CXXFLAGS = \
-  $(optimization_flag) $(c_l_flags) \
-
-LDFLAGS = $(c_l_flags) -Wl,-Map,$@.map \
-
-ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
-  LDFLAGS += -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -Wl,-z,separate-code
-endif
-
-# By infelicitous default, MinGW enables auto-import. See, e.g.:
-#   https://sourceforge.net/p/mingw/mailman/message/16354653/
-# Disabling it globally, thus:
-#   LDFLAGS += -Wl,--disable-auto-import
-# worked with mingw.org's gcc, but the more recent MinGW-w64
-# versions seem to require it unless $(USE_SO_ATTRIBUTES) is
-# defined.
-
-ifneq (,$(USE_SO_ATTRIBUTES))
-  ifeq (mingw32,$(findstring mingw32,$(LMI_TRIPLET)))
-    LDFLAGS += -Wl,--disable-auto-import -static-libstdc++
-  endif
-endif
 
 # C compiler flags.
 
@@ -258,10 +235,8 @@ REQUIRED_CXXFLAGS = \
   $(cxx_standard) \
   $(CXX_WARNINGS) \
 
-# Archiver flags.
-
-REQUIRED_ARFLAGS = \
-  -rus
+CXXFLAGS = \
+  $(optimization_flag) $(c_l_flags) \
 
 # Linker flags.
 
@@ -311,6 +286,30 @@ REQUIRED_LDFLAGS = \
   $(EXTRA_LDFLAGS) \
   $(EXTRA_LIBS) \
 
+LDFLAGS = $(c_l_flags) -Wl,-Map,$@.map \
+
+ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
+  LDFLAGS += -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -Wl,-z,separate-code
+endif
+
+# By infelicitous default, MinGW enables auto-import. See, e.g.:
+#   https://sourceforge.net/p/mingw/mailman/message/16354653/
+# Disabling it globally, thus:
+#   LDFLAGS += -Wl,--disable-auto-import
+# worked with mingw.org's gcc, but the more recent MinGW-w64
+# versions seem to require it unless $(USE_SO_ATTRIBUTES) is
+# defined.
+
+ifneq (,$(USE_SO_ATTRIBUTES))
+  ifeq (mingw32,$(findstring mingw32,$(LMI_TRIPLET)))
+    LDFLAGS += -Wl,--disable-auto-import -static-libstdc++
+  endif
+endif
+
+# Archiver flags.
+
+REQUIRED_ARFLAGS = -rus
+
 # Resource compiler (msw) flags.
 #
 # The '--use-temp-file' windres option seems to be often helpful and
@@ -336,11 +335,11 @@ REQUIRED_RCFLAGS = \
 # Going one step beyond that idea, lmi puts $(tutelary_flag) last,
 # after even $(CFLAGS), for flags that must not be overridden.
 
-ALL_ARFLAGS  = $(REQUIRED_ARFLAGS)  $(ARFLAGS)
 ALL_CPPFLAGS = $(REQUIRED_CPPFLAGS) $(CPPFLAGS)
-ALL_CXXFLAGS = $(REQUIRED_CXXFLAGS) $(CXXFLAGS) $(tutelary_flag)
 ALL_CFLAGS   = $(REQUIRED_CFLAGS)   $(CFLAGS)   $(tutelary_flag)
+ALL_CXXFLAGS = $(REQUIRED_CXXFLAGS) $(CXXFLAGS) $(tutelary_flag)
 ALL_LDFLAGS  = $(REQUIRED_LDFLAGS)  $(LDFLAGS)
+ALL_ARFLAGS  = $(REQUIRED_ARFLAGS)  $(ARFLAGS)
 ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 
 # For the /dev/null rationale, see:
