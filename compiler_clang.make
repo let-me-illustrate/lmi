@@ -67,6 +67,10 @@ ifeq (safestdlib,$(build_type))
 
 endif
 
+# Overriding options--simply expanded, and empty by default.
+
+tutelary_flag :=
+
 # Compiler-and-linker flags.
 #
 # 'c_l_flags' are to be used in both compiler and linker commands.

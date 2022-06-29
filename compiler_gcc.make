@@ -200,6 +200,8 @@ ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
   c_l_flags += -fPIC
 endif
 
+# C and C++ compiler flags.
+
 # Around 2012 it was profitable to use flags such as
 #   --param ggc-min-expand=25 --param ggc-min-heapsize=32768
 # with older, more RAM-hungry versions of gcc, on older hardware
@@ -210,33 +212,28 @@ endif
 # which used less RAM. They might become useful again in future
 # circumstances that cannot be foreseen.
 
-# Dialect options for gcc.
-
 # The default '-fno-rounding-math' means something like
 #   #pragma STDC FENV ACCESS OFF
 # which causes harm while bringing no countervailing benefit--see:
 #   https://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
 
-c_standard   := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c99
-cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++20
-
-CFLAGS = \
-  $(optimization_flag) $(c_l_flags) \
+REQUIRED_COMPILER_FLAGS := \
+  $(c_l_flags) \
+  -frounding-math \
+  -fsignaling-nans \
+  -fno-ms-extensions \
 
 # C compiler flags.
 
-REQUIRED_CFLAGS = \
-  $(c_standard) \
-  $(C_WARNINGS) \
+REQUIRED_CFLAGS = -std=c99 $(C_WARNINGS) $(REQUIRED_COMPILER_FLAGS)
+
+CFLAGS = $(optimization_flag)
 
 # C++ compiler flags.
 
-REQUIRED_CXXFLAGS = \
-  $(cxx_standard) \
-  $(CXX_WARNINGS) \
+REQUIRED_CXXFLAGS = -std=c++20 $(CXX_WARNINGS) $(REQUIRED_COMPILER_FLAGS)
 
-CXXFLAGS = \
-  $(optimization_flag) $(c_l_flags) \
+CXXFLAGS = $(optimization_flag)
 
 # Linker flags.
 
@@ -282,11 +279,12 @@ all_library_directories := \
 EXTRA_LDFLAGS :=
 
 REQUIRED_LDFLAGS = \
+  $(c_l_flags) \
   $(addprefix -L , $(all_library_directories)) \
   $(EXTRA_LDFLAGS) \
   $(EXTRA_LIBS) \
 
-LDFLAGS = $(c_l_flags) -Wl,-Map,$@.map \
+LDFLAGS = -Wl,-Map,$@.map \
 
 ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
   LDFLAGS += -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -Wl,-z,separate-code
