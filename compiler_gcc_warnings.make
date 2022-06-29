@@ -76,6 +76,7 @@ gcc_common_warnings := \
   -Warith-conversion \
   -Wcast-align=strict \
   -Wcast-function-type \
+  -Wcast-qual \
   -Wconversion \
   -Wdangling-else \
   -Wdeprecated-declarations \
@@ -222,7 +223,6 @@ gcc_cxx_warnings := \
 postponed_gcc_cxx_warnings := \
 
 gcc_common_extra_warnings := \
-  -Wcast-qual \
 
 bourn_cast_test.o: gcc_common_extra_warnings += \
   -Wno-double-promotion \
