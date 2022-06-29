@@ -231,12 +231,6 @@ $(cgicc_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
   -Wno-zero-as-null-pointer-constant \
 
-# XMLWRAPP !! Remove these workarounds after updating xmlwrapp. See:
-#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00018.html
-# et seqq.:
-$(xmlwrapp_objects): gcc_common_extra_warnings += \
-  -Wno-conversion \
-
 # SOMEDAY !! Address some of these '-Wconversion' issues.
 
 wno_conv_objects := \
