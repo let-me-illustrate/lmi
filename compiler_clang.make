@@ -71,6 +71,41 @@ endif
 
 tutelary_flag :=
 
+# Build type governs
+#  - optimization flags
+#  - gprof
+#  - libstdc++ debugging macros
+
+# Options for undefined-behavior sanitizer.
+#
+# These:
+#   pointer-compare,pointer-subtract
+# seem to be unusable with C++.
+
+ubsan_options := \
+  -fsanitize=address,undefined,float-divide-by-zero,float-cast-overflow \
+
+# Apparently '-fomit-frame-pointer' is a clang default. Turn it off.
+
+ifeq (gprof,$(build_type))
+  optimization_flag := -O0 -fno-omit-frame-pointer
+  analyzer_flag := -pg
+else ifeq (ubsan,$(build_type))
+  analyzer_flag := $(ubsan_options) -O3 -fno-omit-frame-pointer
+else ifeq (safestdlib,$(build_type))
+  optimization_flag := -O0 -fno-omit-frame-pointer
+else
+  optimization_flag := -O2 -fno-omit-frame-pointer
+endif
+
+# Flags.
+
+# Define uppercase FLAGS recursively for greater flexibility: e.g., so
+# that they reflect downstream conditional changes to the lowercase
+# (and often immediately-expanded) variables they're composed from.
+
+debug_flag := -ggdb
+
 # Compiler-and-linker flags.
 #
 # 'c_l_flags' are to be used in both compiler and linker commands.
@@ -91,6 +126,9 @@ endif
 
 # C and C++ compiler flags.
 
+# clang-14.0.5-1 doesn't need all this rigmarole--see:
+#   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00072.html
+
 REQUIRED_COMPILER_FLAGS := \
   $(c_l_flags) \
   -Woverriding-t-option \
@@ -104,6 +142,9 @@ REQUIRED_COMPILER_FLAGS := \
 
 REQUIRED_CFLAGS = $(REQUIRED_COMPILER_FLAGS) -std=c99
 
+# Better to leave this unset, and specify optimization elsewhere?
+CFLAGS = $(optimization_flag)
+
 # C++ compiler flags.
 
 REQUIRED_CXXFLAGS = $(REQUIRED_COMPILER_FLAGS) -std=c++20
@@ -112,9 +153,46 @@ REQUIRED_CXXFLAGS = $(REQUIRED_COMPILER_FLAGS) -std=c++20
 #
 # -Wstring-plus-int: false negatives and no true positives in lmi.
 
-CXXFLAGS = -Wno-string-plus-int
+CXXFLAGS = $(optimization_flag) -Wno-string-plus-int
 
 # Linker flags.
+
+# Directories set in $(overriding_library_directories) are searched
+# before any others except the current build directory. There seems
+# to be no conventional name for such a variable: automake recommends
+# $(LDADD) or a prefixed variant for both '-l' and '-L' options, but
+# $(LDADD) can't do the right thing in all cases: e.g., to override a
+# default mpatrol library with a custom build,
+#   -L overrides must come at the beginning of a command, but
+#   -l options must come at the end, so that mpatrol is linked last.
+# That is, in the typical automake usage
+#   $(LINK) $(LDFLAGS) $(OBJECTS) $(LDADD) $(LIBS)
+# no single variable can be changed to produce
+#   $(LINK) $(LDFLAGS) $(OBJECTS) -L custom_path $(LIBS) -l custom
+# for a custom version of a library whose default version is already
+# specified in $(LIBS). Thus, a distinct variable is necessary for
+# path overrides, so distinct variables are necessary.
+
+# Architecture-specific directories $(locallibdir) and $(localbindir)
+# are placed on the link path in order to accommodate msw dlls, for
+# which no canonical location is clearly specified by FHS, because
+# they're both binaries and libraries in a sense. These two
+# subdirectories seem to be the most popular choices, and usage
+# varies, at least for msw:
+#  - wx-2.7.0 built with autotools puts its dll in lib/
+#  - libxml2 and libxslt put their dlls in bin/
+# It is crucial to list these two subdirectories in exactly the order
+# given. If they were specified in reverse order, then gnu 'ld' would
+# find a dll before its import library, which latter would therefore
+# be ignored--and that prevented mpatrol from working correctly.
+
+all_library_directories := \
+  . \
+  $(overriding_library_directories) \
+  $(locallibdir) \
+  $(localbindir) \
+
+EXTRA_LDFLAGS :=
 
 REQUIRED_LDFLAGS = \
   $(c_l_flags) \

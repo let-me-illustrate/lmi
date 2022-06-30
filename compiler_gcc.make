@@ -35,8 +35,6 @@ $(srcdir)/compiler_gcc_version.make:: ;
 include $(srcdir)/compiler_gcc_warnings.make
 $(srcdir)/compiler_gcc_warnings.make:: ;
 
-################################################################################
-
 # EXTRA variables.
 #
 # /\w*EXTRA_/ variables such as $(EXTRA_LDFLAGS) are set by other
@@ -69,13 +67,9 @@ ifeq (safestdlib,$(build_type))
 
 endif
 
-################################################################################
-
 # Overriding options--simply expanded, and empty by default.
 
 tutelary_flag :=
-
-################################################################################
 
 # Build type governs
 #  - optimization flags
