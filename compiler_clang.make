@@ -141,14 +141,14 @@ REQUIRED_COMPILER_FLAGS := \
 
 # C compiler flags.
 
-REQUIRED_CFLAGS = $(REQUIRED_COMPILER_FLAGS) -std=c99
+REQUIRED_CFLAGS = -std=c99 $(REQUIRED_COMPILER_FLAGS)
 
 # Better to leave this unset, and specify optimization elsewhere?
 CFLAGS = $(optimization_flag)
 
 # C++ compiler flags.
 
-REQUIRED_CXXFLAGS = $(REQUIRED_COMPILER_FLAGS) -std=c++20
+REQUIRED_CXXFLAGS = -std=c++20 $(REQUIRED_COMPILER_FLAGS)
 
 # Write '-Wno' options at the end, with a rationale here.
 #
