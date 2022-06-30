@@ -86,10 +86,8 @@ tutelary_flag :=
 ubsan_options := \
   -fsanitize=address,undefined,float-divide-by-zero,float-cast-overflow,bounds-strict \
   -Wno-duplicated-branches \
-  -fno-omit-frame-pointer \
   -fno-var-tracking \
   -fno-var-tracking-assignments \
-  -O3 \
   --param max-gcse-memory=1000000 \
 
 # Since gcc version 4.6, '-fomit-frame-pointer' has apparently been
@@ -101,7 +99,7 @@ ifeq (gprof,$(build_type))
   optimization_flag := -O0 -fno-omit-frame-pointer
   analyzer_flag := -pg
 else ifeq (ubsan,$(build_type))
-  analyzer_flag := $(ubsan_options)
+  analyzer_flag := $(ubsan_options) -O3 -fno-omit-frame-pointer
 else ifeq (safestdlib,$(build_type))
   optimization_flag := -O0 -fno-omit-frame-pointer
 else
