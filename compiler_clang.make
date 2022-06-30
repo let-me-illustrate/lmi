@@ -80,7 +80,8 @@ tutelary_flag :=
 #
 # These:
 #   pointer-compare,pointer-subtract
-# seem to be unusable with C++.
+# aren't "production-ready"--see:
+#   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00037.html
 
 ubsan_options := \
   -fsanitize=address,undefined,float-divide-by-zero,float-cast-overflow \
