@@ -2,19 +2,45 @@
 
 a='schroot --chroot=lmi'
 
-b='cd /opt/lmi/bin'
-c='. /opt/lmi/src/lmi/set_toolchain.sh'
-d='wine ./lmi_wx_shared --ash_nazg --data_path=/opt/lmi/data'
-# redirect voluminous GTK diagnostics
-e='lmipath=/opt/lmi/gcc_x86_64-pc-linux-gnu/build/ship; LD_LIBRARY_PATH=$lmipath:/opt/lmi/local/gcc_x86_64-pc-linux-gnu/lib/ $lmipath/lmi_wx_shared --ash_nazg --data_path=/opt/lmi/data 2>&1 |less'
+b='cd /opt/lmi/src/lmi'
+c='make $coefficiency install check_physical_closure 2>&1 | tee ../log | sed -f diagnostics.sed | less -S'
+d='make $coefficiency cgi_tests cli_tests 2>&1 | less -S'
+e='make $coefficiency system_test 2>&1 | less -S'
+f="make \$coefficiency --output-sync=recurse unit_tests 2>&1 | tee >(grep '\*\*\*') >(grep '????') >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >../log"
+g='make $coefficiency all build_type=so_test 2>&1 | tee ../log | sed -f diagnostics.sed | less -S'
+h='make $coefficiency cgi_tests cli_tests build_type=safestdlib 2>&1 | tee ../log | sed -f diagnostics.sed | less -S'
+i="make \$coefficiency --output-sync=recurse unit_tests build_type=safestdlib 2>&1 | tee >(grep '\*\*\*') >(grep '????') >(grep '!!!!' --count | xargs printf '%d tests succeeded\n') >../log"
+j='./nychthemeral_test.sh'
+k='make $coefficiency install check_physical_closure 2>&1 | less -S'
+l='make $coefficiency unit_tests unit_test_targets=regex_test 2>&1 | less -S'
+m='make $coefficiency LMI_COMPILER=gcc LMI_TRIPLET=x86_64-pc-linux-gnu check_concinnity 2>&1 |less -S -N'
+n='LMI_COMPILER=gcc   ; LMI_TRIPLET=x86_64-w64-mingw32  ; . /opt/lmi/src/lmi/set_toolchain.sh'
 
 print -rs $b ; echo $b ; eval $b
 print -rs $c ; echo $c
 print -rs $d ; echo $d
 print -rs $e ; echo $e
+print -rs $f ; echo $f
+print -rs $g ; echo $g
+print -rs $h ; echo $h
+print -rs $i ; echo $i
+print -rs $j ; echo $j
+print -rs $k ; echo $k
+print -rs $l ; echo $l
+print -rs $m ; echo $m
+print -rs $n ; echo $n
 
 unset a
 unset b
 unset c
 unset d
 unset e
+unset f
+unset g
+unset h
+unset i
+unset j
+unset k
+unset l
+unset m
+unset n

@@ -2,10 +2,11 @@
 
 a='schroot --chroot=lmi'
 
-b='cd /opt/lmi/proprietary'
+b='cd /opt/lmi/bin'
 c='. /opt/lmi/src/lmi/set_toolchain.sh'
-d='pushd /opt/lmi/touchstone ; d=/opt/lmi/touchstone-old/touchstone-$(date -u +"%Y%m%dT%H%MZ") && mkdir -p $d && for z in *; do cmp --quiet $z ../test/$z || ( mv $z $d/$z; mv ../test/$z ./$z; ) ; done; popd'
-e='git bundle create /srv/cache_for_lmi/blessed/$(date -u +"%Y%m%dT%H%MZ")-gwc.bundle origin/master..HEAD --branches'
+d='wine ./lmi_wx_shared --ash_nazg --data_path=/opt/lmi/data'
+# redirect voluminous GTK diagnostics
+e='lmipath=/opt/lmi/gcc_x86_64-pc-linux-gnu/build/ship; LD_LIBRARY_PATH=$lmipath:/opt/lmi/local/gcc_x86_64-pc-linux-gnu/lib/ $lmipath/lmi_wx_shared --ash_nazg --data_path=/opt/lmi/data 2>&1 |less'
 
 print -rs $b ; echo $b ; eval $b
 print -rs $c ; echo $c

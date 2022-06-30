@@ -50,9 +50,10 @@
 # panes. Having figured out how to start various terminals with tabbed
 # sessions, I do wonder whether I should have used 'expect'.
 #
-title: Mirror      ;; profile: Shell ;; command: schroot --chroot=lmi --directory=/opt/lmi/src/lmi/tabs/1
-title: Commit      ;; profile: Shell ;; command: schroot --chroot=lmi --directory=/opt/lmi/src/lmi/tabs/2
-title: Build       ;; profile: Shell ;; command: schroot --chroot=lmi --directory=/opt/lmi/src/lmi/tabs/3
-title: Edit        ;; profile: Shell ;; command: schroot --chroot=lmi --directory=/opt/lmi/src/lmi/tabs/4
-title: Run         ;; profile: Shell ;; command: schroot --chroot=lmi --directory=/opt/lmi/src/lmi/tabs/5
-title: Proprietary ;; profile: Shell ;; command: schroot --chroot=lmi --directory=/opt/lmi/src/lmi/tabs/6
+title: Mirror       ;; profile: Shell ;; command: schroot --chroot=lmi --directory=/opt/lmi/src/lmi/tabs/1
+title: Commit       ;; profile: Shell ;; command: schroot --chroot=lmi --directory=/opt/lmi/src/lmi/tabs/2
+title: Build native ;; profile: Shell ;; command: schroot --chroot=lmi --directory=/opt/lmi/src/lmi/tabs/3
+title: Edit         ;; profile: Shell ;; command: schroot --chroot=lmi --directory=/opt/lmi/src/lmi/tabs/4
+title: Build msw    ;; profile: Shell ;; command: schroot --chroot=lmi --directory=/opt/lmi/src/lmi/tabs/5
+title: Run          ;; profile: Shell ;; command: schroot --chroot=lmi --directory=/opt/lmi/src/lmi/tabs/6
+title: Proprietary  ;; profile: Shell ;; command: schroot --chroot=lmi --directory=/opt/lmi/src/lmi/tabs/7
