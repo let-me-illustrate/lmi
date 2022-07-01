@@ -22,3 +22,33 @@
 # Don't remake this makefile.
 
 $(srcdir)/compiler_clang_warnings.make:: ;
+
+# Warnings for clang.
+
+clang_version_specific_c_warnings :=
+clang_version_specific_cxx_warnings :=
+
+treat_warnings_as_errors := -pedantic-errors -Werror
+
+clang_common_warnings := \
+  $(treat_warnings_as_errors) \
+
+clang_c_warnings := \
+  $(clang_common_warnings) \
+
+clang_cxx_warnings := \
+  $(clang_common_warnings) \
+
+# Keep version-specific warnings last, so that they override others.
+
+C_WARNINGS = \
+  $(clang_c_warnings) \
+  $(clang_common_extra_warnings) \
+  $(clang_version_specific_c_warnings) \
+
+CXX_WARNINGS = \
+  $(clang_cxx_warnings) \
+  $(clang_common_extra_warnings) \
+  $(clang_version_specific_cxx_warnings) \
+
+# This file does not end in backslash-newline.
