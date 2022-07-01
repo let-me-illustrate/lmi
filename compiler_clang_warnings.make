@@ -28,10 +28,15 @@ $(srcdir)/compiler_clang_warnings.make:: ;
 clang_version_specific_c_warnings :=
 clang_version_specific_cxx_warnings :=
 
+# Write '-Wno' options at the end, with a rationale here.
+#
+# -Wstring-plus-int: false negatives and no true positives in lmi.
+
 treat_warnings_as_errors := -pedantic-errors -Werror
 
 clang_common_warnings := \
   $(treat_warnings_as_errors) \
+  -Wno-string-plus-int \
 
 clang_c_warnings := \
   $(clang_common_warnings) \

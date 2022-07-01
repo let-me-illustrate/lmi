@@ -150,11 +150,7 @@ CFLAGS = $(optimization_flag)
 
 REQUIRED_CXXFLAGS = -std=c++20 $(CXX_WARNINGS) $(REQUIRED_COMPILER_FLAGS)
 
-# Write '-Wno' options at the end, with a rationale here.
-#
-# -Wstring-plus-int: false negatives and no true positives in lmi.
-
-CXXFLAGS = $(optimization_flag) -Wno-string-plus-int
+CXXFLAGS = $(optimization_flag)
 
 # Linker flags.
 
