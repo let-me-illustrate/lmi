@@ -256,3 +256,4 @@ CXX_WARNINGS = \
   $(gcc_common_extra_warnings) \
   $(gcc_version_specific_cxx_warnings) \
 
+# This file does not end in backslash-newline.

@@ -44,4 +44,3 @@ RC      := windres
 
 GNU_CPP := $(CPP)
 GNU_CXX := $(CXX)
-
