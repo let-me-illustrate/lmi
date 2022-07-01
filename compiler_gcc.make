@@ -117,9 +117,6 @@ ifneq (,$(filter $(gcc_version), 10 10.0))
 # Fixed in gcc-10.2.1, but this makefile doesn't detect the last
 # component of major.minor.patchlevel reliably.
     tutelary_flag := -fomit-frame-pointer
-    ifneq (,$(filter $(gcc_version), 10 10.2.1))
-      tutelary_flag := -fno-omit-frame-pointer
-    endif
   endif
 endif
 
