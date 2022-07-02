@@ -150,7 +150,7 @@ endif
 
 product_file_sources := my_db.o my_fund.o my_prod.o my_rnd.o my_tier.o
 
-product_file_flags := -Os -fno-var-tracking-assignments -fno-omit-frame-pointer
+product_file_flags := -Os -fno-var-tracking-assignments
 
 $(product_file_sources): optimization_flag += $(product_file_flags)
 
