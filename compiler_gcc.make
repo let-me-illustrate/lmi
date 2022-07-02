@@ -112,20 +112,22 @@ ubsan_options := \
 
 debug_flag := -ggdb
 
-# Since gcc version 4.6, '-fomit-frame-pointer' has apparently been
-# the default. Don't use that because it makes debugging difficult.
-# See:
-#   https://lists.gnu.org/archive/html/lmi/2016-06/msg00091.html
+# '-fomit-frame-pointer' is an infelicitous default. Turn it off,
+# as it makes debugging difficult and has no measurable benefit.
+
+analyzer_flag :=
+optimization_flag := -fno-omit-frame-pointer
 
 ifeq (gprof,$(build_type))
-  optimization_flag := -O0 -fno-omit-frame-pointer
-  analyzer_flag := -pg
+  analyzer_flag += -pg
+  optimization_flag += -O0
 else ifeq (ubsan,$(build_type))
-  analyzer_flag := $(ubsan_options) -O3 -fno-omit-frame-pointer
+  analyzer_flag += $(ubsan_options)
+  optimization_flag += -O3
 else ifeq (safestdlib,$(build_type))
-  optimization_flag := -O0 -fno-omit-frame-pointer
+  optimization_flag += -O0
 else
-  optimization_flag := -O2 -fno-omit-frame-pointer
+  optimization_flag += -O2
 endif
 
 # Historical workarounds for product-file-generating binaries.

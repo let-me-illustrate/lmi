@@ -94,17 +94,22 @@ ubsan_options := \
 
 debug_flag := -ggdb
 
-# Apparently '-fomit-frame-pointer' is a clang default. Turn it off.
+# '-fomit-frame-pointer' is an infelicitous default. Turn it off,
+# as it makes debugging difficult and has no measurable benefit.
+
+analyzer_flag :=
+optimization_flag := -fno-omit-frame-pointer
 
 ifeq (gprof,$(build_type))
-  optimization_flag := -O0 -fno-omit-frame-pointer
-  analyzer_flag := -pg
+  analyzer_flag += -pg
+  optimization_flag += -O0
 else ifeq (ubsan,$(build_type))
-  analyzer_flag := $(ubsan_options) -O3 -fno-omit-frame-pointer
+  analyzer_flag += $(ubsan_options)
+  optimization_flag += -O3
 else ifeq (safestdlib,$(build_type))
-  optimization_flag := -O0 -fno-omit-frame-pointer
+  optimization_flag += -O0
 else
-  optimization_flag := -O2 -fno-omit-frame-pointer
+  optimization_flag += -O2
 endif
 
 # Compiler-and-linker flags.
