@@ -104,6 +104,14 @@ ubsan_options := \
   -fno-var-tracking-assignments \
   --param max-gcse-memory=1000000 \
 
+# Flags.
+
+# Define uppercase FLAGS recursively for greater flexibility: e.g., so
+# that they reflect downstream conditional changes to the lowercase
+# (and often immediately-expanded) variables they're composed from.
+
+debug_flag := -ggdb
+
 # Since gcc version 4.6, '-fomit-frame-pointer' has apparently been
 # the default. Don't use that because it makes debugging difficult.
 # See:
@@ -162,14 +170,6 @@ $(product_file_sources): optimization_flag += $(product_file_flags)
 $(product_file_sources): tutelary_flag += $(product_file_flags)
 
 ################################################################################
-
-# Flags.
-
-# Define uppercase FLAGS recursively for greater flexibility: e.g., so
-# that they reflect downstream conditional changes to the lowercase
-# (and often immediately-expanded) variables they're composed from.
-
-debug_flag := -ggdb
 
 # Compiler-and-linker flags.
 #

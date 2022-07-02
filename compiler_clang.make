@@ -86,6 +86,14 @@ tutelary_flag :=
 ubsan_options := \
   -fsanitize=address,undefined,float-divide-by-zero,float-cast-overflow \
 
+# Flags.
+
+# Define uppercase FLAGS recursively for greater flexibility: e.g., so
+# that they reflect downstream conditional changes to the lowercase
+# (and often immediately-expanded) variables they're composed from.
+
+debug_flag := -ggdb
+
 # Apparently '-fomit-frame-pointer' is a clang default. Turn it off.
 
 ifeq (gprof,$(build_type))
@@ -98,14 +106,6 @@ else ifeq (safestdlib,$(build_type))
 else
   optimization_flag := -O2 -fno-omit-frame-pointer
 endif
-
-# Flags.
-
-# Define uppercase FLAGS recursively for greater flexibility: e.g., so
-# that they reflect downstream conditional changes to the lowercase
-# (and often immediately-expanded) variables they're composed from.
-
-debug_flag := -ggdb
 
 # Compiler-and-linker flags.
 #
