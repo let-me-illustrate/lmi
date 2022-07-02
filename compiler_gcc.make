@@ -161,13 +161,6 @@ product_file_sources := my_db.o my_fund.o my_prod.o my_rnd.o my_tier.o
 $(product_file_sources): debug_flag += -fno-var-tracking-assignments
 $(product_file_sources): optimization_flag += -Os
 
-# $(optimization_flag) is part of the default $(CXXFLAGS), but a
-# target-specific assignment there isn't enough, because it is too
-# easily overridden by specifying $(CXXFLAGS) on the command line.
-# This flag overrides any such override:
-#   Suppressed, and soon to be removed:
-#$(product_file_sources): tutelary_flag += $(product_file_flags)
-
 ################################################################################
 
 # Compiler-and-linker flags.
@@ -179,8 +172,14 @@ $(product_file_sources): optimization_flag += -Os
 # Yet another is 'debug_flag': the GNU Coding Standards
 #   https://www.gnu.org/prep/standards/html_node/Command-Variables.html
 # suggest including flags such as '-g' in $(CFLAGS) because they
-# are "not required for proper compilation", but lmi supports
-# multiple build types that transcend that "proper" notion.
+# are "not required for proper compilation", but lmi deliberately
+# sets default debugging flags, of necessity: with gcc-3.4.5 at
+# least, the '-fno-var-tracking-assignments' debugging option was
+# required for compiling product files correctly. Furthermore, lmi
+# binary distributions are intended to be built with '-ggdb' so that
+# any errors reported by end users can reliably be reproduced using
+# debug builds. If it is desired to negate '-ggdb', the gcc manual
+# suggests that '-ggdb0' should do that.
 
 c_l_flags = $(debug_flag) $(analyzer_flag)
 
@@ -207,6 +206,7 @@ endif
 
 REQUIRED_COMPILER_FLAGS = \
   $(c_l_flags) \
+  $(optimization_flag) \
   -frounding-math \
   -fsignaling-nans \
   -fno-ms-extensions \
@@ -215,13 +215,13 @@ REQUIRED_COMPILER_FLAGS = \
 
 REQUIRED_CFLAGS = -std=c99 $(C_WARNINGS) $(REQUIRED_COMPILER_FLAGS)
 
-CFLAGS = $(optimization_flag)
+CFLAGS =
 
 # C++ compiler flags.
 
 REQUIRED_CXXFLAGS = -std=c++20 $(CXX_WARNINGS) $(REQUIRED_COMPILER_FLAGS)
 
-CXXFLAGS = $(optimization_flag)
+CXXFLAGS =
 
 # Linker flags.
 
