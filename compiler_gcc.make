@@ -182,7 +182,7 @@ $(product_file_sources): optimization_flag += -Os
 # are "not required for proper compilation", but lmi supports
 # multiple build types that transcend that "proper" notion.
 
-c_l_flags := $(debug_flag) $(analyzer_flag)
+c_l_flags = $(debug_flag) $(analyzer_flag)
 
 ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
   c_l_flags += -fPIC
@@ -205,7 +205,7 @@ endif
 # which causes harm while bringing no countervailing benefit--see:
 #   https://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
 
-REQUIRED_COMPILER_FLAGS := \
+REQUIRED_COMPILER_FLAGS = \
   $(c_l_flags) \
   -frounding-math \
   -fsignaling-nans \

@@ -119,7 +119,7 @@ endif
 # are "not required for proper compilation", but lmi supports
 # multiple build types that transcend that "proper" notion.
 
-c_l_flags := $(debug_flag) $(analyzer_flag)
+c_l_flags = $(debug_flag) $(analyzer_flag)
 
 ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
   c_l_flags += -fPIC
@@ -130,7 +130,7 @@ endif
 # clang-14.0.5-1 doesn't need all this rigmarole--see:
 #   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00072.html
 
-REQUIRED_COMPILER_FLAGS := \
+REQUIRED_COMPILER_FLAGS = \
   $(c_l_flags) \
   -Woverriding-t-option \
     -ffp-model=strict \
