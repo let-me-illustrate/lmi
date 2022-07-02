@@ -128,6 +128,11 @@ else
   optimization_flag := -O2 -fno-omit-frame-pointer
 endif
 
+# Historical workarounds for product-file-generating binaries.
+#
+# These workarounds are no longer necessary as of 2022-07-02. They are
+# retained as comments in case similar problems ever arise again.
+#
 # An overriding version of 'my_prod.cpp', which is used to create a
 # nondistributable binary, contains so many large strings that, after
 # consuming more than one CPU minute and 1 MiB of RAM, MinGW gcc-3.4.5
@@ -152,14 +157,14 @@ endif
 # that it's still used even if the '-O' flag is someday changed, even
 # though gcc currently documents that any optimization flag other than
 # '-O0' implies it.
-
+#
 # For simplicity and robustness, the same options are used for all
 # 'my_*.cpp' files.
-
-product_file_sources := my_db.o my_fund.o my_prod.o my_rnd.o my_tier.o
-
-$(product_file_sources): debug_flag += -fno-var-tracking-assignments
-$(product_file_sources): optimization_flag += -Os
+#
+# product_file_sources := my_db.o my_fund.o my_prod.o my_rnd.o my_tier.o
+#
+# $(product_file_sources): debug_flag += -fno-var-tracking-assignments
+# $(product_file_sources): optimization_flag += -Os
 
 ################################################################################
 
