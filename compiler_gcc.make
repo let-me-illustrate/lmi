@@ -158,16 +158,15 @@ endif
 
 product_file_sources := my_db.o my_fund.o my_prod.o my_rnd.o my_tier.o
 
-product_file_flags := -Os -fno-var-tracking-assignments
-
-$(product_file_sources): optimization_flag += $(product_file_flags)
+$(product_file_sources): debug_flag += -fno-var-tracking-assignments
+$(product_file_sources): optimization_flag += -Os
 
 # $(optimization_flag) is part of the default $(CXXFLAGS), but a
 # target-specific assignment there isn't enough, because it is too
 # easily overridden by specifying $(CXXFLAGS) on the command line.
 # This flag overrides any such override:
-
-$(product_file_sources): tutelary_flag += $(product_file_flags)
+#   Suppressed, and soon to be removed:
+#$(product_file_sources): tutelary_flag += $(product_file_flags)
 
 ################################################################################
 
