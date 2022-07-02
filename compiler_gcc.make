@@ -71,6 +71,20 @@ endif
 
 tutelary_flag :=
 
+# MinGW-w64's SEH defectively requires '-fomit-frame-pointer' until
+# gcc-10.2.1 (but as of 20220701 debian provides 10.0.0 only). See:
+#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00026.html
+#   https://lists.nongnu.org/archive/html/lmi/2020-12/msg00000.html
+#   https://lists.nongnu.org/archive/html/lmi/2020-12/msg00002.html
+#   https://lists.nongnu.org/archive/html/lmi/2021-03/msg00000.html
+#   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99234
+
+ifneq (,$(filter $(gcc_version), 10 10.0))
+  ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
+    tutelary_flag := -fomit-frame-pointer
+  endif
+endif
+
 # Build type governs
 #  - optimization flags
 #  - gprof
@@ -104,20 +118,6 @@ else ifeq (safestdlib,$(build_type))
   optimization_flag := -O0 -fno-omit-frame-pointer
 else
   optimization_flag := -O2 -fno-omit-frame-pointer
-endif
-
-ifneq (,$(filter $(gcc_version), 10 10.0))
-  ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
-# See:
-#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00026.html
-#   https://lists.nongnu.org/archive/html/lmi/2020-12/msg00000.html
-#   https://lists.nongnu.org/archive/html/lmi/2020-12/msg00002.html
-#   https://lists.nongnu.org/archive/html/lmi/2021-03/msg00000.html
-#   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99234
-# Fixed in gcc-10.2.1, but this makefile doesn't detect the last
-# component of major.minor.patchlevel reliably.
-    tutelary_flag := -fomit-frame-pointer
-  endif
 endif
 
 # An overriding version of 'my_prod.cpp', which is used to create a
