@@ -25,30 +25,15 @@
 
 $(srcdir)/compiler_clang.make:: ;
 
+# Ascertain compiler version.
+
+include $(srcdir)/compiler_clang_version.make
+$(srcdir)/compiler_clang_version.make:: ;
+
+# Warnings.
+
 include $(srcdir)/compiler_clang_warnings.make
 $(srcdir)/compiler_clang_warnings.make:: ;
-
-# Aliases for tools used in targets elsewhere.
-
-AR      := ar
-CC      := clang
-CPP     := cpp
-CXX     := clang++
-LD      := clang++
-# For GNU/Linux, $(RC) is never invoked.
-RC      := windres
-
-# GNU tools (or workalikes) for special purposes.
-#
-# For testing physical closure and generating autodependencies, use
-# either GNU tools or closely compatible equivalents such as clang.
-# This obviates figuring out how other toolchains support these needs.
-#
-# Override these definitions to specify GNU tools when using an
-# incompatible toolchain.
-
-GNU_CPP := $(CPP)
-GNU_CXX := $(CXX)
 
 # EXTRA variables.
 #
@@ -82,6 +67,51 @@ ifeq (safestdlib,$(build_type))
 
 endif
 
+# Overriding options--simply expanded, and empty by default.
+
+tutelary_flag :=
+
+# Build type governs
+#  - optimization flags
+#  - gprof
+#  - libstdc++ debugging macros
+
+# Options for undefined-behavior sanitizer.
+#
+# These:
+#   pointer-compare,pointer-subtract
+# aren't "production-ready"--see:
+#   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00037.html
+
+ubsan_options := \
+  -fsanitize=address,undefined,float-divide-by-zero,float-cast-overflow \
+
+# Flags.
+
+# Define uppercase FLAGS recursively for greater flexibility: e.g., so
+# that they reflect downstream conditional changes to the lowercase
+# (and often immediately-expanded) variables they're composed from.
+
+debug_flag := -ggdb
+
+# '-fomit-frame-pointer' is an infelicitous default. Turn it off,
+# as it makes debugging difficult and has no measurable benefit.
+
+analyzer_flag :=
+optimization_flag := -fno-omit-frame-pointer
+
+ifeq (gprof,$(build_type))
+  analyzer_flag += -pg
+  optimization_flag += -O0
+else ifeq (ubsan,$(build_type))
+  analyzer_flag += $(ubsan_options)
+  optimization_flag += -O3
+else ifeq (safestdlib,$(build_type))
+  optimization_flag += -O0
+else
+  optimization_flag += -O2
+endif
+
 # Compiler-and-linker flags.
 #
 # 'c_l_flags' are to be used in both compiler and linker commands.
@@ -91,10 +121,16 @@ endif
 # Yet another is 'debug_flag': the GNU Coding Standards
 #   https://www.gnu.org/prep/standards/html_node/Command-Variables.html
 # suggest including flags such as '-g' in $(CFLAGS) because they
-# are "not required for proper compilation", but lmi supports
-# multiple build types that transcend that "proper" notion.
+# are "not required for proper compilation", but lmi deliberately
+# sets default debugging flags, of necessity: with gcc-3.4.5 at
+# least, the '-fno-var-tracking-assignments' debugging option was
+# required for compiling product files correctly. Furthermore, lmi
+# binary distributions are intended to be built with '-ggdb' so that
+# any errors reported by end users can reliably be reproduced using
+# debug builds. If it is desired to negate '-ggdb', the gcc manual
+# suggests that '-ggdb0' should do that.
 
-c_l_flags := $(debug_flag) $(analyzer_flag)
+c_l_flags = $(debug_flag) $(analyzer_flag)
 
 ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
   c_l_flags += -fPIC
@@ -102,8 +138,12 @@ endif
 
 # C and C++ compiler flags.
 
-REQUIRED_COMPILER_FLAGS := \
+# clang-14.0.5-1 doesn't need all this rigmarole--see:
+#   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00072.html
+
+REQUIRED_COMPILER_FLAGS = \
   $(c_l_flags) \
+  $(optimization_flag) \
   -Woverriding-t-option \
     -ffp-model=strict \
     -ffp-exception-behavior=ignore \
@@ -113,19 +153,54 @@ REQUIRED_COMPILER_FLAGS := \
 
 # C compiler flags.
 
-REQUIRED_CFLAGS = $(REQUIRED_COMPILER_FLAGS) -std=c99
+REQUIRED_CFLAGS = -std=c99 $(C_WARNINGS) $(REQUIRED_COMPILER_FLAGS)
+
+CFLAGS =
 
 # C++ compiler flags.
 
-REQUIRED_CXXFLAGS = $(REQUIRED_COMPILER_FLAGS) -std=c++20
+REQUIRED_CXXFLAGS = -std=c++20 $(CXX_WARNINGS) $(REQUIRED_COMPILER_FLAGS)
 
-# Write '-Wno' options at the end, with a rationale here.
-#
-# -Wstring-plus-int: false negatives and no true positives in lmi.
-
-CXXFLAGS = -Wno-string-plus-int
+CXXFLAGS =
 
 # Linker flags.
+
+# Directories set in $(overriding_library_directories) are searched
+# before any others except the current build directory. There seems
+# to be no conventional name for such a variable: automake recommends
+# $(LDADD) or a prefixed variant for both '-l' and '-L' options, but
+# $(LDADD) can't do the right thing in all cases: e.g., to override a
+# default mpatrol library with a custom build,
+#   -L overrides must come at the beginning of a command, but
+#   -l options must come at the end, so that mpatrol is linked last.
+# That is, in the typical automake usage
+#   $(LINK) $(LDFLAGS) $(OBJECTS) $(LDADD) $(LIBS)
+# no single variable can be changed to produce
+#   $(LINK) $(LDFLAGS) $(OBJECTS) -L custom_path $(LIBS) -l custom
+# for a custom version of a library whose default version is already
+# specified in $(LIBS). Thus, a distinct variable is necessary for
+# path overrides, so distinct variables are necessary.
+
+# Architecture-specific directories $(locallibdir) and $(localbindir)
+# are placed on the link path in order to accommodate msw dlls, for
+# which no canonical location is clearly specified by FHS, because
+# they're both binaries and libraries in a sense. These two
+# subdirectories seem to be the most popular choices, and usage
+# varies, at least for msw:
+#  - wx-2.7.0 built with autotools puts its dll in lib/
+#  - libxml2 and libxslt put their dlls in bin/
+# It is crucial to list these two subdirectories in exactly the order
+# given. If they were specified in reverse order, then gnu 'ld' would
+# find a dll before its import library, which latter would therefore
+# be ignored--and that prevented mpatrol from working correctly.
+
+all_library_directories := \
+  . \
+  $(overriding_library_directories) \
+  $(locallibdir) \
+  $(localbindir) \
+
+EXTRA_LDFLAGS :=
 
 REQUIRED_LDFLAGS = \
   $(c_l_flags) \

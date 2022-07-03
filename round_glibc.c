@@ -380,7 +380,14 @@ long double roundl(long double x)
       i1 &= ~i;
     }
 
+#if defined LMI_GCC
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wconversion"
+#endif // defined LMI_GCC
   SET_LDOUBLE_WORDS (x, se, i0, i1);
+#if defined LMI_GCC
+#   pragma GCC diagnostic pop
+#endif // defined LMI_GCC
   return x;
 }
 

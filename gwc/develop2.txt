@@ -71,6 +71,37 @@ git bundle create /srv/cache_for_lmi/blessed/$(date -u +'%Y%m%dT%H%MZ')-catchup.
 
 cp -ia src/* /opt/lmi/src/products/src
 
+  # Synchronize origin on one machine with multiple chroots
+
+  # Create a bare repository on the host. Use that as 'origin' for
+  # the local repository in each chroot (which already identity-mounts
+  # the 'origin' directory). When a bundle is received, update it like
+  # this...
+
+cd /srv/cache_for_lmi/blessed/proprietary
+git fetch ../whatever.bundle master:master
+
+  # ...because 'git pull' can't be used in a bare repository. Then,
+  # 'git pull' in each chroot will DTRT.
+
+  # Compare files against proprietary repository
+
+  # 'meld' is arguably less clunky than 'netrw'. It's not installed
+  # in chroots by default because it's easy enough, and more flexible,
+  # to run it on the host.
+
+  # Compare source files
+
+meld /srv/chroot/lmi_bookworm_5/opt/lmi/src/products/src /srv/chroot/lmi_bookworm_5/opt/lmi/proprietary/src &
+
+  # Compare data files
+
+meld /srv/chroot/lmi_bookworm_5/opt/lmi/data /srv/chroot/lmi_bookworm_5/opt/lmi/proprietary/data &
+
+  # Compare system-test files
+
+meld /srv/chroot/lmi_bookworm_5/opt/lmi/test /srv/chroot/lmi_bookworm_5/opt/lmi/proprietary/test &
+
   # Whenever a rate table changes, regenerate the binary database
 
 cd /opt/lmi/data

@@ -22,3 +22,38 @@
 # Don't remake this makefile.
 
 $(srcdir)/compiler_clang_warnings.make:: ;
+
+# Warnings for clang.
+
+clang_version_specific_c_warnings :=
+clang_version_specific_cxx_warnings :=
+
+# Write '-Wno' options at the end, with a rationale here.
+#
+# -Wstring-plus-int: false negatives and no true positives in lmi.
+
+treat_warnings_as_errors := -pedantic-errors -Werror
+
+clang_common_warnings := \
+  $(treat_warnings_as_errors) \
+  -Wno-string-plus-int \
+
+clang_c_warnings := \
+  $(clang_common_warnings) \
+
+clang_cxx_warnings := \
+  $(clang_common_warnings) \
+
+# Keep version-specific warnings last, so that they override others.
+
+C_WARNINGS = \
+  $(clang_c_warnings) \
+  $(clang_common_extra_warnings) \
+  $(clang_version_specific_c_warnings) \
+
+CXX_WARNINGS = \
+  $(clang_cxx_warnings) \
+  $(clang_common_extra_warnings) \
+  $(clang_version_specific_cxx_warnings) \
+
+# This file does not end in backslash-newline.

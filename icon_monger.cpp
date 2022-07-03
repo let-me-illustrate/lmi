@@ -111,7 +111,7 @@ icon_monger::icon_monger()
 
 wxBitmapBundle icon_monger::CreateBitmapBundle
     (wxArtID const&     id
-    ,wxArtClient const& client
+    ,wxArtClient const&
     ,wxSize const&      size
     )
 {

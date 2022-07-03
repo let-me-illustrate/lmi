@@ -36,6 +36,7 @@
 #   include <bit>                       // endian
 #endif //  202002 <= __cplusplus
 #include <climits>                      // ULLONG_MAX
+#include <cstdint>                      // intmax_t
 #include <cstdlib>                      // strtoull()
 #include <cstring>                      // memcpy(), strncmp()
 #include <iomanip>
@@ -341,6 +342,15 @@ struct location_info
     explicit location_info(int line_num = 0, int position = 0)
         :line_num_ {line_num}
         ,position_ {position}
+        {
+        }
+
+    // Some invocations pass a 'position' of a wide type. Ideally
+    // each would be rewritten; this overload is an expedient stopgap
+    // to trap any ludicrous value.
+    explicit location_info(int line_num, std::intmax_t position)
+        :line_num_ {line_num}
+        ,position_ {bourn_cast<int>(position)}
         {
         }
 

@@ -25,32 +25,15 @@
 
 $(srcdir)/compiler_gcc.make:: ;
 
+# Ascertain compiler version.
+
+include $(srcdir)/compiler_gcc_version.make
+$(srcdir)/compiler_gcc_version.make:: ;
+
+# Warnings.
+
 include $(srcdir)/compiler_gcc_warnings.make
 $(srcdir)/compiler_gcc_warnings.make:: ;
-
-# Aliases for tools used in targets elsewhere.
-
-AR      := $(gcc_proclitic)ar
-CC      := $(gcc_proclitic)gcc
-CPP     := $(gcc_proclitic)cpp
-CXX     := $(gcc_proclitic)g++
-LD      := $(gcc_proclitic)g++
-# For GNU/Linux, $(RC) is never invoked.
-RC      := $(gcc_proclitic)windres
-
-# GNU tools (or workalikes) for special purposes.
-#
-# For testing physical closure and generating autodependencies, use
-# either GNU tools or closely compatible equivalents such as clang.
-# This obviates figuring out how other toolchains support these needs.
-#
-# Override these definitions to specify GNU tools when using an
-# incompatible toolchain.
-
-GNU_CPP := $(CPP)
-GNU_CXX := $(CXX)
-
-################################################################################
 
 # EXTRA variables.
 #
@@ -84,322 +67,23 @@ ifeq (safestdlib,$(build_type))
 
 endif
 
-# Compiler version.
-
-# $(subst): workaround for debian, whose MinGW-w64 identifies its
-# version 7.x.0 as "7.x-win32".
-
-ifeq (gcc,$(LMI_COMPILER))
-  gcc_version   := $(subst -win32,.0,$(shell $(CXX)     -dumpversion))
-endif
-
-# These are defined even for toolchains other than gcc.
-
-gnu_cpp_version := $(subst -win32,.0,$(shell $(GNU_CPP) -dumpversion))
-gnu_cxx_version := $(subst -win32,.0,$(shell $(GNU_CXX) -dumpversion))
-
-ifeq      (10,$(gnu_cpp_version))
-else ifeq (10.0,$(gnu_cpp_version))
-else ifeq (11,$(gnu_cpp_version))
-else ifeq (11.0,$(gnu_cpp_version))
-else
-  $(warning Untested $(GNU_CPP) version '$(gnu_cpp_version)')
-endif
-
-ifeq      (10,$(gnu_cxx_version))
-else ifeq (10.0,$(gnu_cxx_version))
-else ifeq (11,$(gnu_cxx_version))
-else ifeq (11.0,$(gnu_cxx_version))
-else
-  $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
-endif
-
-################################################################################
-
 # Overriding options--simply expanded, and empty by default.
 
 tutelary_flag :=
 
-# Dialect and warning options for gcc.
-
-# The default '-fno-rounding-math' means something like
-#   #pragma STDC FENV ACCESS OFF
-# which causes harm while bringing no countervailing benefit--see:
-#   https://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
-
-c_standard   := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c99
-cxx_standard := -fno-ms-extensions -frounding-math -fsignaling-nans -std=c++20
-
-gcc_version_specific_c_warnings :=
-gcc_version_specific_cxx_warnings :=
-
-ifneq (,$(filter $(gcc_version), 10 10.0))
-
-  ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
-# See:
+# MinGW-w64's SEH defectively requires '-fomit-frame-pointer' until
+# gcc-10.2.1 (but as of 20220701 debian provides 10.0.0 only). See:
 #   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00026.html
 #   https://lists.nongnu.org/archive/html/lmi/2020-12/msg00000.html
 #   https://lists.nongnu.org/archive/html/lmi/2020-12/msg00002.html
 #   https://lists.nongnu.org/archive/html/lmi/2021-03/msg00000.html
 #   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=99234
-# Fixed in gcc-10.2.1, but this makefile doesn't detect the last
-# component of major.minor.patchlevel reliably.
+
+ifneq (,$(filter $(gcc_version), 10 10.0))
+  ifeq (x86_64-w64-mingw32,$(findstring x86_64-w64-mingw32,$(LMI_TRIPLET)))
     tutelary_flag := -fomit-frame-pointer
-    ifneq (,$(filter $(gcc_version), 10 10.2.1))
-      tutelary_flag := -fno-omit-frame-pointer
-    endif
-  endif
-
-else ifneq (,$(filter $(gcc_version), 11 11.0))
-
-# g++-11 warnings not recognized by g++-10
-#
-# The gcc manual says that '-Wenum-conversion' is for C only,
-# but `make show_overlooked_cxx_warnings` disagreed.
-
-  gcc_version_specific_cxx_warnings := \
-    -Wctad-maybe-unsupported \
-    -Wdeprecated-enum-enum-conversion \
-    -Wdeprecated-enum-float-conversion \
-    -Wenum-conversion \
-    -Winvalid-imported-macros \
-
-endif
-
-treat_warnings_as_errors := -pedantic-errors -Werror
-
-# Write '-Wno' options at the end, with a rationale here.
-#
-# -Wabi: useful only for a special purpose
-# -Wanalyzer-too-complex: not actually helpful
-# -Wdate-time: only for "bit-wise-identical reproducible compilations"
-# -Wfloat-equal: too many warnings on correct code, e.g.,
-#   exact comparison to zero
-# -Winline: 'inline' now refers to linkage, not inlining
-# -Wmissing-declarations: for C++, this flags valid functions that
-#   arguably belong in an unnamed namespace
-# -Wpadded: useful only for low-level work
-# -Wparentheses: its diagnostics are beyond pedantic
-# -Wpsabi: undocumented--ARM only?
-# -Wsign-conversion: [see note elsewhere in this file]
-# -Wsuggest-attribute: too gcc-specific
-# -Wsystem-headers: not generally useful
-# -Wswitch-default: false positives for switches on enums that
-#   include all cases (verified by -Wswitch-enum)
-
-gcc_common_warnings := \
-  $(treat_warnings_as_errors) \
-  -Waggregate-return \
-  -Wall \
-  -Walloc-zero \
-  -Walloca \
-  -Warith-conversion \
-  -Wcast-align=strict \
-  -Wcast-function-type \
-  -Wconversion \
-  -Wdangling-else \
-  -Wdeprecated-declarations \
-  -Wdisabled-optimization \
-  -Wdouble-promotion \
-  -Wduplicated-branches \
-  -Wduplicated-cond \
-  -Wextra \
-  -Wformat=2 \
-  -Wformat-nonliteral \
-  -Wformat-overflow=2 \
-  -Wformat-security \
-  -Wformat-signedness \
-  -Wformat-truncation \
-  -Wformat-y2k \
-  -Wimport \
-  -Winit-self \
-  -Winvalid-pch \
-  -Wlogical-op \
-  -Wmissing-include-dirs \
-  -Wmultichar \
-  -Wnull-dereference \
-  -Wpacked \
-  -Wpointer-arith \
-  -Wredundant-decls \
-  -Wrestrict \
-  -Wshadow \
-  -Wshift-overflow=2 \
-  -Wsign-compare \
-  -Wstack-protector \
-  -Wstrict-overflow \
-  -Wstringop-overflow=4 \
-  -Wswitch-enum \
-  -Wtrampolines \
-  -Wundef \
-  -Wunreachable-code \
-  -Wunsafe-loop-optimizations \
-  -Wunused-macros \
-  -Wvector-operation-performance \
-  -Wvla \
-  -Wno-abi \
-  -Wno-analyzer-too-complex \
-  -Wno-date-time \
-  -Wno-float-equal \
-  -Wno-inline \
-  -Wno-missing-declarations \
-  -Wno-padded \
-  -Wno-parentheses \
-  -Wno-psabi \
-  -Wno-sign-conversion \
-  -Wno-suggest-attribute=pure \
-  -Wno-suggest-attribute=const \
-  -Wno-suggest-attribute=noreturn \
-  -Wno-suggest-attribute=malloc \
-  -Wno-suggest-attribute=format \
-  -Wno-suggest-attribute=cold \
-  -Wno-system-headers \
-  -Wno-switch-default \
-
-# Consider these later:
-postponed_gcc_common_warnings := \
-
-# Write '-Wno' options at the end, with a rationale here.
-#
-# -Wunsuffixed-float-constants: a migration aid to support an eventual
-#   FLOAT_CONST_DECIMAL64 pragma, but only a nuisance for now
-
-gcc_c_warnings := \
-  $(c_standard) \
-  $(gcc_common_warnings) \
-  -Wbad-function-cast \
-  -Wc++-compat \
-  -Wjump-misses-init \
-  -Wmissing-braces \
-  -Wmissing-prototypes \
-  -Wnested-externs \
-  -Wold-style-definition \
-  -Wstrict-prototypes \
-  -Wtraditional-conversion \
-  -Wwrite-strings \
-  -Wno-unsuffixed-float-constants \
-
-# Write '-Wno' options at the end, with a rationale here.
-#
-# -Wabi-tag: useful only for a special purpose
-# -Waggregate-return: generally incompatible with C++
-# -Weffc++: obsolescent
-# -Wmismatched-tags: not helpful--see:
-#   https://lists.nongnu.org/archive/html/lmi/2016-05/msg00075.html
-# -Wmultiple-inheritance: forbids a useful feature
-# -Wnamespaces: forbids a useful feature
-# -Wsign-promo: too many false positives--see:
-#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00016.html
-# -Wsuggest-final-methods, and
-# -Wsuggest-final-types: use these only occasionally, like -Weffc++;
-#   work with '-Wsuggest-final-types' first, because making a class
-#   final may resolve '-Wsuggest-final-methods' suggestions for its
-#   members; but expect many false positives
-# -Wtemplates: forbids a useful feature
-# -Wvirtual-inheritance: forbids a useful feature
-
-gcc_cxx_warnings := \
-  $(cxx_standard) \
-  $(gcc_common_warnings) \
-  -Wc++11-compat \
-  -Wc++14-compat \
-  -Wc++1z-compat \
-  -Wcatch-value=3 \
-  -Wcomma-subscript \
-  -Wconditionally-supported \
-  -Wctor-dtor-privacy \
-  -Wdelete-non-virtual-dtor \
-  -Wdeprecated \
-  -Wdeprecated-copy-dtor \
-  -Wextra-semi \
-  -Wnoexcept \
-  -Wnoexcept-type \
-  -Wnon-template-friend \
-  -Wnon-virtual-dtor \
-  -Wold-style-cast \
-  -Woverloaded-virtual \
-  -Wplacement-new=2 \
-  -Wpmf-conversions \
-  -Wredundant-tags \
-  -Wregister \
-  -Wreorder \
-  -Wstrict-null-sentinel \
-  -Wsuggest-override \
-  -Wsynth \
-  -Wuseless-cast \
-  -Wvolatile \
-  -Wzero-as-null-pointer-constant \
-  -Wno-abi-tag \
-  -Wno-aggregate-return \
-  -Wno-effc++ \
-  -Wno-mismatched-tags \
-  -Wno-multiple-inheritance \
-  -Wno-namespaces \
-  -Wno-sign-promo \
-  -Wno-suggest-final-methods \
-  -Wno-suggest-final-types \
-  -Wno-templates \
-  -Wno-virtual-inheritance \
-
-# Consider these later:
-postponed_gcc_cxx_warnings := \
-
-gcc_common_extra_warnings := \
-  -Wcast-qual \
-
-bourn_cast_test.o: gcc_common_extra_warnings += \
-  -Wno-double-promotion \
-
-$(cgicc_objects): gcc_common_extra_warnings += \
-  -Wno-conversion \
-  -Wno-zero-as-null-pointer-constant \
-
-ifeq (safestdlib,$(build_type))
-  ifeq (3.4.5,$(gcc_version))
-    expression_template_0_test.o: gcc_common_extra_warnings += -Wno-unused-parameter
   endif
 endif
-
-# XMLWRAPP !! Remove these workarounds after updating xmlwrapp. See:
-#   https://lists.nongnu.org/archive/html/lmi/2019-03/msg00018.html
-# et seqq.:
-$(xmlwrapp_objects): gcc_common_extra_warnings += \
-  -Wno-conversion \
-
-# SOMEDAY !! Address some of these '-Wconversion' issues.
-
-wno_conv_objects := \
-  rate_table.o \
-  round_glibc.o \
-
-$(wno_conv_objects): gcc_common_extra_warnings += -Wno-conversion -Wfloat-conversion
-
-wno_sign_conv_objects := \
-  $(wx_dependent_objects) \
-  crc32.o \
-  getopt.o \
-  md5.o \
-  round_glibc.o \
-
-# '-Wsign-conversion' is generally unusable with C++ because the STL
-# defectively uses unsigned types. It is useful to enable it from
-# time to time and filter the output thus:
-#   grep 'error:' | sed -e '/size_type/d'
-
-$(wno_sign_conv_objects): gcc_common_extra_warnings += -Wno-sign-conversion
-
-# Keep version-specific warnings last, so that they override others.
-
-C_WARNINGS = \
-  $(gcc_c_warnings) \
-  $(gcc_common_extra_warnings) \
-  $(gcc_version_specific_c_warnings) \
-
-CXX_WARNINGS = \
-  $(gcc_cxx_warnings) \
-  $(gcc_common_extra_warnings) \
-  $(gcc_version_specific_cxx_warnings) \
-
-################################################################################
 
 # Build type governs
 #  - optimization flags
@@ -410,34 +94,47 @@ CXX_WARNINGS = \
 #
 # These:
 #   pointer-compare,pointer-subtract
-# aren't necessarily usable with gcc--see:
-#   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00033.html
+# aren't "production-ready"--see:
+#   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00037.html
 
 ubsan_options := \
   -fsanitize=address,undefined,float-divide-by-zero,float-cast-overflow,bounds-strict \
   -Wno-duplicated-branches \
-  -fno-omit-frame-pointer \
   -fno-var-tracking \
   -fno-var-tracking-assignments \
-  -O3 \
   --param max-gcse-memory=1000000 \
 
-# Since gcc version 4.6, '-fomit-frame-pointer' has apparently been
-# the default. Don't use that because it makes debugging difficult.
-# See:
-#   https://lists.gnu.org/archive/html/lmi/2016-06/msg00091.html
+# Flags.
+
+# Define uppercase FLAGS recursively for greater flexibility: e.g., so
+# that they reflect downstream conditional changes to the lowercase
+# (and often immediately-expanded) variables they're composed from.
+
+debug_flag := -ggdb
+
+# '-fomit-frame-pointer' is an infelicitous default. Turn it off,
+# as it makes debugging difficult and has no measurable benefit.
+
+analyzer_flag :=
+optimization_flag := -fno-omit-frame-pointer
 
 ifeq (gprof,$(build_type))
-  optimization_flag := -O0 -fno-omit-frame-pointer
-  analyzer_flag := -pg
+  analyzer_flag += -pg
+  optimization_flag += -O0
 else ifeq (ubsan,$(build_type))
-  analyzer_flag := $(ubsan_options)
+  analyzer_flag += $(ubsan_options)
+  optimization_flag += -O3
 else ifeq (safestdlib,$(build_type))
-  optimization_flag := -O0 -fno-omit-frame-pointer
+  optimization_flag += -O0
 else
-  optimization_flag := -O2 -fno-omit-frame-pointer
+  optimization_flag += -O2
 endif
 
+# Historical workarounds for product-file-generating binaries.
+#
+# These workarounds are no longer necessary as of 2022-07-02. They are
+# retained as comments in case similar problems ever arise again.
+#
 # An overriding version of 'my_prod.cpp', which is used to create a
 # nondistributable binary, contains so many large strings that, after
 # consuming more than one CPU minute and 1 MiB of RAM, MinGW gcc-3.4.5
@@ -462,32 +159,16 @@ endif
 # that it's still used even if the '-O' flag is someday changed, even
 # though gcc currently documents that any optimization flag other than
 # '-O0' implies it.
-
+#
 # For simplicity and robustness, the same options are used for all
 # 'my_*.cpp' files.
-
-product_file_sources := my_db.o my_fund.o my_prod.o my_rnd.o my_tier.o
-
-product_file_flags := -Os -fno-var-tracking-assignments -fno-omit-frame-pointer
-
-$(product_file_sources): optimization_flag += $(product_file_flags)
-
-# $(optimization_flag) is part of the default $(CXXFLAGS), but a
-# target-specific assignment there isn't enough, because it is too
-# easily overridden by specifying $(CXXFLAGS) on the command line.
-# This flag overrides any such override:
-
-$(product_file_sources): tutelary_flag += $(product_file_flags)
+#
+# product_file_sources := my_db.o my_fund.o my_prod.o my_rnd.o my_tier.o
+#
+# $(product_file_sources): debug_flag += -fno-var-tracking-assignments
+# $(product_file_sources): optimization_flag += -Os
 
 ################################################################################
-
-# Flags.
-
-# Define uppercase FLAGS recursively for greater flexibility: e.g., so
-# that they reflect downstream conditional changes to the lowercase
-# (and often immediately-expanded) variables they're composed from.
-
-debug_flag := -ggdb
 
 # Compiler-and-linker flags.
 #
@@ -498,68 +179,56 @@ debug_flag := -ggdb
 # Yet another is 'debug_flag': the GNU Coding Standards
 #   https://www.gnu.org/prep/standards/html_node/Command-Variables.html
 # suggest including flags such as '-g' in $(CFLAGS) because they
-# are "not required for proper compilation", but lmi supports
-# multiple build types that transcend that "proper" notion.
+# are "not required for proper compilation", but lmi deliberately
+# sets default debugging flags, of necessity: with gcc-3.4.5 at
+# least, the '-fno-var-tracking-assignments' debugging option was
+# required for compiling product files correctly. Furthermore, lmi
+# binary distributions are intended to be built with '-ggdb' so that
+# any errors reported by end users can reliably be reproduced using
+# debug builds. If it is desired to negate '-ggdb', the gcc manual
+# suggests that '-ggdb0' should do that.
 
-c_l_flags := $(debug_flag) $(analyzer_flag)
+c_l_flags = $(debug_flag) $(analyzer_flag)
 
 ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
   c_l_flags += -fPIC
 endif
 
-# As this is written in 2012, lmi is often built on machines with less
-# RAM per core than gcc wants. Experiments show that these flags cut
-# gcc's RAM appetite by fifty percent, in return for a ten-percent
-# speed penalty that can be overcome by increasing parallelism. There
-# seems to be no need for them with gcc-4.x, which uses less RAM.
+# C and C++ compiler flags.
 
-ifeq (gcc,$(LMI_COMPILER))
-  ifeq (3.4.5,$(gcc_version))
-    ggc_flags := --param ggc-min-expand=25 --param ggc-min-heapsize=32768
-  endif
-endif
+# Around 2012 it was profitable to use flags such as
+#   --param ggc-min-expand=25 --param ggc-min-heapsize=32768
+# with older, more RAM-hungry versions of gcc, on older hardware
+# that didn't have as much RAM per core as gcc wanted. Experiments
+# showed that these flags cut gcc's RAM appetite by fifty percent,
+# in return for a ten-percent speed penalty that could be overcome
+# by increasing parallelism. They became unnecessary with gcc-4.x,
+# which used less RAM. They might become useful again in future
+# circumstances that cannot be foreseen.
 
-CFLAGS = \
-  $(ggc_flags) $(optimization_flag) $(c_l_flags) \
+# The default '-fno-rounding-math' means something like
+#   #pragma STDC FENV ACCESS OFF
+# which causes harm while bringing no countervailing benefit--see:
+#   https://lists.nongnu.org/archive/html/lmi/2017-08/msg00045.html
 
-CXXFLAGS = \
-  $(ggc_flags) $(optimization_flag) $(c_l_flags) \
-
-LDFLAGS = $(c_l_flags) -Wl,-Map,$@.map \
-
-ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
-  LDFLAGS += -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -Wl,-z,separate-code
-endif
-
-# Explicitly disable the infelicitous auto-import default. See:
-#   http://article.gmane.org/gmane.comp.gnu.mingw.user/19758
-#     [2006-05-18T11:38:01Z from Earnie Boyd]
-# Do not disable it for MinGW-w64, which seems to require it.
-
-ifeq (3.4.5,$(gcc_version))
-  LDFLAGS += -Wl,--disable-auto-import
-endif
-
-ifneq (,$(USE_SO_ATTRIBUTES))
-  ifeq (mingw32,$(findstring mingw32,$(LMI_TRIPLET)))
-    LDFLAGS += -Wl,--disable-auto-import -static-libstdc++
-  endif
-endif
+REQUIRED_COMPILER_FLAGS = \
+  $(c_l_flags) \
+  $(optimization_flag) \
+  -frounding-math \
+  -fsignaling-nans \
+  -fno-ms-extensions \
 
 # C compiler flags.
 
-REQUIRED_CFLAGS = \
-  $(C_WARNINGS) \
+REQUIRED_CFLAGS = -std=c99 $(C_WARNINGS) $(REQUIRED_COMPILER_FLAGS)
+
+CFLAGS =
 
 # C++ compiler flags.
 
-REQUIRED_CXXFLAGS = \
-  $(CXX_WARNINGS) \
+REQUIRED_CXXFLAGS = -std=c++20 $(CXX_WARNINGS) $(REQUIRED_COMPILER_FLAGS)
 
-# Archiver flags.
-
-REQUIRED_ARFLAGS = \
-  -rus
+CXXFLAGS =
 
 # Linker flags.
 
@@ -605,9 +274,34 @@ all_library_directories := \
 EXTRA_LDFLAGS :=
 
 REQUIRED_LDFLAGS = \
+  $(c_l_flags) \
   $(addprefix -L , $(all_library_directories)) \
   $(EXTRA_LDFLAGS) \
   $(EXTRA_LIBS) \
+
+LDFLAGS = -Wl,-Map,$@.map \
+
+ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
+  LDFLAGS += -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -Wl,-z,separate-code
+endif
+
+# By infelicitous default, MinGW enables auto-import. See, e.g.:
+#   https://sourceforge.net/p/mingw/mailman/message/16354653/
+# Disabling it globally, thus:
+#   LDFLAGS += -Wl,--disable-auto-import
+# worked with mingw.org's gcc, but the more recent MinGW-w64
+# versions seem to require it unless $(USE_SO_ATTRIBUTES) is
+# defined.
+
+ifneq (,$(USE_SO_ATTRIBUTES))
+  ifeq (mingw32,$(findstring mingw32,$(LMI_TRIPLET)))
+    LDFLAGS += -Wl,--disable-auto-import -static-libstdc++
+  endif
+endif
+
+# Archiver flags.
+
+REQUIRED_ARFLAGS = -rus
 
 # Resource compiler (msw) flags.
 #
@@ -634,11 +328,11 @@ REQUIRED_RCFLAGS = \
 # Going one step beyond that idea, lmi puts $(tutelary_flag) last,
 # after even $(CFLAGS), for flags that must not be overridden.
 
-ALL_ARFLAGS  = $(REQUIRED_ARFLAGS)  $(ARFLAGS)
 ALL_CPPFLAGS = $(REQUIRED_CPPFLAGS) $(CPPFLAGS)
-ALL_CXXFLAGS = $(REQUIRED_CXXFLAGS) $(CXXFLAGS) $(tutelary_flag)
 ALL_CFLAGS   = $(REQUIRED_CFLAGS)   $(CFLAGS)   $(tutelary_flag)
+ALL_CXXFLAGS = $(REQUIRED_CXXFLAGS) $(CXXFLAGS) $(tutelary_flag)
 ALL_LDFLAGS  = $(REQUIRED_LDFLAGS)  $(LDFLAGS)
+ALL_ARFLAGS  = $(REQUIRED_ARFLAGS)  $(ARFLAGS)
 ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 
 # For the /dev/null rationale, see:

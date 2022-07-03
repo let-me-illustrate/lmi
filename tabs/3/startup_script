@@ -14,6 +14,8 @@ j='./nychthemeral_test.sh'
 k='make $coefficiency install check_physical_closure 2>&1 | less -S'
 l='make $coefficiency unit_tests unit_test_targets=regex_test 2>&1 | less -S'
 m='make $coefficiency LMI_COMPILER=gcc LMI_TRIPLET=x86_64-pc-linux-gnu check_concinnity 2>&1 |less -S -N'
+n='LMI_COMPILER=gcc   ; LMI_TRIPLET=x86_64-pc-linux-gnu ; . /opt/lmi/src/lmi/set_toolchain.sh'
+o='LMI_COMPILER=clang ; LMI_TRIPLET=x86_64-pc-linux-gnu ; . /opt/lmi/src/lmi/set_toolchain.sh'
 
 print -rs $b ; echo $b ; eval $b
 print -rs $c ; echo $c
@@ -27,6 +29,8 @@ print -rs $j ; echo $j
 print -rs $k ; echo $k
 print -rs $l ; echo $l
 print -rs $m ; echo $m
+print -rs $n ; echo $n
+print -rs $o ; echo $o
 
 unset a
 unset b
@@ -41,3 +45,5 @@ unset j
 unset k
 unset l
 unset m
+unset n
+unset o
