@@ -684,6 +684,8 @@ fardel: install
 	+@[ -d $(fardel_dir) ] || $(MKDIR) --parents $(fardel_dir)
 	@$(MAKE) --file=$(this_makefile) --directory=$(fardel_dir) wrap_fardel
 	@$(ECHO) "Created '$(fardel_name)' archive in '$(fardel_root)'."
+	@$(ECHO) "To upload this fardel to savannah, run this command:"
+	@$(ECHO) "  $(srcdir)/publish.sh $(fardel_root)/$(fardel_name).zip"
 
 .PHONY: wrap_fardel
 wrap_fardel:
@@ -707,7 +709,6 @@ wrap_fardel:
 	  --directory=$(fardel_root) \
 	  --file=$(fardel_root)/$(fardel_name).zip \
 	  $(fardel_name)
-	@-$(srcdir)/publish.sh $(fardel_root)/$(fardel_name).zip
 
 ################################################################################
 
