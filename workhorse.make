@@ -694,11 +694,11 @@ wrap_fardel:
 	@$(INSTALL) -m 0664 $(datadir)/group_quote_banner.png .
 	@$(INSTALL) -m 0775 $(fardel_binaries) .
 	@$(INSTALL) -m 0664 $(fardel_files) .
-	printf "$(j1) $(j2)" >expiry
+	@printf "$(j1) $(j2)" >expiry
 	@$(MD5SUM) --binary $(fardel_checksummed_files) >validated.md5
 	@$(PERFORM) $(bindir)/generate_passkey$(EXEEXT) > passkey
 	@$(TAR) \
-	  --bzip2 \
+	  --auto-compress \
 	  --create \
 	  --directory=$(fardel_root) \
 	  --file=$(fardel_root)/$(fardel_name).tar.bz2 \
