@@ -232,9 +232,9 @@ CXXFLAGS =
 
 # Linker flags.
 
-# Prefer to invoke GNU 'ld' through the compiler frontends 'gcc' and
-# 'g++' because that takes care of linking the required libraries for
-# each language. Accordingly, pass GNU 'ld' options with '-Wl,'.
+# Prefer to invoke the linker through compiler frontends, because
+# that takes care of linking each language's required libraries.
+# Accordingly, pass linker options with '-Wl,'.
 
 # Directories set in $(overriding_library_directories) are searched
 # before any others except the current build directory. There seems

@@ -165,6 +165,10 @@ CXXFLAGS =
 
 # Linker flags.
 
+# Prefer to invoke the linker through compiler frontends, because
+# that takes care of linking each language's required libraries.
+# Accordingly, pass linker options with '-Wl,'.
+
 # Directories set in $(overriding_library_directories) are searched
 # before any others except the current build directory. There seems
 # to be no conventional name for such a variable: automake recommends
