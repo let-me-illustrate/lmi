@@ -208,16 +208,17 @@ EXTRA_LDFLAGS :=
 
 REQUIRED_LDFLAGS = \
   -fuse-ld=lld \
+  -Wl,-Map,$@.map \
   $(c_l_flags) \
   $(addprefix -L , $(all_library_directories)) \
   $(EXTRA_LDFLAGS) \
   $(EXTRA_LIBS) \
 
-LDFLAGS = -Wl,-Map,$@.map \
-
 ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
-  LDFLAGS += -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -Wl,-z,separate-code
+  REQUIRED_LDFLAGS += -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -Wl,-z,separate-code
 endif
+
+LDFLAGS =
 
 # Archiver flags.
 
