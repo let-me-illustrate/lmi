@@ -203,6 +203,7 @@ all_library_directories := \
 EXTRA_LDFLAGS :=
 
 REQUIRED_LDFLAGS = \
+  -fuse-ld=lld \
   $(c_l_flags) \
   $(addprefix -L , $(all_library_directories)) \
   $(EXTRA_LDFLAGS) \

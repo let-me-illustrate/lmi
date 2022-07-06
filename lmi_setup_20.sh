@@ -98,6 +98,7 @@ apt-get --assume-yes install \
   libxml2-utils \
   libunwind-dev \
   libxslt1-dev \
+  lld \
   make \
   patch \
   pkg-config \
