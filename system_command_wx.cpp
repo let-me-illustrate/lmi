@@ -87,7 +87,7 @@ void concrete_system_command(std::string const& cmd_line)
         : nullptr;
         ;
     bool const b = f && f->GetStatusBar();
-    std::ostream null_output(0);
+    std::ostream null_output {nullptr};
     std::ostream& statusbar_if_available = b ? status() : null_output;
 
     statusbar_if_available << "Running..." << std::flush;
