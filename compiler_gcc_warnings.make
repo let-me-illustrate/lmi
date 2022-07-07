@@ -224,6 +224,8 @@ postponed_gcc_cxx_warnings := \
 
 gcc_common_extra_warnings := \
 
+# Target-specific modifications.
+
 bourn_cast_test.o: gcc_common_extra_warnings += \
   -Wno-double-promotion \
 

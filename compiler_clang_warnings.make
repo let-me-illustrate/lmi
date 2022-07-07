@@ -95,6 +95,8 @@ clang_cxx_warnings := \
   -Wno-weak-vtables \
   -Wno-zero-as-null-pointer-constant \
 
+# Target-specific modifications.
+
 # Keep version-specific warnings last, so that they override others.
 
 C_WARNINGS = \
