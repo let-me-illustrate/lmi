@@ -197,9 +197,13 @@ void Input::redintegrate_ex_ante
     if(class_version() == file_version)
         {
         // INPUT !! Next time the class version is updated,
-        // remove this 'goto' and its label.
+        // remove this 'goto' and its label, and restore the
+        // 'return' statement.
+#if 1
         goto jumper;
+#else // 0
         return;
+#endif // 0
         }
 
     // Prior to version 3, 'SolveType' distinguished:

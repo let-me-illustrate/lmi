@@ -751,7 +751,9 @@ bool SkeletonTest::StoreCurrentException()
         return true;
         }
 
-    return false;
+#if defined LMI_GCC
+    throw "Unreachable--silences a compiler diagnostic.";
+#endif // defined LMI_GCC
 }
 
 void SkeletonTest::RethrowStoredException()
