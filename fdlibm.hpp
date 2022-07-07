@@ -153,19 +153,19 @@ static inline uint32_t hi_uint(double d)
     return i;
 }
 
-#if defined __cplusplus && defined LMI_GCC
+#if defined __cplusplus && (defined LMI_GCC || defined LMI_CLANG)
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wold-style-cast"
-#endif // defined __cplusplus && defined LMI_GCC
+#endif // defined __cplusplus && (defined LMI_GCC || defined LMI_CLANG)
 static inline int32_t hi_int(double d)
 {
     uint32_t i;
     GET_HIGH_WORD(i,d);
     return (int32_t)i;
 }
-#if defined __cplusplus && defined LMI_GCC
+#if defined __cplusplus && (defined LMI_GCC || defined LMI_CLANG)
 #   pragma GCC diagnostic pop
-#endif // defined __cplusplus && defined LMI_GCC
+#endif // defined __cplusplus && (defined LMI_GCC || defined LMI_CLANG)
 
 // Get the less significant 32 bit int from a double.
 

@@ -46,21 +46,21 @@ class jdn_t;
 /// (C++98 5.4), which is inherently unsafe. Its sole virtue is that
 /// it is easily searched for.
 
-#if defined LMI_GCC
+#if defined LMI_GCC || defined LMI_CLANG
 #   pragma GCC diagnostic push
-#   if 8 <= __GNUC__
+#   if defined LMI_GCC && 8 <= __GNUC__
 #       pragma GCC diagnostic ignored "-Wcast-function-type"
-#   endif // 8 <= __GNUC__
+#   endif // defined LMI_GCC && 8 <= __GNUC__
 #   pragma GCC diagnostic ignored "-Wold-style-cast"
-#endif // defined LMI_GCC
+#endif // defined LMI_GCC || defined LMI_CLANG
 template<typename To, typename From>
 To c_cast(From z)
 {
     return (To)(z);
 }
-#if defined LMI_GCC
+#if defined LMI_GCC || defined LMI_CLANG
 #   pragma GCC diagnostic pop
-#endif // defined LMI_GCC
+#endif // defined LMI_GCC || defined LMI_CLANG
 
 /// Encapsulate wx clipboard.
 ///

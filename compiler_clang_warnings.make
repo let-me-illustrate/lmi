@@ -80,7 +80,6 @@ clang_cxx_warnings := \
   -Wno-missing-noreturn \
   -Wno-missing-prototypes \
   -Wno-missing-variable-declarations \
-  -Wno-old-style-cast \
   -Wno-padded \
   -Wno-shadow \
   -Wno-sign-conversion \
