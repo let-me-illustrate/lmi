@@ -48,6 +48,9 @@ clang_c_warnings := \
 # Write '-Wno' options at the end, with a rationale here.
 #
 # -Wstring-plus-int: false negatives and no true positives in lmi.
+# -Wunreachable-code-break: pleonastic 'break' adds clarity.
+# -Wweak-template-vtables: same as '-Wweak-vtables'.
+# -Wweak-vtables: it's better to let the linker remove duplicates.
 
 clang_cxx_warnings := \
   $(clang_common_warnings) \
@@ -86,14 +89,11 @@ clang_cxx_warnings := \
   -Wno-undefined-func-template \
   -Wno-unknown-pragmas \
   -Wno-unneeded-member-function \
-  -Wno-unreachable-code \
   -Wno-unreachable-code-break \
-  -Wno-unreachable-code-return \
   -Wno-unused-macros \
   -Wno-unused-template \
   -Wno-weak-template-vtables \
   -Wno-weak-vtables \
-  -Wno-zero-as-null-pointer-constant \
 
 # Target-specific modifications.
 
