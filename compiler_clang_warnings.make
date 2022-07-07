@@ -87,7 +87,6 @@ clang_cxx_warnings := \
   -Wno-sign-conversion \
   -Wno-string-plus-int \
   -Wno-undefined-func-template \
-  -Wno-unknown-pragmas \
   -Wno-unneeded-member-function \
   -Wno-unreachable-code-break \
   -Wno-weak-template-vtables \
@@ -96,6 +95,7 @@ clang_cxx_warnings := \
 # Target-specific modifications.
 
 $(cgicc_objects): clang_common_extra_warnings += \
+  -Wno-unknown-pragmas \
   -Wno-zero-as-null-pointer-constant \
 
 # Keep version-specific warnings last, so that they override others.
