@@ -489,10 +489,10 @@ void Input::DoHarmonize()
         ;
 
     bool salary_used =
-// TODO ?? WX PORT !! Figure out how to handle the next line:
-//           mce_sa_salary == VectorSpecifiedAmountStrategy[0]
-true // Silly workaround for now.
-        || mce_sa_salary == SpecifiedAmountStrategyFromIssue
+// TODO ?? WX PORT !! Figure out how to handle the first condition:
+//         mce_sa_salary == VectorSpecifiedAmountStrategy[0]
+//      || mce_sa_salary == SpecifiedAmountStrategyFromIssue
+           mce_sa_salary == SpecifiedAmountStrategyFromIssue
         ;
 
     SalarySpecifiedAmountFactor .enable(!specamt_solve && salary_used);
