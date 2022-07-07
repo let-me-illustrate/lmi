@@ -39,16 +39,18 @@ bool g_unwind = true;
 #include <libunwind.h>
 #include <typeinfo>                     // type_info
 
-#   if defined LMI_GCC
+#   if defined LMI_GCC || defined LMI_CLANG
 #       pragma GCC diagnostic push
     // Calls to low-level C functions may as well use "0" for
     // terseness instead of "nullptr".
 #       pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
     // Casting dlsym objects to function pointers is allowed
     // only as a conditional extension.
-#       pragma GCC diagnostic ignored "-Wconditionally-supported"
+#       if defined LMI_GCC
+#           pragma GCC diagnostic ignored "-Wconditionally-supported"
+#       endif // defined LMI_GCC
 #       pragma GCC diagnostic ignored "-Wold-style-cast"
-#   endif // defined LMI_GCC
+#   endif // defined LMI_GCC || defined LMI_CLANG
 
 // For reference, the ABI specifies this prototype:
 // extern "C" void __cxa_throw
@@ -205,8 +207,8 @@ void __cxa_throw(void* thrown_exception, std::type_info* tinfo, void (*dest)(voi
 #endif // defined LMI_CLANG
 }
 
-#   if defined LMI_GCC
+#   if defined LMI_GCC || defined LMI_CLANG
 #       pragma GCC diagnostic pop
-#   endif // defined LMI_GCC
+#   endif // defined LMI_GCC || defined LMI_CLANG
 
 #endif // defined LMI_X86_64 && defined LMI_POSIX && defined __GLIBCXX__
