@@ -90,8 +90,6 @@ clang_cxx_warnings := \
   -Wno-unknown-pragmas \
   -Wno-unneeded-member-function \
   -Wno-unreachable-code-break \
-  -Wno-unused-macros \
-  -Wno-unused-template \
   -Wno-weak-template-vtables \
   -Wno-weak-vtables \
 

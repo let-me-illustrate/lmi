@@ -214,6 +214,12 @@ namespace
             }
     };
 
+// clang considers these two templates "unused" in the unit test only
+#if defined LMI_CLANG
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wunused-template"
+#endif // defined LMI_CLANG
+
     template<typename T>
     bool is_exact_integer(T t)
     {
@@ -255,6 +261,10 @@ namespace
             return t;
             }
     }
+
+#if defined LMI_CLANG
+#   pragma clang diagnostic pop
+#endif // defined LMI_CLANG
 
     template<typename T, int>
     struct bound_adjuster

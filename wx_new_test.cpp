@@ -31,6 +31,9 @@
 // resulting in an object that wouldn't necessarily work here because
 // of unwanted shared-library attributes.
 #include "wx_new.cpp"
+#if defined UNIT_TESTING_WX_NEW
+// This meaningless test avoids a clang '-Wunused-macros' warning.
+#endif // defined UNIT_TESTING_WX_NEW
 
 #include "test_tools.hpp"
 
