@@ -29,20 +29,71 @@ clang_version_specific_c_warnings :=
 clang_version_specific_cxx_warnings :=
 
 # Write '-Wno' options at the end, with a rationale here.
-#
-# -Wstring-plus-int: false negatives and no true positives in lmi.
 
 treat_warnings_as_errors := -pedantic-errors -Werror
 
 clang_common_warnings := \
   $(treat_warnings_as_errors) \
-  -Wno-string-plus-int \
+  -Weverything \
+
+# Write '-Wno' options at the end, with a rationale here.
 
 clang_c_warnings := \
   $(clang_common_warnings) \
+  -Wno-float-conversion \
+  -Wno-float-equal \
+  -Wno-reserved-macro-identifier \
+  -Wno-sign-conversion \
+
+# Write '-Wno' options at the end, with a rationale here.
+#
+# -Wstring-plus-int: false negatives and no true positives in lmi.
 
 clang_cxx_warnings := \
   $(clang_common_warnings) \
+  -Wno-c++20-compat \
+  -Wno-c++98-compat-pedantic \
+  -Wno-cast-function-type \
+  -Wno-comma \
+  -Wno-conditional-uninitialized \
+  -Wno-covered-switch-default \
+  -Wno-date-time \
+  -Wno-deprecated-copy-with-dtor \
+  -Wno-disabled-macro-expansion \
+  -Wno-documentation \
+  -Wno-documentation-html \
+  -Wno-documentation-unknown-command \
+  -Wno-double-promotion \
+  -Wno-exit-time-destructors \
+  -Wno-extra-semi-stmt \
+  -Wno-float-conversion \
+  -Wno-float-equal \
+  -Wno-global-constructors \
+  -Wno-implicit-fallthrough \
+  -Wno-implicit-float-conversion \
+  -Wno-logical-op-parentheses \
+  -Wno-mismatched-tags \
+  -Wno-missing-noreturn \
+  -Wno-missing-prototypes \
+  -Wno-missing-variable-declarations \
+  -Wno-old-style-cast \
+  -Wno-padded \
+  -Wno-reserved-macro-identifier \
+  -Wno-shadow \
+  -Wno-shorten-64-to-32 \
+  -Wno-sign-conversion \
+  -Wno-string-plus-int \
+  -Wno-undefined-func-template \
+  -Wno-unknown-pragmas \
+  -Wno-unneeded-member-function \
+  -Wno-unreachable-code \
+  -Wno-unreachable-code-break \
+  -Wno-unreachable-code-return \
+  -Wno-unused-macros \
+  -Wno-unused-template \
+  -Wno-weak-template-vtables \
+  -Wno-weak-vtables \
+  -Wno-zero-as-null-pointer-constant \
 
 # Keep version-specific warnings last, so that they override others.
 
