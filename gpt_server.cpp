@@ -77,7 +77,12 @@ gpt_state test_one_days_gpt_transactions
     s["X5_gsp_b"] = value_cast<std::string>(o.GuidelineSinglePremiumPolicyB);
     s["X6_glp_c"] = value_cast<std::string>(o.GuidelineLevelPremiumPolicyC );
     s["X7_gsp_c"] = value_cast<std::string>(o.GuidelineSinglePremiumPolicyC);
+    // Return here, but retain alternative below.
+volatile bool avoid_warning {true};
+if(avoid_warning)
+    {
     return s;
+    }
 
     bool                        Use7702ATables               = exact_cast<mce_yes_or_no           >(input["Use7702ATables"              ])->value();
 //  int                         IssueAge                     = exact_cast<tnr_age                 >(input["IssueAge"                    ])->value();

@@ -418,7 +418,12 @@ double stratified_charges::minimum_tiered_sepacct_load_for_7702() const
 {
     stratified_entity const& z = datum("CurrSepAcctLoadTieredByAssets");
     LMI_ASSERT(!z.values().empty());
+    // Return here, but retain alternative below.
+volatile bool avoid_warning {true};
+if(avoid_warning)
+    {
     return *std::min_element(z.values().begin(), z.values().end());
+    }
 
     stratified_entity const& z0 = datum("CurrSepAcctLoadBandedByAssets");
     stratified_entity const& z1 = datum("CurrSepAcctLoadBandedByPrem");
