@@ -144,7 +144,6 @@ currency SolveTest()
             alarum() << "Not implemented.";
             }
             break;
-        throw "Unreachable--silences a compiler diagnostic.";
         }
 
     return z - y;
