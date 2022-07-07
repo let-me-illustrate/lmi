@@ -97,6 +97,9 @@ clang_cxx_warnings := \
 
 # Target-specific modifications.
 
+$(cgicc_objects): clang_common_extra_warnings += \
+  -Wno-zero-as-null-pointer-constant \
+
 # Keep version-specific warnings last, so that they override others.
 
 C_WARNINGS = \
