@@ -87,7 +87,6 @@ clang_cxx_warnings := \
   -Wno-sign-conversion \
   -Wno-string-plus-int \
   -Wno-undefined-func-template \
-  -Wno-unneeded-member-function \
   -Wno-unreachable-code-break \
   -Wno-weak-template-vtables \
   -Wno-weak-vtables \

@@ -360,7 +360,7 @@ class table_mixin
     {
     }
 
-    ~table_mixin() = default;
+    virtual ~table_mixin() = default;
 
     // Description of a single table column.
     struct illustration_table_column
