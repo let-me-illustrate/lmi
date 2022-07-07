@@ -81,7 +81,6 @@ clang_cxx_warnings := \
   -Wno-missing-variable-declarations \
   -Wno-old-style-cast \
   -Wno-padded \
-  -Wno-reserved-macro-identifier \
   -Wno-shadow \
   -Wno-sign-conversion \
   -Wno-string-plus-int \

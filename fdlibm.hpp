@@ -47,7 +47,10 @@
 // endianness is necessarily the same as integer endianness.
 #if defined LMI_CLANG
 #   if !defined __FLOAT_WORD_ORDER__ && defined __BYTE_ORDER__
+#       pragma clang diagnostic push
+#       pragma clang diagnostic ignored "-Wreserved-macro-identifier"
 #       define __FLOAT_WORD_ORDER__ __BYTE_ORDER__
+#       pragma clang diagnostic pop
 #   endif // !defined __FLOAT_WORD_ORDER__ && defined __BYTE_ORDER__
 #endif // defined LMI_CLANG
 
