@@ -82,7 +82,7 @@ $(srcdir)/objects.make:: ;
 # Include this after 'objects.make', so compiler-specific makefiles
 # can specify target-specific variables for simply-expanded lists of
 # object files defined in 'objects.make', e.g.:
-#   cgi_objects := ... [objects.make]
+#   cgicc_objects := ... [objects.make]
 #   $(cgicc_objects): gcc_warnings += ... [compiler_gcc.make]
 
 include $(srcdir)/compiler.make
