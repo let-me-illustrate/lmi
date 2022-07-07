@@ -251,7 +251,7 @@ std::istream& mc_enum<T>::read(std::istream& is)
     if(n() == v)
         {
         ordinal(s); // Throws.
-        throw "Unreachable.";
+        throw "Unreachable--silences a compiler diagnostic.";
         }
     value_ = e()[v];
 
