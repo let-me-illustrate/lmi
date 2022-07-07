@@ -83,7 +83,6 @@ clang_cxx_warnings := \
   -Wno-padded \
   -Wno-reserved-macro-identifier \
   -Wno-shadow \
-  -Wno-shorten-64-to-32 \
   -Wno-sign-conversion \
   -Wno-string-plus-int \
   -Wno-undefined-func-template \
@@ -94,6 +93,7 @@ clang_cxx_warnings := \
 # Target-specific modifications.
 
 $(cgicc_objects): clang_common_extra_warnings += \
+  -Wno-shorten-64-to-32 \
   -Wno-unknown-pragmas \
   -Wno-zero-as-null-pointer-constant \
 
