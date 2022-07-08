@@ -109,7 +109,9 @@ class Skeleton
     void UponTestLibWarning               (wxCommandEvent&);
     void UponTestLibHobsons               (wxCommandEvent&);
     void UponTestLibFatal                 (wxCommandEvent&);
+    [[noreturn]]
     void UponTestLibStandardException     (wxCommandEvent&);
+    [[noreturn]]
     void UponTestLibArbitraryException    (wxCommandEvent&);
     void UponTestLibCatastropheReport     (wxCommandEvent&);
 

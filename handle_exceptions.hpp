@@ -33,6 +33,7 @@
 /// This function, of type std::terminate_handler, is intended to be
 /// used as the argument of std::set_terminate().
 
+[[noreturn]]
 inline void lmi_terminate_handler()
 {
     safely_show_message

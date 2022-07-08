@@ -59,7 +59,7 @@ endif
 # -Wparentheses: its diagnostics are beyond pedantic
 # -Wpsabi: undocumented--ARM only?
 # -Wsign-conversion: [see note elsewhere in this file]
-# -Wsuggest-attribute: too gcc-specific
+# -Wsuggest-attribute: use occasionally; beware false positives
 # -Wsystem-headers: not generally useful
 # -Wswitch-default: false positives for switches on enums that
 #   include all cases (verified by -Wswitch-enum)

@@ -68,7 +68,7 @@ clang_c_warnings := \
 ###  -Wglobal-constructors
 # -Wlogical-op-parentheses: && is multiplicative; || is additive
 # -Wmismatched-tags: stylistic freedom--not a defect
-###  -Wmissing-noreturn
+# -Wmissing-noreturn: use occasionally; beware false positives
 ###  -Wmissing-prototypes
 ###  -Wmissing-variable-declarations
 # -Wpadded: useful only for low-level work
