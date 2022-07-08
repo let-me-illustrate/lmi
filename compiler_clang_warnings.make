@@ -47,6 +47,9 @@ clang_c_warnings := \
 
 # Write '-Wno' options at the end, with a rationale here.
 #
+# -W++20-compat: backward compatibility not desirable
+# -W++98-compat-pedantic: backward compatibility not desirable
+# -Wdate-time: only for "bit-wise-identical reproducible compilations"
 # -Wdocumentation: warns about comments
 # -Wdocumentation-html: warns about comments
 # -Wdocumentation-unknown-command: warns about comments
