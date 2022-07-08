@@ -45,16 +45,23 @@ int test_main(int, char*[])
     LMI_TEST(is_infinite<long double>(-infinity<long double>()));
 
     // Narrowing conversions tested here:
-#if defined __GNUC__
+#if defined LMI_GCC
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wfloat-conversion"
-#endif // defined __GNUC__
+#endif // defined LMI_GCC
+#if defined LMI_CLANG
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wimplicit-float-conversion"
+#endif // defined LMI_CLANG
     LMI_TEST(is_infinite<float      >(-infinity<double     >()));
     LMI_TEST(is_infinite<float      >(-infinity<long double>()));
     LMI_TEST(is_infinite<double     >(-infinity<long double>()));
-#if defined __GNUC__
+#if defined LMI_CLANG
+#   pragma clang diagnostic pop
+#endif // defined LMI_CLANG
+#if defined LMI_GCC
 #   pragma GCC diagnostic pop
-#endif // defined __GNUC__
+#endif // defined LMI_GCC
 
     LMI_TEST(!is_infinite(0.0));
     LMI_TEST(!is_infinite( std::numeric_limits<double>::max()));

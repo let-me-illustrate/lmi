@@ -76,7 +76,6 @@ clang_cxx_warnings := \
   -Wno-float-equal \
   -Wno-global-constructors \
   -Wno-implicit-fallthrough \
-  -Wno-implicit-float-conversion \
   -Wno-logical-op-parentheses \
   -Wno-mismatched-tags \
   -Wno-missing-noreturn \
