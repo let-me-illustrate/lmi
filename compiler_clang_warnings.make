@@ -49,15 +49,34 @@ clang_c_warnings := \
 #
 # -W++20-compat: backward compatibility not desirable
 # -W++98-compat-pedantic: backward compatibility not desirable
+### [triple '#' marks warnings requiring investigation]
+###  -Wcast-function-type
+###  -Wcomma
+###  -Wconditional-uninitialized
+###  -Wcovered-switch-default
 # -Wdate-time: only for "bit-wise-identical reproducible compilations"
+###  -Wdeprecated-copy-with-dtor
+###  -Wdisabled-macro-expansion
 # -Wdocumentation: warns about comments
 # -Wdocumentation-html: warns about comments
 # -Wdocumentation-unknown-command: warns about comments
+###  -Wdouble-promotion
+###  -Wexit-time-destructors
+###  -Wextra-semi-stmt
+###  -Wfloat-conversion
 # -Wfloat-equal: too many false positives, e.g., 0.0 == X
+###  -Wglobal-constructors
+###  -Wimplicit-fallthrough
 # -Wlogical-op-parentheses: && is multiplicative; || is additive
 # -Wmismatched-tags: stylistic freedom--not a defect
+###  -Wmissing-noreturn
+###  -Wmissing-prototypes
+###  -Wmissing-variable-declarations
 # -Wpadded: useful only for low-level work
+###  -Wshadow
+###  -Wsign-conversion
 # -Wstring-plus-int: false negatives and no true positives in lmi
+###  -Wundefined-func-template
 # -Wunreachable-code-break: pleonastic 'break' adds clarity
 # -Wweak-template-vtables: same as '-Wweak-vtables'
 # -Wweak-vtables: it's better to let the linker remove duplicates
