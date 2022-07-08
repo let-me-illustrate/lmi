@@ -51,8 +51,7 @@ endif
 # -Wabi: useful only for a special purpose
 # -Wanalyzer-too-complex: not actually helpful
 # -Wdate-time: only for "bit-wise-identical reproducible compilations"
-# -Wfloat-equal: too many warnings on correct code, e.g.,
-#   exact comparison to zero
+# -Wfloat-equal: too many false positives, e.g., 0.0 == X
 # -Winline: 'inline' now refers to linkage, not inlining
 # -Wmissing-declarations: for C++, this flags valid functions that
 #   arguably belong in an unnamed namespace
