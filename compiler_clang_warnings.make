@@ -47,6 +47,8 @@ clang_c_warnings := \
 
 # Write '-Wno' options at the end, with a rationale here.
 #
+# -Wlogical-op-parentheses: && is multiplicative; || is additive
+# -Wmismatched-tags: stylistic freedom--not a defect
 # -Wpadded: useful only for low-level work
 # -Wstring-plus-int: false negatives and no true positives in lmi
 # -Wunreachable-code-break: pleonastic 'break' adds clarity
