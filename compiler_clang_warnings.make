@@ -53,7 +53,7 @@ clang_c_warnings := \
 ### [triple '#' marks warnings requiring investigation]
 ###  -Wcomma
 ###  -Wconditional-uninitialized
-###  -Wcovered-switch-default
+# -Wcovered-switch-default: better to leave "default:" in place
 # -Wdate-time: only for "bit-wise-identical reproducible compilations"
 ###  -Wdeprecated-copy-with-dtor
 ###  -Wdisabled-macro-expansion
