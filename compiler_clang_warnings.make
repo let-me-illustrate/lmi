@@ -47,6 +47,9 @@ clang_c_warnings := \
 
 # Write '-Wno' options at the end, with a rationale here.
 #
+# -Wdocumentation: warns about comments
+# -Wdocumentation-html: warns about comments
+# -Wdocumentation-unknown-command: warns about comments
 # -Wfloat-equal: too many false positives, e.g., 0.0 == X
 # -Wlogical-op-parentheses: && is multiplicative; || is additive
 # -Wmismatched-tags: stylistic freedom--not a defect
