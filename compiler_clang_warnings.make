@@ -34,6 +34,7 @@ treat_warnings_as_errors := -pedantic-errors -Werror
 
 clang_common_warnings := \
   $(treat_warnings_as_errors) \
+  -ferror-limit=0 \
   -Weverything \
 
 # Write '-Wno' options at the end, with a rationale here.
