@@ -424,7 +424,7 @@ round_to<RealType>::select_rounding_function(rounding_style const a_style) const
             {
             return detail::round_not;
             }
-        case r_indeterminate: // fall through--always invalid
+        case r_indeterminate: [[fallthrough]]; // always invalid
         default:
             {
             throw std::domain_error("Invalid rounding style.");

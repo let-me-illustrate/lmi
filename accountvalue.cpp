@@ -472,9 +472,9 @@ void AccountValue::PerformSpecAmtStrategy()
             SA = base_specamt(0);
             }
             break;
-        case mce_sa_gsp:      // fall through
-        case mce_sa_corridor: // fall through
-        case mce_sa_salary:   // fall through
+        case mce_sa_gsp:      [[fallthrough]];
+        case mce_sa_corridor: [[fallthrough]];
+        case mce_sa_salary:   [[fallthrough]];
         default:
             {
             alarum()
@@ -536,8 +536,8 @@ void AccountValue::TxOptionChange()
             // An alternative is to lapse the policy.
             }
             break;
-        case mce_rop: // fall through
-        case mce_mdb: // fall through
+        case mce_rop: [[fallthrough]];
+        case mce_mdb: [[fallthrough]];
         default:
             {
             alarum() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
@@ -648,9 +648,9 @@ void AccountValue::PerformPmtStrategy(currency* a_Pmt)
             *a_Pmt = stored_pmts[Year];
             }
             break;
-        case mce_pmt_gsp:      // fall through
-        case mce_pmt_corridor: // fall through
-        case mce_pmt_table:    // fall through
+        case mce_pmt_gsp:      [[fallthrough]];
+        case mce_pmt_corridor: [[fallthrough]];
+        case mce_pmt_table:    [[fallthrough]];
         default:
             {
             alarum()
@@ -759,8 +759,8 @@ void AccountValue::TxSetDeathBft()
             // Negative AV doesn't decrease death benefit.
             deathbft = std::max(ActualSpecAmt + std::max(C0, AV), corr);
             break;
-        case mce_rop: // fall through
-        case mce_mdb: // fall through
+        case mce_rop: [[fallthrough]];
+        case mce_mdb: [[fallthrough]];
         default:
             {
             alarum() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;
@@ -933,8 +933,8 @@ void AccountValue::TxTakeWD()
         case mce_option2:
             ;
             break;
-        case mce_rop: // fall through
-        case mce_mdb: // fall through
+        case mce_rop: [[fallthrough]];
+        case mce_mdb: [[fallthrough]];
         default:
             {
             alarum() << "Case " << YearsDBOpt << " not found." << LMI_FLUSH;

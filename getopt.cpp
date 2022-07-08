@@ -599,11 +599,11 @@ GetOpt::operator()()
                 return '?';
 
               case LIST_ARG:
-                list_option = pfound; // fall through
+                list_option = pfound; [[fallthrough]];
 
-              case REQD_ARG: // fall through
-              case OPT_ARG:  // fall through
-              case ALT_ARG:  // fall through
+              case REQD_ARG: [[fallthrough]];
+              case OPT_ARG:  [[fallthrough]];
+              case ALT_ARG:  [[fallthrough]];
               default:
                 optarg = nameend + 1;
                 break;
@@ -637,8 +637,8 @@ GetOpt::operator()()
                   }
                 break;
 
-              case NO_ARG:  // fall through
-              case OPT_ARG: // fall through
+              case NO_ARG:  [[fallthrough]];
+              case OPT_ARG: [[fallthrough]];
               default:
                 optarg = nullptr;
                 break;

@@ -65,9 +65,9 @@ inline std::string duff_fmt(double value, int decimals)
                 do
                     {
                     if('.' == *p) break;
-                    *q++ = ',';  // fall through
-        case 0:     *q++ = *p++; // fall through
-        case 2:     *q++ = *p++; // fall through
+                    *q++ = ',';  [[fallthrough]];
+        case 0:     *q++ = *p++; [[fallthrough]];
+        case 2:     *q++ = *p++; [[fallthrough]];
         case 1:     *q++ = *p++;
                     }
                 while(*p);

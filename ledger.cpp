@@ -108,8 +108,8 @@ void Ledger::SetRunBases(int length)
             l_map_rep[mce_run_gen_mdpt_sep_full] = LedgerVariant(length);
             }
             break;
-        case mce_group_private_placement:      // Deliberately fall through.
-        case mce_individual_private_placement: // Deliberately fall through.
+        case mce_group_private_placement:      [[fallthrough]];
+        case mce_individual_private_placement: [[fallthrough]];
         case mce_finra:
             {
             l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(length);
@@ -134,8 +134,8 @@ void Ledger::SetRunBases(int length)
             l_map_rep[mce_run_gen_guar_sep_half] = LedgerVariant(length);
             }
             break;
-        case mce_offshore_private_placement_obsolete: // fall through
-        case mce_ill_reg_private_placement_obsolete:  // fall through
+        case mce_offshore_private_placement_obsolete: [[fallthrough]];
+        case mce_ill_reg_private_placement_obsolete:  [[fallthrough]];
         case mce_variable_annuity_obsolete:
             {
             alarum() << "Unsupported ledger type '" << ledger_type_ << "'." << LMI_FLUSH;

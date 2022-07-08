@@ -3245,7 +3245,7 @@ void concrete_pdf_command(Ledger const& ledger, fs::path const& pdf_out_file)
         case mce_ill_reg:
             pdf_illustration_naic        (ledger, pdf_out_file).render_all();
             break;
-        case mce_prospectus_abeyed: // fall through
+        case mce_prospectus_abeyed: [[fallthrough]];
         case mce_finra:
             pdf_illustration_finra       (ledger, pdf_out_file).render_all();
             break;
@@ -3255,8 +3255,8 @@ void concrete_pdf_command(Ledger const& ledger, fs::path const& pdf_out_file)
         case mce_individual_private_placement:
             pdf_illustration_reg_d_indiv (ledger, pdf_out_file).render_all();
             break;
-        case mce_offshore_private_placement_obsolete: // fall through
-        case mce_ill_reg_private_placement_obsolete:  // fall through
+        case mce_offshore_private_placement_obsolete: [[fallthrough]];
+        case mce_ill_reg_private_placement_obsolete:  [[fallthrough]];
         case mce_variable_annuity_obsolete:
             alarum() << "Unsupported ledger type." << LMI_FLUSH;
         }

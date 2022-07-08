@@ -118,8 +118,8 @@ currency SolveTest()
                     y = ConstThat->base_specamt(ThatSolveTgtYear - 1);
                     }
                     break;
-                case mce_rop: // fall through
-                case mce_mdb: // fall through
+                case mce_rop: [[fallthrough]];
+                case mce_mdb: [[fallthrough]];
                 default:
                     {
                     alarum()
@@ -137,8 +137,8 @@ currency SolveTest()
             y = round_to_cents.c(ThatSolveTargetValue);
             }
             break;
-        case mce_solve_for_target_naar: // Fall through.
-        case mce_solve_for_tax_basis:   // Fall through.
+        case mce_solve_for_target_naar: [[fallthrough]];
+        case mce_solve_for_tax_basis:   [[fallthrough]];
         case mce_solve_for_non_mec:
             {
             alarum() << "Not implemented.";
@@ -303,8 +303,8 @@ currency AccountValue::Solve()
             SolveFn    = SolveWD;
             }
             break;
-        case mce_solve_none:    // fall through
-        case mce_solve_er_prem: // fall through
+        case mce_solve_none:    [[fallthrough]];
+        case mce_solve_er_prem: [[fallthrough]];
         default:
             {
             alarum()

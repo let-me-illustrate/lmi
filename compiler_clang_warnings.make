@@ -66,7 +66,6 @@ clang_c_warnings := \
 ###  -Wfloat-conversion
 # -Wfloat-equal: too many false positives, e.g., 0.0 == X
 ###  -Wglobal-constructors
-###  -Wimplicit-fallthrough
 # -Wlogical-op-parentheses: && is multiplicative; || is additive
 # -Wmismatched-tags: stylistic freedom--not a defect
 ###  -Wmissing-noreturn
@@ -99,7 +98,6 @@ clang_cxx_warnings := \
   -Wno-float-conversion \
   -Wno-float-equal \
   -Wno-global-constructors \
-  -Wno-implicit-fallthrough \
   -Wno-logical-op-parentheses \
   -Wno-mismatched-tags \
   -Wno-missing-noreturn \
