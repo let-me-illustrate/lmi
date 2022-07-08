@@ -48,9 +48,7 @@ class jdn_t;
 
 #if defined LMI_GCC || defined LMI_CLANG
 #   pragma GCC diagnostic push
-#   if defined LMI_GCC && 8 <= __GNUC__
-#       pragma GCC diagnostic ignored "-Wcast-function-type"
-#   endif // defined LMI_GCC && 8 <= __GNUC__
+#   pragma GCC diagnostic ignored "-Wcast-function-type"
 #   pragma GCC diagnostic ignored "-Wold-style-cast"
 #endif // defined LMI_GCC || defined LMI_CLANG
 template<typename To, typename From>

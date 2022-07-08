@@ -50,7 +50,6 @@ clang_c_warnings := \
 # -W++20-compat: backward compatibility not desirable
 # -W++98-compat-pedantic: backward compatibility not desirable
 ### [triple '#' marks warnings requiring investigation]
-###  -Wcast-function-type
 ###  -Wcomma
 ###  -Wconditional-uninitialized
 ###  -Wcovered-switch-default
@@ -85,7 +84,6 @@ clang_cxx_warnings := \
   $(clang_common_warnings) \
   -Wno-c++20-compat \
   -Wno-c++98-compat-pedantic \
-  -Wno-cast-function-type \
   -Wno-comma \
   -Wno-conditional-uninitialized \
   -Wno-covered-switch-default \
