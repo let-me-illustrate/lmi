@@ -181,41 +181,41 @@ inline static double SolveWD(double CandidateValue)
 //============================================================================
 void AccountValue::SolveSetPmts
     (currency a_Pmt
-    ,int      ThatSolveBegYear
-    ,int      ThatSolveEndYear
+    ,int      a_ThatSolveBegYear
+    ,int      a_ThatSolveEndYear
     )
 {
-    Outlay_->set_ee_modal_premiums(a_Pmt, ThatSolveBegYear, ThatSolveEndYear);
+    Outlay_->set_ee_modal_premiums(a_Pmt, a_ThatSolveBegYear, a_ThatSolveEndYear);
 }
 
 //============================================================================
 void AccountValue::SolveSetSpecAmt
     (currency a_Bft
-    ,int      ThatSolveBegYear
-    ,int      ThatSolveEndYear
+    ,int      a_ThatSolveBegYear
+    ,int      a_ThatSolveEndYear
     )
 {
-    DeathBfts_->set_specamt(a_Bft, ThatSolveBegYear, ThatSolveEndYear);
+    DeathBfts_->set_specamt(a_Bft, a_ThatSolveBegYear, a_ThatSolveEndYear);
 }
 
 //============================================================================
 void AccountValue::SolveSetLoans
     (currency a_Loan
-    ,int      ThatSolveBegYear
-    ,int      ThatSolveEndYear
+    ,int      a_ThatSolveBegYear
+    ,int      a_ThatSolveEndYear
     )
 {
-    Outlay_->set_new_cash_loans(a_Loan, ThatSolveBegYear, ThatSolveEndYear);
+    Outlay_->set_new_cash_loans(a_Loan, a_ThatSolveBegYear, a_ThatSolveEndYear);
 }
 
 //============================================================================
 void AccountValue::SolveSetWDs
     (currency a_WD
-    ,int      ThatSolveBegYear
-    ,int      ThatSolveEndYear
+    ,int      a_ThatSolveBegYear
+    ,int      a_ThatSolveEndYear
     )
 {
-    Outlay_->set_withdrawals(a_WD, ThatSolveBegYear, ThatSolveEndYear);
+    Outlay_->set_withdrawals(a_WD, a_ThatSolveBegYear, a_ThatSolveEndYear);
 }
 
 //============================================================================

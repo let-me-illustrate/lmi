@@ -72,7 +72,6 @@ clang_c_warnings := \
 ###  -Wmissing-prototypes
 ###  -Wmissing-variable-declarations
 # -Wpadded: useful only for low-level work
-###  -Wshadow
 ###  -Wsign-conversion
 # -Wstring-plus-int: false negatives and no true positives in lmi
 ###  -Wundefined-func-template
@@ -106,7 +105,6 @@ clang_cxx_warnings := \
   -Wno-missing-prototypes \
   -Wno-missing-variable-declarations \
   -Wno-padded \
-  -Wno-shadow \
   -Wno-sign-conversion \
   -Wno-string-plus-int \
   -Wno-undefined-func-template \
