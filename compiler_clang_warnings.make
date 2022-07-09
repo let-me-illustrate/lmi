@@ -52,7 +52,6 @@ clang_c_warnings := \
 # -W++98-compat-pedantic: backward compatibility not desirable
 # -Wcovered-switch-default: better to leave "default:" in place
 # -Wdate-time: only for "bit-wise-identical reproducible compilations"
-###  -Wdeprecated-copy-with-dtor [pending review]
 # -Wdocumentation: warns about comments
 # -Wdocumentation-html: warns about comments
 # -Wdocumentation-unknown-command: warns about comments
@@ -82,7 +81,6 @@ clang_cxx_warnings := \
   -Wno-c++98-compat-pedantic \
   -Wno-covered-switch-default \
   -Wno-date-time \
-  -Wno-deprecated-copy-with-dtor \
   -Wno-documentation \
   -Wno-documentation-html \
   -Wno-documentation-unknown-command \
