@@ -39,7 +39,7 @@ clang_common_warnings := \
 
 # Write '-Wno' options at the end, with a rationale here.
 # -Wfloat-equal: too many false positives, e.g., 0.0 == X
-###  -Wsign-conversion
+# -Wsign-conversion: too many false positives, e.g., v[signed]
 
 clang_c_warnings := \
   $(clang_common_warnings) \
@@ -59,19 +59,19 @@ clang_c_warnings := \
 # -Wdocumentation: warns about comments
 # -Wdocumentation-html: warns about comments
 # -Wdocumentation-unknown-command: warns about comments
-###  -Wdouble-promotion
-###  -Wexit-time-destructors
+# -Wdouble-promotion: not actually useful
+# -Wexit-time-destructors: for analysis only--all positives are false
 ###  -Wextra-semi-stmt
 # -Wfloat-conversion: false positives for double-to-bool conversion
 # -Wfloat-equal: too many false positives, e.g., 0.0 == X
-###  -Wglobal-constructors
+# -Wglobal-constructors: for analysis only--all positives are false
 # -Wlogical-op-parentheses: && is multiplicative; || is additive
 # -Wmismatched-tags: stylistic freedom--not a defect
 # -Wmissing-noreturn: use occasionally; beware false positives
 ###  -Wmissing-prototypes
 ###  -Wmissing-variable-declarations
 # -Wpadded: useful only for low-level work
-###  -Wsign-conversion
+# -Wsign-conversion: too many false positives, e.g., v[signed]
 # -Wstring-plus-int: false negatives and no true positives in lmi
 ###  -Wundefined-func-template
 # -Wunreachable-code-break: pleonastic 'break' adds clarity
