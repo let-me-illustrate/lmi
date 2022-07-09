@@ -190,7 +190,7 @@ namespace
             {
             constexpr T z0 = bin_exp
                 (static_cast<T>(std::numeric_limits<T>::radix)
-                ,static_cast<T>(std::numeric_limits<T>::digits)
+                ,               std::numeric_limits<T>::digits
                 );
             constexpr auto z1lo = std::numeric_limits<long long int>::lowest();
             constexpr auto z1hi = std::numeric_limits<long long int>::max();

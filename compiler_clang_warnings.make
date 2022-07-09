@@ -62,7 +62,7 @@ clang_c_warnings := \
 ###  -Wdouble-promotion
 ###  -Wexit-time-destructors
 ###  -Wextra-semi-stmt
-###  -Wfloat-conversion
+# -Wfloat-conversion: false positives for double-to-bool conversion
 # -Wfloat-equal: too many false positives, e.g., 0.0 == X
 ###  -Wglobal-constructors
 # -Wlogical-op-parentheses: && is multiplicative; || is additive
