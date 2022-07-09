@@ -38,12 +38,12 @@ clang_common_warnings := \
   -Weverything \
 
 # Write '-Wno' options at the end, with a rationale here.
+# -Wfloat-equal: too many false positives, e.g., 0.0 == X
+###  -Wsign-conversion
 
 clang_c_warnings := \
   $(clang_common_warnings) \
-  -Wno-float-conversion \
   -Wno-float-equal \
-  -Wno-reserved-macro-identifier \
   -Wno-sign-conversion \
 
 # Write '-Wno' options at the end, with a rationale here.
