@@ -1310,8 +1310,16 @@ int rroot_(FunctionalType& f, int* nprob, int* neps, double* eps,
 /* FOUR FUNCTION VALUES "FA", "FB", "FD", AND "FE" ARE DISTINCT, AND */
 /* HENCE "PZERO" WILL BE CALLED. */
 
+#if defined LMI_CLANG
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wconditional-uninitialized"
+#endif // defined LMI_CLANG
+    // clang: "variable 'fd' may be uninitialized when used here"
     prof = (fa - fb) * (fa - fd) * (fa - fe) * (fb - fd) * (fb - fe) * (fd -
             fe);
+#if defined LMI_CLANG
+#   pragma clang diagnostic pop
+#endif // defined LMI_CLANG
     if (itnum == 2 || prof == 0.) {
         newqua_(a, b, &d_0, &fa, &fb, &fd, &c0, &c2);
     } else {

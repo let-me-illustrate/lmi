@@ -52,7 +52,6 @@ clang_c_warnings := \
 # -W++98-compat-pedantic: backward compatibility not desirable
 ### [triple '#' marks warnings requiring investigation]
 ###  -Wcomma
-###  -Wconditional-uninitialized
 # -Wcovered-switch-default: better to leave "default:" in place
 # -Wdate-time: only for "bit-wise-identical reproducible compilations"
 ###  -Wdeprecated-copy-with-dtor
@@ -84,7 +83,6 @@ clang_cxx_warnings := \
   -Wno-c++20-compat \
   -Wno-c++98-compat-pedantic \
   -Wno-comma \
-  -Wno-conditional-uninitialized \
   -Wno-covered-switch-default \
   -Wno-date-time \
   -Wno-deprecated-copy-with-dtor \
