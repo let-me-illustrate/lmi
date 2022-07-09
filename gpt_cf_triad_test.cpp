@@ -210,40 +210,23 @@ class gpt_cf_triad_test
     static void mete_instantiate_old();
     static void mete_premiums_old();
 
-    static std::vector<double> q_m_                  ;
-    static std::vector<double> glp_ic_               ;
-    static std::vector<double> glp_ig_               ;
-    static std::vector<double> gsp_ic_               ;
-    static std::vector<double> gsp_ig_               ;
-    static std::vector<double> prem_load_target_     ;
-    static std::vector<double> prem_load_excess_     ;
-    static std::vector<double> policy_fee_monthly_   ;
-    static std::vector<double> policy_fee_annual_    ;
-    static std::vector<double> specamt_load_monthly_ ;
-    static std::vector<double> qab_gio_rate_         ;
-    static std::vector<double> qab_adb_rate_         ;
-    static std::vector<double> qab_term_rate_        ;
-    static std::vector<double> qab_spouse_rate_      ;
-    static std::vector<double> qab_child_rate_       ;
-    static std::vector<double> qab_waiver_rate_      ;
+    static inline std::vector<double> q_m_                  {};
+    static inline std::vector<double> glp_ic_               {};
+    static inline std::vector<double> glp_ig_               {};
+    static inline std::vector<double> gsp_ic_               {};
+    static inline std::vector<double> gsp_ig_               {};
+    static inline std::vector<double> prem_load_target_     {};
+    static inline std::vector<double> prem_load_excess_     {};
+    static inline std::vector<double> policy_fee_monthly_   {};
+    static inline std::vector<double> policy_fee_annual_    {};
+    static inline std::vector<double> specamt_load_monthly_ {};
+    static inline std::vector<double> qab_gio_rate_         {};
+    static inline std::vector<double> qab_adb_rate_         {};
+    static inline std::vector<double> qab_term_rate_        {};
+    static inline std::vector<double> qab_spouse_rate_      {};
+    static inline std::vector<double> qab_child_rate_       {};
+    static inline std::vector<double> qab_waiver_rate_      {};
 };
-
-std::vector<double> gpt_cf_triad_test::q_m_                  {};
-std::vector<double> gpt_cf_triad_test::glp_ic_               {};
-std::vector<double> gpt_cf_triad_test::glp_ig_               {};
-std::vector<double> gpt_cf_triad_test::gsp_ic_               {};
-std::vector<double> gpt_cf_triad_test::gsp_ig_               {};
-std::vector<double> gpt_cf_triad_test::prem_load_target_     {};
-std::vector<double> gpt_cf_triad_test::prem_load_excess_     {};
-std::vector<double> gpt_cf_triad_test::policy_fee_monthly_   {};
-std::vector<double> gpt_cf_triad_test::policy_fee_annual_    {};
-std::vector<double> gpt_cf_triad_test::specamt_load_monthly_ {};
-std::vector<double> gpt_cf_triad_test::qab_gio_rate_         {};
-std::vector<double> gpt_cf_triad_test::qab_adb_rate_         {};
-std::vector<double> gpt_cf_triad_test::qab_term_rate_        {};
-std::vector<double> gpt_cf_triad_test::qab_spouse_rate_      {};
-std::vector<double> gpt_cf_triad_test::qab_child_rate_       {};
-std::vector<double> gpt_cf_triad_test::qab_waiver_rate_      {};
 
 /// Initialize GPT vector parameters.
 ///
