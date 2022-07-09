@@ -35,13 +35,20 @@
 struct base_datum
 {
     base_datum() :sane(7) {}
+
+    base_datum(base_datum const&) = default;
+    base_datum(base_datum&&) = default;
+    base_datum& operator=(base_datum const&) = default;
+    base_datum& operator=(base_datum&&) = default;
     virtual ~base_datum() = default;    // Just to make it polymorphic.
+
     virtual int virtual_function() = 0; // Just to make it abstract.
     bool base_function()
         {
         std::cout << "base_datum::base_function() called " << sane << std::endl;
         return true;
         }
+
     int sane;
 };
 

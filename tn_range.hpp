@@ -240,6 +240,11 @@ class tn_range final
     tn_range();
     explicit tn_range(Number);
     explicit tn_range(std::string const&);
+
+    tn_range(tn_range const&) = default;
+    tn_range(tn_range&&) = default;
+    tn_range& operator=(tn_range const&) = default;
+    tn_range& operator=(tn_range&&) = default;
     ~tn_range() override = default;
 
     tn_range& operator=(Number);

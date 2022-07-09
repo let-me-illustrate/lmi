@@ -38,6 +38,11 @@ class datum_string
   public:
     datum_string() = default;
     explicit datum_string(std::string const&);
+
+    datum_string(datum_string const&) = default;
+    datum_string(datum_string&&) = default;
+    datum_string& operator=(datum_string const&) = default;
+    datum_string& operator=(datum_string&&) = default;
     ~datum_string() override = default;
 
     datum_string& operator=(std::string const&);

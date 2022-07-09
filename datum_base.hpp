@@ -34,6 +34,11 @@ class LMI_SO datum_base
 {
   public:
     datum_base() = default;
+
+    datum_base(datum_base const&) = default;
+    datum_base(datum_base&&) = default;
+    datum_base& operator=(datum_base const&) = default;
+    datum_base& operator=(datum_base&&) = default;
     virtual ~datum_base() = default;
 
     void enable(bool);

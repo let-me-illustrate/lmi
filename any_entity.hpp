@@ -37,6 +37,12 @@
 class any_entity
 {
   public:
+    any_entity() = default;
+
+    any_entity(any_entity const&) = default;
+    any_entity(any_entity&&) = delete;
+    any_entity& operator=(any_entity const&) = delete;
+    any_entity& operator=(any_entity&&) = delete;
     virtual ~any_entity() = default;
 
     any_entity& operator=(std::string const& s) {return assign(s);}
