@@ -47,7 +47,6 @@ class LMI_SO FundInfo final
         ,std::string const& LongName
         ,std::string const& gloss = std::string()
         );
-    ~FundInfo() = default;
 
     double ScalarIMF() const;
     std::string const& ShortName() const;

@@ -1170,7 +1170,6 @@ class statistics
 {
   public:
     statistics() = default;
-    ~statistics() = default;
 
     statistics& operator+=(statistics const&);
 

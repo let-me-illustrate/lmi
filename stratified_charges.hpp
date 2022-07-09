@@ -77,7 +77,6 @@ class LMI_SO stratified_entity final
         ,std::vector<double> const& values
         ,std::string const&         gloss = std::string()
         );
-    ~stratified_entity() = default;
 
     bool operator==(stratified_entity const&) const;
 

@@ -47,7 +47,6 @@ class LMI_SO mec_server final
 {
   public:
     explicit mec_server(mcenum_emission);
-    ~mec_server() = default;
 
     bool operator()(fs::path const&);
     bool operator()(fs::path const&, mec_input const&);

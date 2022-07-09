@@ -54,7 +54,6 @@ class yare_input final
 {
   public:
     explicit yare_input(Input const&);
-    ~yare_input() = default;
 
     int                               IssueAge                        ;
     int                               RetirementAge                   ;

@@ -77,7 +77,6 @@ class LMI_SO database_entity final
         ,double             datum
         ,std::string const& gloss = std::string()
         );
-    ~database_entity() = default;
 
     bool operator==(database_entity const&) const;
 

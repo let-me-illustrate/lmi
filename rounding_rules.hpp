@@ -48,7 +48,6 @@ class LMI_SO rounding_parameters final
         ,rounding_style     style
         ,std::string const& gloss = std::string()
         );
-    ~rounding_parameters() = default;
 
     bool operator==(rounding_parameters const&) const;
 
