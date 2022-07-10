@@ -60,15 +60,15 @@ clang_c_warnings := \
 # -Wdocumentation-unknown-command: warns about comments
 # -Wdouble-promotion: not actually useful
 # -Wexit-time-destructors: for analysis only--all positives are false
-###  -Wextra-semi-stmt
+# -Wextra-semi-stmt: all positives are false
 # -Wfloat-conversion: false positives for double-to-bool conversion
 # -Wfloat-equal: too many false positives, e.g., 0.0 == X
 # -Wglobal-constructors: for analysis only--all positives are false
 # -Wlogical-op-parentheses: && is multiplicative; || is additive
 # -Wmismatched-tags: stylistic freedom--not a defect
 # -Wmissing-noreturn: use occasionally; beware false positives
-###  -Wmissing-prototypes
-###  -Wmissing-variable-declarations
+# -Wmissing-prototypes: inappropriate for C++
+# -Wmissing-variable-declarations: inappropriate for C++
 # -Wpadded: useful only for low-level work
 # -Wsign-conversion: too many false positives, e.g., v[signed]
 # -Wstring-plus-int: false negatives and no true positives in lmi
