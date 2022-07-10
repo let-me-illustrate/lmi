@@ -504,7 +504,15 @@ GetOpt::operator()()
   if
     (   nlongopts
     &&  (
+#if defined LMI_CLANG
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wcomma"
+#endif // defined LMI_CLANG
+            // clang: "possible misuse of comma operator"
             ('-' == nargv[optind][1]) ? (nextchar++, 1) : (0)
+#if defined LMI_CLANG
+#   pragma clang diagnostic pop
+#endif // defined LMI_CLANG
         ||  (
                 nlong_only
             &&  (

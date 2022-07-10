@@ -239,7 +239,8 @@ Ledger& Ledger::PlusEq(Ledger const& a_Addend)
             ((*this_i).second.LapseYear
             ,(*addend_i).second.LapseYear
             );
-        ++this_i, ++addend_i;
+        ++this_i;
+        ++addend_i;
         }
 
     LMI_ASSERT(this_i == l_map_rep.end() && addend_i == lm_addend.end());

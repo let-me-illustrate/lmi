@@ -1373,9 +1373,17 @@ int rroot_(FunctionalType& f, int* nprob, int* neps, double* eps,
         fu = fb;
     }
     c0 = u - fu / (fb - fa) * 2. * (*b - *a);
+#if defined LMI_CLANG
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wcomma"
+#endif // defined LMI_CLANG
+    // clang: "possible misuse of comma operator"
     if ((d_1 = c0 - u, std::fabs(d_1)) > (*b - *a) * .5) {
         c0 = *a + (*b - *a) * .5;
     }
+#if defined LMI_CLANG
+#   pragma clang diagnostic pop
+#endif // defined LMI_CLANG
 
 /* CALL SUBROUTINE "BRACKT" TO GET A SHRINKED ENCLOSING INTERVAL AS */
 /* WELL AS TO UPDATE THE TERMINATION CRITERION. STOP THE PROCEDURE */
