@@ -353,9 +353,11 @@ make "$coefficiency" install check_physical_closure 2>&1 \
 # The automated GUI test simulates keyboard and mouse actions, so
 # no such actions must be performed manually while it is running
 # (unless it is run in a virtual frame buffer, as with Xvfb here).
+# The $WINEDEBUG setting inhibits wine-6.0.3 nuisance messages.
 if [ "x86_64-pc-linux-gnu" != "$LMI_TRIPLET" ]
 then
   printf '\n# GUI test\n\n'
+  WINEDEBUG="fixme-shell,fixme-event" \
   xvfb-run "$PERFORM" "$prefix"/bin/wx_test"$EXEEXT" \
     --ash_nazg --data_path="$prefix"/data 2>&1 \
     | tee "$log_dir"/gui_test | sed -e "$build_clutter" -e "$gui_test_clutter"
