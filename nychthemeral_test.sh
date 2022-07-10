@@ -92,6 +92,10 @@ install_clutter='
 # that, for some unknown reason, mustn't end in '$').
 
 gui_test_clutter='
+/^it looks like wine32 is missing, you should install it\.$/d
+/^multiarch needs to be enabled first\.  as root, please$/d
+/^execute "dpkg --add-architecture i386 && apt-get update &&$/d
+/^apt-get install wine32"$/d
 /^about_dialog_version: started$/d
 /^About dialog version string is .[[:digit:]]\+T[[:digit:]]\+Z.\.$/d
 /^time=[[:digit:]]\+ms (for about_dialog_version)$/d
