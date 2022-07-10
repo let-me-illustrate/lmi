@@ -99,6 +99,7 @@ gcc_common_warnings := \
   -Wmultichar \
   -Wnull-dereference \
   -Wpacked \
+  -Wpedantic \
   -Wpointer-arith \
   -Wredundant-decls \
   -Wrestrict \
