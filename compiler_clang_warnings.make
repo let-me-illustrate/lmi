@@ -69,7 +69,7 @@ clang_c_warnings := \
 # -Wmissing-variable-declarations: inappropriate for C++
 # -Wpadded: useful only for low-level work
 # -Wsign-conversion: too many false positives, e.g., v[signed]
-# -Wstring-plus-int: false negatives and no true positives in lmi
+# -Wstring-plus-int: all positives in lmi are false
 # -Wundefined-func-template: all positives seem false--see:
 #    https://lists.nongnu.org/archive/html/lmi/2022-07/msg00018.html
 # -Wunreachable-code-break: pleonastic 'break' adds clarity
