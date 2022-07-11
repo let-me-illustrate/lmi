@@ -68,9 +68,7 @@ class Irc7702A final
         );
 
     Irc7702A(Irc7702A const&) = default;
-    Irc7702A(Irc7702A&&) = delete;
-    Irc7702A& operator=(Irc7702A const&) = delete;
-    Irc7702A& operator=(Irc7702A&&) = delete;
+    Irc7702A& operator=(Irc7702A const&) = delete; // const data members
     ~Irc7702A() = default;
 
     void Initialize7702A
