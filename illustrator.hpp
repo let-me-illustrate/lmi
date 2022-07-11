@@ -45,8 +45,8 @@ class LMI_SO illustrator final
 
     illustrator(illustrator const&) = default;
     illustrator(illustrator&&) = default;
-    illustrator& operator=(illustrator const&) = delete;
-    illustrator& operator=(illustrator&&) = delete;
+    illustrator& operator=(illustrator const&) = default;
+    illustrator& operator=(illustrator&&) = default;
     ~illustrator() = default;
 
     bool operator()(fs::path const&);

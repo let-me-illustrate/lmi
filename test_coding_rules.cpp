@@ -1171,10 +1171,10 @@ class statistics
   public:
     statistics() = default;
 
-    statistics(statistics const&) = delete;
+    statistics(statistics const&) = default;
     statistics(statistics&&) = default;
-    statistics& operator=(statistics const&) = delete;
-    statistics& operator=(statistics&&) = delete;
+    statistics& operator=(statistics const&) = default;
+    statistics& operator=(statistics&&) = default;
     ~statistics() = default;
 
     statistics& operator+=(statistics const&);

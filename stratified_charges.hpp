@@ -79,7 +79,7 @@ class LMI_SO stratified_entity final
         );
 
     stratified_entity(stratified_entity const&) = default;
-    stratified_entity(stratified_entity&&) = delete;
+    stratified_entity(stratified_entity&&) = default;
     stratified_entity& operator=(stratified_entity const&) = default;
     stratified_entity& operator=(stratified_entity&&) = default;
     ~stratified_entity() = default;

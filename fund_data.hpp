@@ -50,7 +50,7 @@ class LMI_SO FundInfo final
 
     FundInfo(FundInfo const&) = default;
     FundInfo(FundInfo&&) = default;
-    FundInfo& operator=(FundInfo const&) = delete;
+    FundInfo& operator=(FundInfo const&) = default;
     FundInfo& operator=(FundInfo&&) = default;
     ~FundInfo() = default;
 

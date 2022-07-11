@@ -74,9 +74,9 @@ class LMI_SO Ledger final
         );
 
     Ledger(Ledger const&) = default;
-    Ledger(Ledger&&) = delete;
-    Ledger& operator=(Ledger const&) = delete;
-    Ledger& operator=(Ledger&&) = delete;
+    Ledger(Ledger&&) = default;
+    Ledger& operator=(Ledger const&) = default;
+    Ledger& operator=(Ledger&&) = default;
     virtual ~Ledger() = default;
 
     void ZeroInforceAfterLapse();

@@ -50,7 +50,7 @@ class LMI_SO rounding_parameters final
         );
 
     rounding_parameters(rounding_parameters const&) = default;
-    rounding_parameters(rounding_parameters&&) = delete;
+    rounding_parameters(rounding_parameters&&) = default;
     rounding_parameters& operator=(rounding_parameters const&) = default;
     rounding_parameters& operator=(rounding_parameters&&) = default;
     ~rounding_parameters() = default;

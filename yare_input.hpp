@@ -55,10 +55,10 @@ class yare_input final
   public:
     explicit yare_input(Input const&);
 
-    yare_input(yare_input const&) = delete;
+    yare_input(yare_input const&) = default;
     yare_input(yare_input&&) = default;
-    yare_input& operator=(yare_input const&) = delete;
-    yare_input& operator=(yare_input&&) = delete;
+    yare_input& operator=(yare_input const&) = default;
+    yare_input& operator=(yare_input&&) = default;
     ~yare_input() = default;
 
     int                               IssueAge                        ;

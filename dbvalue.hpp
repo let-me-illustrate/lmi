@@ -79,7 +79,7 @@ class LMI_SO database_entity final
         );
 
     database_entity(database_entity const&) = default;
-    database_entity(database_entity&&) = delete;
+    database_entity(database_entity&&) = default;
     database_entity& operator=(database_entity const&) = default;
     database_entity& operator=(database_entity&&) = default;
     ~database_entity() = default;
