@@ -97,12 +97,7 @@ class LMI_SO product_data
   public:
     explicit product_data(fs::path const& product_filename);
     explicit product_data(std::string const& product_name);
-
-    product_data(product_data const&); // Implemented out of line.
-    product_data(product_data&&) = delete;
-    product_data& operator=(product_data const&) = delete;
-    product_data& operator=(product_data&&) = delete;
-    ~product_data() override; // Implemented out of line.
+    ~product_data() override;
 
     std::string const& datum(std::string const& name) const;
 
@@ -115,6 +110,9 @@ class LMI_SO product_data
     glossed_string& item(std::string const& name);
 
   private:
+    product_data(product_data const&);
+    product_data& operator=(product_data const&) = delete;
+
     void ascribe_members();
 
     // xml_serializable required implementation.
