@@ -150,10 +150,6 @@ product_data::product_data(fs::path const&)
 
 product_data::~product_data() = default;
 
-product_data::product_data(product_data const&)
-    :MemberSymbolTable <product_data> {}
-{}
-
 std::string filename_from_product_name(std::string const&)
 {
     return empty_string;
