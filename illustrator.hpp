@@ -43,6 +43,12 @@ class LMI_SO illustrator final
   public:
     explicit illustrator(mcenum_emission);
 
+    illustrator(illustrator const&) = default;
+    illustrator(illustrator&&) = default;
+    illustrator& operator=(illustrator const&) = delete;
+    illustrator& operator=(illustrator&&) = delete;
+    ~illustrator() = default;
+
     bool operator()(fs::path const&);
     bool operator()(fs::path const&, Input const&);
     bool operator()(fs::path const&, std::vector<Input> const&);

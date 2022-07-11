@@ -1171,6 +1171,12 @@ class statistics
   public:
     statistics() = default;
 
+    statistics(statistics const&) = delete;
+    statistics(statistics&&) = default;
+    statistics& operator=(statistics const&) = delete;
+    statistics& operator=(statistics&&) = delete;
+    ~statistics() = default;
+
     statistics& operator+=(statistics const&);
 
     static statistics analyze_file(file const&);

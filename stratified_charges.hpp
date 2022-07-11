@@ -78,6 +78,12 @@ class LMI_SO stratified_entity final
         ,std::string const&         gloss = std::string()
         );
 
+    stratified_entity(stratified_entity const&) = default;
+    stratified_entity(stratified_entity&&) = delete;
+    stratified_entity& operator=(stratified_entity const&) = default;
+    stratified_entity& operator=(stratified_entity&&) = default;
+    ~stratified_entity() = default;
+
     bool operator==(stratified_entity const&) const;
 
     void read (xml::element const& node);

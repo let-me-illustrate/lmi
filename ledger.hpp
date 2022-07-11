@@ -73,6 +73,12 @@ class LMI_SO Ledger final
         ,bool               is_composite
         );
 
+    Ledger(Ledger const&) = default;
+    Ledger(Ledger&&) = delete;
+    Ledger& operator=(Ledger const&) = delete;
+    Ledger& operator=(Ledger&&) = delete;
+    virtual ~Ledger() = default;
+
     void ZeroInforceAfterLapse();
     Ledger& PlusEq(Ledger const& a_Addend);
 

@@ -67,6 +67,12 @@ class Irc7702A final
 // TAXATION !! probably other arguments are needed for reproposals
         );
 
+    Irc7702A(Irc7702A const&) = default;
+    Irc7702A(Irc7702A&&) = delete;
+    Irc7702A& operator=(Irc7702A const&) = delete;
+    Irc7702A& operator=(Irc7702A&&) = delete;
+    ~Irc7702A() = default;
+
     void Initialize7702A
         (bool   a_Ignore
         ,bool   a_MecAtIssue
