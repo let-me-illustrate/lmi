@@ -100,6 +100,7 @@ apt-get --assume-yes install \
   libxslt1-dev \
   lld \
   make \
+  mold \
   patch \
   pkg-config \
   rsync \
