@@ -54,12 +54,6 @@
 ///
 /// Still others permit both numbers and keywords. Specified amount,
 /// e.g., must accommodate numeric entry.
-///
-/// The dtor is pure because this class should not be instantiated.
-/// Most of the other virtuals would normally be overridden in any
-/// derived class, but aren't pure because that requirement is obvious
-/// and it's convenient to invoke them in assert_sanity() to validate
-/// ctor postconditions.
 
 class datum_sequence
     :public datum_string
@@ -72,7 +66,7 @@ class datum_sequence
     datum_sequence(datum_sequence&&) = default;
     datum_sequence& operator=(datum_sequence const&) = default;
     datum_sequence& operator=(datum_sequence&&) = default;
-    ~datum_sequence() override = 0; // Pure: see note above.
+    ~datum_sequence() override = default;
 
     datum_sequence& operator=(std::string const&);
 
@@ -81,7 +75,7 @@ class datum_sequence
     virtual bool numeric_values_are_allowable() const;
     virtual bool keyword_values_are_allowable() const;
     virtual std::string const default_keyword() const;
-    virtual std::map<std::string,std::string> const allowed_keywords() const;
+    virtual std::map<std::string,std::string> const allowed_keywords() const =0;
 
     bool equals(datum_sequence const&) const;
 

@@ -46,15 +46,6 @@ datum_sequence::datum_sequence(std::string const& s)
     assert_sanity();
 }
 
-/// Implementation of pure virtual destructor.
-///
-/// Neither this explicitly-defaulted implementation nor any other can
-/// be written inside the class definition because C++11 [10.4/3] says
-/// "a function declaration cannot provide both a pure-specifier and a
-/// definition".
-
-datum_sequence::~datum_sequence() = default;
-
 datum_sequence& datum_sequence::operator=(std::string const& s)
 {
     datum_string::operator=(s);
