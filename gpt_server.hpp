@@ -50,8 +50,8 @@ class LMI_SO gpt_server final
 
     gpt_server(gpt_server const&) = default;
     gpt_server(gpt_server&&) = default;
-    gpt_server& operator=(gpt_server const&) = delete;
-    gpt_server& operator=(gpt_server&&) = delete;
+    gpt_server& operator=(gpt_server const&) = default;
+    gpt_server& operator=(gpt_server&&) = default;
     ~gpt_server() = default;
 
     bool operator()(fs::path const&);
