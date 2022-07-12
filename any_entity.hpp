@@ -31,8 +31,6 @@
 /// Abstract class any_entity specifies the interface required for
 /// entities in the MVC Model. Class any_member is derived from this
 /// class, but other implementations may be substituted.
-///
-/// Implicitly-declared special member functions do the right thing.
 
 class any_entity
 {
@@ -40,9 +38,9 @@ class any_entity
     any_entity() = default;
 
     any_entity(any_entity const&) = default;
-    any_entity(any_entity&&) = delete;
-    any_entity& operator=(any_entity const&) = delete;
-    any_entity& operator=(any_entity&&) = delete;
+    any_entity(any_entity&&) = default;
+    any_entity& operator=(any_entity const&) = default;
+    any_entity& operator=(any_entity&&) = default;
     virtual ~any_entity() = default;
 
     any_entity& operator=(std::string const& s) {return assign(s);}
