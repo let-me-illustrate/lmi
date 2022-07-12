@@ -26,8 +26,6 @@
 
 #include "datum_base.hpp"
 
-// Implicitly-declared special member functions do the right thing.
-
 class datum_boolean
     :public datum_base
 {

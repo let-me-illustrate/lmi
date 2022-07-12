@@ -28,8 +28,6 @@
 
 #include <iosfwd>
 
-// Implicitly-declared special member functions do the right thing.
-
 class LMI_SO datum_base
 {
   public:

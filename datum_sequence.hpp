@@ -60,8 +60,6 @@
 /// derived class, but aren't pure because that requirement is obvious
 /// and it's convenient to invoke them in assert_sanity() to validate
 /// ctor postconditions.
-///
-/// Implicitly-declared special member functions do the right thing.
 
 class datum_sequence
     :public datum_string

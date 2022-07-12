@@ -30,8 +30,6 @@
 
 #include <string>
 
-// Implicitly-declared special member functions do the right thing.
-
 class datum_string
     :public datum_base
 {
