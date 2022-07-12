@@ -59,6 +59,14 @@ class datum_sequence
     :public datum_string
 {
   public:
+    bool equals(datum_sequence const&) const;
+
+    virtual bool numeric_values_are_allowable() const;
+    virtual bool keyword_values_are_allowable() const;
+    virtual std::string const default_keyword() const;
+    virtual std::map<std::string,std::string> const allowed_keywords() const;
+
+  protected:
     datum_sequence();
     explicit datum_sequence(std::string const&);
 
@@ -72,14 +80,6 @@ class datum_sequence
 
     void block_keyword_values(bool);
 
-    virtual bool numeric_values_are_allowable() const;
-    virtual bool keyword_values_are_allowable() const;
-    virtual std::string const default_keyword() const;
-    virtual std::map<std::string,std::string> const allowed_keywords() const =0;
-
-    bool equals(datum_sequence const&) const;
-
-  protected:
     bool keyword_values_are_blocked() const;
 
   private:
