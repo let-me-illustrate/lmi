@@ -90,7 +90,7 @@ namespace lmi
 /// std::type_info is not Copyable, so a deep copy is not possible;
 /// neither is it necessary, because a std::type_info object is, in
 /// effect, a smart pointer managed by the implementation.
-///   http://www.two-sdg.demon.co.uk/curbralan/papers/RTTI.html
+///   https://web.archive.org/web/20200115093104/http://www.two-sdg.demon.co.uk/curbralan/papers/RTTI.html
 /// "This is one of the few cases in C++ programming where it is
 /// reasonable for a programmer to take the address associated with a
 /// reference and hold onto it for later use:

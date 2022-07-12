@@ -205,7 +205,7 @@ constexpr To bourn_cast(From from, std::true_type, std::false_type)
 /// The underlying idea is discussed here:
 ///   https://groups.google.com/forum/#!original/comp.std.c++/WHu6gUiwXkU/ZyV_ejRrXFYJ
 /// and here:
-///   http://www.two-sdg.demon.co.uk/curbralan/code/numeric_cast/numeric_cast.hpp
+///   https://web.archive.org/web/20191015161113/http://www.two-sdg.demon.co.uk/curbralan/code/numeric_cast/numeric_cast.hpp
 /// and embodied in Kevlin Henney's original boost:numeric_cast,
 /// distributed under the GPL-compatible Boost Software License.
 
