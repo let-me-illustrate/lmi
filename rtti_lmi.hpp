@@ -85,7 +85,7 @@ namespace lmi
 /// explains why the addresses of std::type_info objects should not
 /// be compared directly.
 ///
-/// Implicitly-declared special member functions do the right thing.
+/// Explicitly-defaulted special member functions do the right thing.
 /// It may seem odd to say that of a class with a pointer member, but
 /// std::type_info is not Copyable, so a deep copy is not possible;
 /// neither is it necessary, because a std::type_info object is, in
@@ -126,7 +126,7 @@ class TypeInfo final
     TypeInfo(std::type_info const& z): ti_(&z) {}
 
     TypeInfo(TypeInfo const&) = default;
-    TypeInfo(TypeInfo&&) = delete;
+    TypeInfo(TypeInfo&&) = default;
     TypeInfo& operator=(TypeInfo const&) = default;
     TypeInfo& operator=(TypeInfo&&) = default;
     ~TypeInfo() = default;

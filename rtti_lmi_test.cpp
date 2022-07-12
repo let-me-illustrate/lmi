@@ -27,6 +27,7 @@
 
 #include <map>
 #include <sstream>
+#include <utility>                      // std::move()
 #include <vector>
 
 struct RttiLmiTest
@@ -48,6 +49,17 @@ void RttiLmiTest::TestTypeInfo()
 
     lmi::TypeInfo ti2(ti1);
     LMI_TEST(typeid(int) == *ti2.ti_);
+
+    // MoveAssignable.
+    lmi::TypeInfo mti0(typeid(double));
+    lmi::TypeInfo mti1(typeid(int));
+    mti0 = std::move(mti1);
+    LMI_TEST(typeid(int) == *mti0.ti_);
+
+    // MoveConstructible.
+
+    lmi::TypeInfo mti2(std::move(mti0));
+    LMI_TEST(typeid(int) == *mti2.ti_);
 
     // EqualityComparable.
 
