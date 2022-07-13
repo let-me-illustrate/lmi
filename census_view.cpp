@@ -626,7 +626,7 @@ class CensusViewGridCellAttrProvider
 
 /// Interface to the data for wxGrid.
 
-class CensusViewGridTable
+class CensusViewGridTable final
     :public wxGridTableBase
 {
   public:
