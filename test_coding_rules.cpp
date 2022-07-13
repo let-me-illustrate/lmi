@@ -1164,8 +1164,6 @@ void enforce_taboos(file const& f)
         }
 }
 
-/// Implicitly-declared special member functions do the right thing.
-
 class statistics
 {
   public:

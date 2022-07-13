@@ -38,8 +38,6 @@ LMI_SO void TestIrc7702A();
 //   7-pay premium strategy changes premium when spec amt changes;
 //   should optionally calculate factors e.g. 7pp, NSP from first principles.
 
-// Implicitly-declared special member functions do the right thing.
-
 class Irc7702A final
 {
   public:

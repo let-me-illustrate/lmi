@@ -40,8 +40,6 @@ class gpt_input;
 /// a distinct enumeration seems unwarranted, especially because
 /// explaining another one in '--help' would be too complicated.
 /// Enumerators that don't make sense can be reported at run time.
-///
-/// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO gpt_server final
 {

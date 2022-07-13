@@ -35,8 +35,6 @@
 #include <string>
 
 /// Parameters of a rounding rule.
-///
-/// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO rounding_parameters final
 {
@@ -81,7 +79,8 @@ class LMI_SO rounding_parameters final
 /// rounding is a property of the transaction, and not of the variable
 /// it ultimately affects.
 ///
-/// Implicitly-declared special member functions do the right thing.
+/// Implicitly-declared special member functions do the right thing,
+/// except that there are none, only because they aren't needed.
 ///
 /// Notes on particular rounding functors.
 ///

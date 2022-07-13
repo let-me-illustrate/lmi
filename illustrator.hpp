@@ -35,8 +35,6 @@ class Input;
 class Ledger;
 
 /// Sole top-level facility for illustration generation.
-///
-/// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO illustrator final
 {

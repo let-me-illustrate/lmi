@@ -62,8 +62,6 @@ enum e_stratified
     };
 
 /// A tiered or banded datum.
-///
-/// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO stratified_entity final
 {

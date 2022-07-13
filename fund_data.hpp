@@ -31,9 +31,7 @@
 #include <string>
 #include <vector>
 
-// Separate account funds: their names and investment mgmt fees
-
-// Implicitly-declared special member functions do the right thing.
+/// Separate account funds: names and investment management fees
 
 class LMI_SO FundInfo final
 {

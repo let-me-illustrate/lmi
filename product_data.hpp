@@ -37,8 +37,6 @@
 /// For example, the principal string datum might be the full name of
 /// the issuing company, whereas the gloss might explain under what
 /// conditions that company is used instead of a sibling.
-///
-/// Implicitly-declared special member functions do the right thing.
 
 class glossed_string final
 {
@@ -80,8 +78,6 @@ template<> struct deserialized<product_data>
 ///
 /// This is the "master" product file: it includes the filenames of
 /// all other product files.
-///
-/// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO product_data
     :public xml_serializable  <product_data>
