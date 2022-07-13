@@ -59,7 +59,9 @@ endif
 # -Wparentheses: its diagnostics are beyond pedantic
 # -Wpsabi: undocumented--ARM only?
 # -Wsign-conversion: [see note elsewhere in this file]
-# -Wsuggest-attribute: use occasionally; beware false positives
+# -Wsuggest-attribute: these are all nonstandard and gcc-specific,
+#   except '-Wno-suggest-attribute=noreturn', which might occasionally
+#   be useful for C++ although it gives many false positives.
 # -Wsystem-headers: not generally useful
 # -Wswitch-default: false positives for switches on enums that
 #   include all cases (verified by -Wswitch-enum)
