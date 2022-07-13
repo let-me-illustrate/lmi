@@ -28,22 +28,27 @@
 
 #include <iosfwd>
 
+/// Base class for GUI input fields.
+///
+/// Special member functions are protected simply because no need has
+/// arisen for them to be public.
+
 class LMI_SO datum_base
 {
   public:
-    datum_base() = default;
-
-    datum_base(datum_base const&) = default;
-    datum_base(datum_base&&) = default;
-    datum_base& operator=(datum_base const&) = default;
-    datum_base& operator=(datum_base&&) = default;
-    virtual ~datum_base() = default;
-
     void enable(bool);
     bool is_enabled() const;
 
     virtual std::istream& read (std::istream&)       = 0;
     virtual std::ostream& write(std::ostream&) const = 0;
+
+  protected:
+    datum_base() = default;
+    datum_base(datum_base const&) = default;
+    datum_base(datum_base&&) = default;
+    datum_base& operator=(datum_base const&) = default;
+    datum_base& operator=(datum_base&&) = default;
+    virtual ~datum_base() = default;
 
   private:
     bool enabled_ {true};
