@@ -106,7 +106,7 @@ bool operator==(datum_sequence const&, datum_sequence const&);
 
 /// Numeric MVC input sequence.
 
-class numeric_sequence
+class numeric_sequence final
     :public datum_sequence
 {
   public:
@@ -136,7 +136,7 @@ template<> inline std::string value_cast<std::string,numeric_sequence>
 
 /// MVC input sequence for payments.
 
-class payment_sequence
+class payment_sequence final
     :public datum_sequence
 {
   public:
@@ -166,7 +166,7 @@ template<> inline std::string value_cast<std::string,payment_sequence>
 
 /// MVC input sequence for payment mode.
 
-class mode_sequence
+class mode_sequence final
     :public datum_sequence
 {
   public:
@@ -197,7 +197,7 @@ template<> inline std::string value_cast<std::string,mode_sequence>
 
 /// MVC input sequence for specified amount.
 
-class specamt_sequence
+class specamt_sequence final
     :public datum_sequence
 {
   public:
@@ -227,7 +227,7 @@ template<> inline std::string value_cast<std::string,specamt_sequence>
 
 /// MVC input sequence for death benefit option.
 
-class dbo_sequence
+class dbo_sequence final
     :public datum_sequence
 {
   public:

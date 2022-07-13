@@ -26,7 +26,7 @@
 
 #include "datum_base.hpp"
 
-class datum_boolean
+class datum_boolean final
     :public datum_base
 {
   public:
