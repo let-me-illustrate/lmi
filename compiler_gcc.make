@@ -176,7 +176,11 @@ endif
 # The gprof '-pg' flag is one example. Another is '-fPIC', which
 # pc-linux-gnu requires for '-shared':
 #   https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html#DOCF1
-# Yet another is 'debug_flag': the GNU Coding Standards
+# Yet another is 'debug_flag': including it in $(LDFLAGS) seems
+# to be historical practice, as seen in the GNU 'make' manual:
+#   https://www.gnu.org/software/make/manual/make.html#Complex-Makefile
+# | LDFLAGS = -g
+# even though GNU 'ld' ignores '-g'; and the GNU Coding Standards
 #   https://www.gnu.org/prep/standards/html_node/Command-Variables.html
 # suggest including flags such as '-g' in $(CFLAGS) because they
 # are "not required for proper compilation", but lmi deliberately
