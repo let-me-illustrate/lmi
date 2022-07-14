@@ -522,8 +522,16 @@ lmi_msw_res.o: lmi.ico
 # Of course, '-c' is ignored; it flags situations where '-C'
 # might be useful.
 
+# Override this variable to exclude files that are inappropriate in
+# context--e.g., when building a fardel for distribution to field
+# users whose 'skin*.xrc' should exclude skins with inforce data
+# that are unavailable to them.
+excluded_data_files :=
+
 data_files := \
   $(wildcard $(addprefix $(srcdir)/,*.ico *.png *.xml *.xrc *.xsd *.xsl)) \
+
+data_files := $(filter-out $(excluded_data_files), $(data_files))
 
 help_files := \
   $(wildcard $(addprefix $(srcdir)/,*.html)) \
