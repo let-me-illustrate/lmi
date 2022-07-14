@@ -74,7 +74,7 @@ class datum_sequence
     datum_sequence(datum_sequence&&) = default;
     datum_sequence& operator=(datum_sequence const&) = default;
     datum_sequence& operator=(datum_sequence&&) = default;
-    ~datum_sequence() override = default;
+    ~datum_sequence() override = 0;
 
     datum_sequence& operator=(std::string const&);
 
@@ -87,6 +87,8 @@ class datum_sequence
 
     bool keyword_values_are_blocked_;
 };
+
+inline datum_sequence::~datum_sequence() = default;
 
 bool operator==(datum_sequence const&, datum_sequence const&);
 
