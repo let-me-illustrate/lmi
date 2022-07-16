@@ -107,16 +107,13 @@ bool sequence_base::equals(sequence_base const& z) const
 /// Ensure that input is possible; throw otherwise.
 ///
 /// Input is possible iff either
-///   - keyword values are allowable, or
+///   - keyword values are allowable, and at least one is allowed, or
 ///   - numeric values are allowable.
-/// For the nonce at least, the first condition doesn't require
-/// allowed_keywords() to return a non-empty map; that can be
-/// considered as experience emerges with derived classes.
 
 void sequence_base::assert_sanity() const
 {
     LMI_ASSERT
-        (  keyword_values_are_allowable()
+        (  keyword_values_are_allowable() && !allowed_keywords().empty()
         || numeric_values_are_allowable()
         );
 }
