@@ -468,9 +468,9 @@ class LMI_SO Input final
 /// Specialization of struct template reconstitutor for this Model
 /// and the base class that all its input sequences share.
 
-template<> struct reconstitutor<datum_sequence,Input>
+template<> struct reconstitutor<sequence_base,Input>
 {
-    typedef datum_sequence DesiredType;
+    typedef sequence_base DesiredType;
     static DesiredType* reconstitute(any_member<Input>& m)
         {
         DesiredType* z = nullptr;
@@ -561,9 +561,9 @@ template<> struct reconstitutor<datum_base,Input>
         {
         DesiredType* z = nullptr;
         z = exact_cast<datum_string            >(m); if(z) return z;
-        z = reconstitutor<datum_sequence,Input>::reconstitute(m); if(z) return z;
-        z = reconstitutor<mc_enum_base  ,Input>::reconstitute(m); if(z) return z;
-        z = reconstitutor<tn_range_base ,Input>::reconstitute(m); if(z) return z;
+        z = reconstitutor<sequence_base,Input>::reconstitute(m); if(z) return z;
+        z = reconstitutor<mc_enum_base ,Input>::reconstitute(m); if(z) return z;
+        z = reconstitutor<tn_range_base,Input>::reconstitute(m); if(z) return z;
         return z;
         }
 };

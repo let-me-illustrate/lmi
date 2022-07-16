@@ -51,7 +51,7 @@ template<typename T>
 std::string realize_sequence_string
     (Input          const& input
     ,std::vector<T>      & v
-    ,datum_sequence const& sequence_string
+    ,sequence_base  const& sequence_string
     )
 {
     try
@@ -80,7 +80,7 @@ template<typename T>
 std::string realize_sequence_string
     (Input             const& input
     ,std::vector<T>         & v
-    ,datum_sequence    const& sequence_string
+    ,sequence_base     const& sequence_string
     ,detail::stringmap const& keyword_dictionary
     ,std::string       const& default_keyword
     )
@@ -119,7 +119,7 @@ std::string realize_sequence_string
     (Input               const& input
     ,std::vector<Numeric>     & vn
     ,std::vector<Enumerative> & ve
-    ,datum_sequence      const& sequence_string
+    ,sequence_base       const& sequence_string
     ,detail::stringmap   const& keyword_dictionary
     ,std::string         const& default_keyword
     )

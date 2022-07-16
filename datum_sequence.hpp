@@ -55,11 +55,11 @@
 /// Still others permit both numbers and keywords. Specified amount,
 /// e.g., must accommodate numeric entry.
 
-class datum_sequence
+class sequence_base
     :public datum_string
 {
   public:
-    bool equals(datum_sequence const&) const;
+    bool equals(sequence_base const&) const;
 
     virtual bool numeric_values_are_allowable() const;
     virtual bool keyword_values_are_allowable() const;
@@ -67,16 +67,16 @@ class datum_sequence
     virtual std::map<std::string,std::string> const allowed_keywords() const;
 
   protected:
-    datum_sequence();
-    explicit datum_sequence(std::string const&);
+    sequence_base();
+    explicit sequence_base(std::string const&);
 
-    datum_sequence(datum_sequence const&) = default;
-    datum_sequence(datum_sequence&&) = default;
-    datum_sequence& operator=(datum_sequence const&) = default;
-    datum_sequence& operator=(datum_sequence&&) = default;
-    ~datum_sequence() override = 0;
+    sequence_base(sequence_base const&) = default;
+    sequence_base(sequence_base&&) = default;
+    sequence_base& operator=(sequence_base const&) = default;
+    sequence_base& operator=(sequence_base&&) = default;
+    ~sequence_base() override = 0;
 
-    datum_sequence& operator=(std::string const&);
+    sequence_base& operator=(std::string const&);
 
     void block_keyword_values(bool);
 
@@ -88,20 +88,20 @@ class datum_sequence
     bool keyword_values_are_blocked_;
 };
 
-inline datum_sequence::~datum_sequence() = default;
+inline sequence_base::~sequence_base() = default;
 
-bool operator==(datum_sequence const&, datum_sequence const&);
+bool operator==(sequence_base const&, sequence_base const&);
 
 // Specialize value_cast<> for each derived class, e.g., as follows:
 //
-// template<> inline datum_sequence value_cast<datum_sequence,std::string>
+// template<> inline leaf_class value_cast<leaf_class,std::string>
 //     (std::string const& from)
 // {
-//     return datum_sequence(from);
+//     return leaf_class(from);
 // }
 //
-// template<> inline std::string value_cast<std::string,datum_sequence>
-//     (datum_sequence const& from)
+// template<> inline std::string value_cast<std::string,leaf_class>
+//     (leaf_class const& from)
 // {
 //     return from.value();
 // }
@@ -109,11 +109,11 @@ bool operator==(datum_sequence const&, datum_sequence const&);
 /// Numeric MVC input sequence.
 
 class numeric_sequence final
-    :public datum_sequence
+    :public sequence_base
 {
   public:
     numeric_sequence() = default;
-    explicit numeric_sequence(std::string const& s) : datum_sequence(s) {}
+    explicit numeric_sequence(std::string const& s) : sequence_base(s) {}
 
     numeric_sequence& operator=(std::string const&);
 
@@ -139,11 +139,11 @@ template<> inline std::string value_cast<std::string,numeric_sequence>
 /// MVC input sequence for payments.
 
 class payment_sequence final
-    :public datum_sequence
+    :public sequence_base
 {
   public:
     payment_sequence() = default;
-    explicit payment_sequence(std::string const& s) : datum_sequence(s) {}
+    explicit payment_sequence(std::string const& s) : sequence_base(s) {}
 
     payment_sequence& operator=(std::string const&);
 
@@ -169,11 +169,11 @@ template<> inline std::string value_cast<std::string,payment_sequence>
 /// MVC input sequence for payment mode.
 
 class mode_sequence final
-    :public datum_sequence
+    :public sequence_base
 {
   public:
     mode_sequence() = default;
-    explicit mode_sequence(std::string const& s) : datum_sequence(s) {}
+    explicit mode_sequence(std::string const& s) : sequence_base(s) {}
 
     mode_sequence& operator=(std::string const&);
 
@@ -200,11 +200,11 @@ template<> inline std::string value_cast<std::string,mode_sequence>
 /// MVC input sequence for specified amount.
 
 class specamt_sequence final
-    :public datum_sequence
+    :public sequence_base
 {
   public:
     specamt_sequence() = default;
-    explicit specamt_sequence(std::string const& s) : datum_sequence(s) {}
+    explicit specamt_sequence(std::string const& s) : sequence_base(s) {}
 
     specamt_sequence& operator=(std::string const&);
 
@@ -230,11 +230,11 @@ template<> inline std::string value_cast<std::string,specamt_sequence>
 /// MVC input sequence for death benefit option.
 
 class dbo_sequence final
-    :public datum_sequence
+    :public sequence_base
 {
   public:
     dbo_sequence() = default;
-    explicit dbo_sequence(std::string const& s) : datum_sequence(s) {}
+    explicit dbo_sequence(std::string const& s) : sequence_base(s) {}
 
     dbo_sequence& operator=(std::string const&);
 

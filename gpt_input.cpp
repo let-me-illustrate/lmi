@@ -49,7 +49,7 @@ template<typename T>
 std::string realize_sequence_string
     (gpt_input           & input
     ,std::vector<T>      & v
-    ,datum_sequence const& sequence_string
+    ,sequence_base  const& sequence_string
     )
 {
     try

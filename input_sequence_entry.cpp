@@ -1581,7 +1581,7 @@ void InputSequenceEntry::DoOpenEditor()
     InputSequenceEditor editor(button_, title_, in);
 
     std::string sequence_string = text_->GetValue().ToStdString(wxConvUTF8);
-    datum_sequence const& ds = *member_cast<datum_sequence>(in[field_name()]);
+    sequence_base const& ds = *member_cast<sequence_base>(in[field_name()]);
 
     std::map<std::string,std::string> const kwmap = ds.allowed_keywords();
     std::vector<std::string> const keywords =

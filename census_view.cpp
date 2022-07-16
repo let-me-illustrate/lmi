@@ -516,7 +516,7 @@ table_type_converter::get(any_member<Input> const& value)
         {
         return get_impl<table_string_converter>();
         }
-    else if(is_reconstitutable_as<datum_sequence>(value))
+    else if(is_reconstitutable_as<sequence_base>(value))
         {
         return get_impl<table_sequence_converter>();
         }

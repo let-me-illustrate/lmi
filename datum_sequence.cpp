@@ -29,7 +29,7 @@
 ///
 /// Throws if insane.
 
-datum_sequence::datum_sequence()
+sequence_base::sequence_base()
     :keyword_values_are_blocked_ {false}
 {
     assert_sanity();
@@ -39,14 +39,14 @@ datum_sequence::datum_sequence()
 ///
 /// Throws if insane.
 
-datum_sequence::datum_sequence(std::string const& s)
+sequence_base::sequence_base(std::string const& s)
     :datum_string                {s}
     ,keyword_values_are_blocked_ {false}
 {
     assert_sanity();
 }
 
-datum_sequence& datum_sequence::operator=(std::string const& s)
+sequence_base& sequence_base::operator=(std::string const& s)
 {
     datum_string::operator=(s);
     return *this;
@@ -58,7 +58,7 @@ datum_sequence& datum_sequence::operator=(std::string const& s)
 ///
 /// Throws if insane.
 
-void datum_sequence::block_keyword_values(bool z)
+void sequence_base::block_keyword_values(bool z)
 {
     keyword_values_are_blocked_ = z;
     assert_sanity();
@@ -66,7 +66,7 @@ void datum_sequence::block_keyword_values(bool z)
 
 /// Declare whether numeric values are allowable.
 
-bool datum_sequence::numeric_values_are_allowable() const
+bool sequence_base::numeric_values_are_allowable() const
 {
     return true;
 }
@@ -75,7 +75,7 @@ bool datum_sequence::numeric_values_are_allowable() const
 ///
 /// Even if they are allowable, they may be blocked.
 
-bool datum_sequence::keyword_values_are_allowable() const
+bool sequence_base::keyword_values_are_allowable() const
 {
     return false;
 }
@@ -84,7 +84,7 @@ bool datum_sequence::keyword_values_are_allowable() const
 ///
 /// Return empty string if there's no default keyword.
 
-std::string const datum_sequence::default_keyword() const
+std::string const sequence_base::default_keyword() const
 {
     return std::string();
 }
@@ -104,7 +104,7 @@ std::string const datum_sequence::default_keyword() const
 /// map makes it possible to change internal names without affecting
 /// the user interface.
 
-std::map<std::string,std::string> const datum_sequence::allowed_keywords() const
+std::map<std::string,std::string> const sequence_base::allowed_keywords() const
 {
     return std::map<std::string,std::string>();
 }
@@ -117,7 +117,7 @@ std::map<std::string,std::string> const datum_sequence::allowed_keywords() const
 /// datum, but maintaining strong encapsulation reduces the temptation
 /// for one component of MVC to inspect another's internals.
 
-bool datum_sequence::equals(datum_sequence const& z) const
+bool sequence_base::equals(sequence_base const& z) const
 {
     return
            z.value()                     == value()
@@ -133,7 +133,7 @@ bool datum_sequence::equals(datum_sequence const& z) const
 /// datum, but maintaining strong encapsulation reduces the temptation
 /// for one component of MVC to inspect another's internals.
 
-bool datum_sequence::keyword_values_are_blocked() const
+bool sequence_base::keyword_values_are_blocked() const
 {
     return keyword_values_are_blocked_;
 }
@@ -147,7 +147,7 @@ bool datum_sequence::keyword_values_are_blocked() const
 /// allowed_keywords() to return a non-empty map; that can be
 /// considered as experience emerges with derived classes.
 
-void datum_sequence::assert_sanity() const
+void sequence_base::assert_sanity() const
 {
     LMI_ASSERT
         (  (keyword_values_are_allowable() && !keyword_values_are_blocked_)
@@ -155,7 +155,7 @@ void datum_sequence::assert_sanity() const
         );
 }
 
-bool operator==(datum_sequence const& lhs, datum_sequence const& rhs)
+bool operator==(sequence_base const& lhs, sequence_base const& rhs)
 {
     return lhs.equals(rhs);
 }
@@ -164,13 +164,13 @@ bool operator==(datum_sequence const& lhs, datum_sequence const& rhs)
 
 numeric_sequence& numeric_sequence::operator=(std::string const& s)
 {
-    datum_sequence::operator=(s);
+    sequence_base::operator=(s);
     return *this;
 }
 
 std::map<std::string,std::string> const numeric_sequence::allowed_keywords() const
 {
-    return datum_sequence::allowed_keywords();
+    return sequence_base::allowed_keywords();
 }
 
 bool operator==(numeric_sequence const& lhs, numeric_sequence const& rhs)
@@ -182,7 +182,7 @@ bool operator==(numeric_sequence const& lhs, numeric_sequence const& rhs)
 
 payment_sequence& payment_sequence::operator=(std::string const& s)
 {
-    datum_sequence::operator=(s);
+    sequence_base::operator=(s);
     return *this;
 }
 
@@ -218,7 +218,7 @@ bool operator==(payment_sequence const& lhs, payment_sequence const& rhs)
 
 mode_sequence& mode_sequence::operator=(std::string const& s)
 {
-    datum_sequence::operator=(s);
+    sequence_base::operator=(s);
     return *this;
 }
 
@@ -251,7 +251,7 @@ bool operator==(mode_sequence const& lhs, mode_sequence const& rhs)
 
 specamt_sequence& specamt_sequence::operator=(std::string const& s)
 {
-    datum_sequence::operator=(s);
+    sequence_base::operator=(s);
     return *this;
 }
 
@@ -292,7 +292,7 @@ bool operator==(specamt_sequence const& lhs, specamt_sequence const& rhs)
 
 dbo_sequence& dbo_sequence::operator=(std::string const& s)
 {
-    datum_sequence::operator=(s);
+    sequence_base::operator=(s);
     return *this;
 }
 
