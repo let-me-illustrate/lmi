@@ -76,7 +76,6 @@ class sequence_base
 
     sequence_base& operator=(std::string const&);
 
-  private:
     void assert_sanity() const;
 };
 

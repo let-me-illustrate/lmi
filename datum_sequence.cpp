@@ -31,7 +31,6 @@
 
 sequence_base::sequence_base()
 {
-    assert_sanity();
 }
 
 /// Construct from string.
@@ -41,7 +40,6 @@ sequence_base::sequence_base()
 sequence_base::sequence_base(std::string const& s)
     :datum_string_base           {s}
 {
-    assert_sanity();
 }
 
 sequence_base& sequence_base::operator=(std::string const& s)
@@ -132,11 +130,13 @@ bool operator==(sequence_base const& lhs, sequence_base const& rhs)
 
 numeric_sequence::numeric_sequence()
 {
+    assert_sanity();
 }
 
 numeric_sequence::numeric_sequence(std::string const& s)
     :sequence_base(s)
 {
+    assert_sanity();
 }
 
 numeric_sequence& numeric_sequence::operator=(std::string const& s)
@@ -159,11 +159,13 @@ bool operator==(numeric_sequence const& lhs, numeric_sequence const& rhs)
 
 payment_sequence::payment_sequence()
 {
+    assert_sanity();
 }
 
 payment_sequence::payment_sequence(std::string const& s)
     :sequence_base(s)
 {
+    assert_sanity();
 }
 
 payment_sequence& payment_sequence::operator=(std::string const& s)
@@ -199,11 +201,13 @@ bool operator==(payment_sequence const& lhs, payment_sequence const& rhs)
 
 mode_sequence::mode_sequence()
 {
+    assert_sanity();
 }
 
 mode_sequence::mode_sequence(std::string const& s)
     :sequence_base(s)
 {
+    assert_sanity();
 }
 
 mode_sequence& mode_sequence::operator=(std::string const& s)
@@ -240,11 +244,13 @@ bool operator==(mode_sequence const& lhs, mode_sequence const& rhs)
 
 specamt_sequence::specamt_sequence()
 {
+    assert_sanity();
 }
 
 specamt_sequence::specamt_sequence(std::string const& s)
     :sequence_base(s)
 {
+    assert_sanity();
 }
 
 specamt_sequence& specamt_sequence::operator=(std::string const& s)
@@ -285,11 +291,13 @@ bool operator==(specamt_sequence const& lhs, specamt_sequence const& rhs)
 
 dbo_sequence::dbo_sequence()
 {
+    assert_sanity();
 }
 
 dbo_sequence::dbo_sequence(std::string const& s)
     :sequence_base(s)
 {
+    assert_sanity();
 }
 
 dbo_sequence& dbo_sequence::operator=(std::string const& s)
