@@ -56,7 +56,7 @@
 /// e.g., must accommodate numeric entry.
 
 class sequence_base
-    :public datum_string
+    :public datum_string_base
 {
   public:
     bool equals(sequence_base const&) const;

@@ -40,7 +40,7 @@ sequence_base::sequence_base()
 /// Throws if insane.
 
 sequence_base::sequence_base(std::string const& s)
-    :datum_string                {s}
+    :datum_string_base           {s}
     ,keyword_values_are_blocked_ {false}
 {
     assert_sanity();
@@ -48,7 +48,7 @@ sequence_base::sequence_base(std::string const& s)
 
 sequence_base& sequence_base::operator=(std::string const& s)
 {
-    datum_string::operator=(s);
+    datum_string_base::operator=(s);
     return *this;
 }
 

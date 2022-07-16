@@ -28,23 +28,23 @@
 #include <istream>
 #include <ostream>
 
-datum_string::datum_string(std::string const& value)
+datum_string_base::datum_string_base(std::string const& value)
     :value_ {value}
 {
 }
 
-datum_string& datum_string::operator=(std::string const& s)
+datum_string_base& datum_string_base::operator=(std::string const& s)
 {
     value_ = s;
     return *this;
 }
 
-std::string const& datum_string::value() const
+std::string const& datum_string_base::value() const
 {
     return value_;
 }
 
-std::istream& datum_string::read(std::istream& is)
+std::istream& datum_string_base::read(std::istream& is)
 {
     std::locale old_locale = is.imbue(blank_is_not_whitespace_locale());
     is >> value_;
@@ -52,9 +52,20 @@ std::istream& datum_string::read(std::istream& is)
     return is;
 }
 
-std::ostream& datum_string::write(std::ostream& os) const
+std::ostream& datum_string_base::write(std::ostream& os) const
 {
     return os << value();
+}
+
+bool operator==(datum_string_base const& lhs, datum_string_base const& rhs)
+{
+    return lhs.value() == rhs.value();
+}
+
+datum_string& datum_string::operator=(std::string const& s)
+{
+    datum_string_base::operator=(s);
+    return *this;
 }
 
 bool operator==(datum_string const& lhs, datum_string const& rhs)
