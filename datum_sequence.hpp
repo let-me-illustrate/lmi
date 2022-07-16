@@ -59,8 +59,8 @@ class sequence_base
   public:
     bool equals(sequence_base const&) const;
 
-    virtual bool numeric_values_are_allowable() const;
-    virtual bool keyword_values_are_allowable() const;
+    virtual bool numeric_values_are_allowable() const = 0;
+    virtual bool keyword_values_are_allowable() const = 0;
     virtual std::string const default_keyword() const;
     virtual std::map<std::string,std::string> const allowed_keywords() const;
 
@@ -72,14 +72,12 @@ class sequence_base
     sequence_base(sequence_base&&) = default;
     sequence_base& operator=(sequence_base const&) = default;
     sequence_base& operator=(sequence_base&&) = default;
-    ~sequence_base() override = 0;
+    ~sequence_base() override = default;
 
     sequence_base& operator=(std::string const&);
 
     void assert_sanity() const;
 };
-
-inline sequence_base::~sequence_base() = default;
 
 bool operator==(sequence_base const&, sequence_base const&);
 
