@@ -57,15 +57,13 @@ class datum_string
 
 bool operator==(datum_string const&, datum_string const&);
 
-template<>
-inline datum_string value_cast<datum_string,std::string>
+template<> inline datum_string value_cast<datum_string,std::string>
     (std::string const& from)
 {
     return datum_string(from);
 }
 
-template<>
-inline std::string value_cast<std::string,datum_string>
+template<> inline std::string value_cast<std::string,datum_string>
     (datum_string const& from)
 {
     return from.value();
