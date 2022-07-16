@@ -567,10 +567,6 @@ false // Silly workaround for now.
 // only at durations that exhibit an actual conflict: e.g., a premium
 // solve for the first ten years only shouldn't inhibit anything after
 // the tenth year.
-//
-// At any rate, keywords should not be blocked when the control is
-// disabled: see
-//   https://lists.nongnu.org/archive/html/lmi/2010-07/msg00006.html
 
     Payment           .enable(mce_solve_ee_prem != SolveType);
     CorporationPayment.enable(mce_solve_er_prem != SolveType);

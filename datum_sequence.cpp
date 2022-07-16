@@ -30,7 +30,6 @@
 /// Throws if insane.
 
 sequence_base::sequence_base()
-    :keyword_values_are_blocked_ {false}
 {
     assert_sanity();
 }
@@ -41,7 +40,6 @@ sequence_base::sequence_base()
 
 sequence_base::sequence_base(std::string const& s)
     :datum_string_base           {s}
-    ,keyword_values_are_blocked_ {false}
 {
     assert_sanity();
 }
@@ -52,18 +50,6 @@ sequence_base& sequence_base::operator=(std::string const& s)
     return *this;
 }
 
-/// Block or unblock keyword values.
-///
-/// This has no practical effect if keyword values are not allowable.
-///
-/// Throws if insane.
-
-void sequence_base::block_keyword_values(bool z)
-{
-    keyword_values_are_blocked_ = z;
-    assert_sanity();
-}
-
 /// Declare whether numeric values are allowable.
 
 bool sequence_base::numeric_values_are_allowable() const
@@ -72,8 +58,6 @@ bool sequence_base::numeric_values_are_allowable() const
 }
 
 /// Declare whether keyword values are allowable.
-///
-/// Even if they are allowable, they may be blocked.
 
 bool sequence_base::keyword_values_are_allowable() const
 {
@@ -119,29 +103,13 @@ std::map<std::string,std::string> const sequence_base::allowed_keywords() const
 
 bool sequence_base::equals(sequence_base const& z) const
 {
-    return
-           z.value()                     == value()
-        && z.keyword_values_are_blocked_ == keyword_values_are_blocked_
-        ;
-}
-
-/// Determine whether keywords are blocked.
-///
-/// Rationale: to support allowed_keywords() in derived classes.
-///
-/// It would be simple to provide a public accessor for the member
-/// datum, but maintaining strong encapsulation reduces the temptation
-/// for one component of MVC to inspect another's internals.
-
-bool sequence_base::keyword_values_are_blocked() const
-{
-    return keyword_values_are_blocked_;
+    return z.value() == value();
 }
 
 /// Ensure that input is possible; throw otherwise.
 ///
 /// Input is possible iff either
-///   - keyword values are allowable and not blocked; or
+///   - keyword values are allowable, or
 ///   - numeric values are allowable.
 /// For the nonce at least, the first condition doesn't require
 /// allowed_keywords() to return a non-empty map; that can be
@@ -150,8 +118,8 @@ bool sequence_base::keyword_values_are_blocked() const
 void sequence_base::assert_sanity() const
 {
     LMI_ASSERT
-        (  (keyword_values_are_allowable() && !keyword_values_are_blocked_)
-        ||  numeric_values_are_allowable()
+        (  keyword_values_are_allowable()
+        || numeric_values_are_allowable()
         );
 }
 
@@ -188,11 +156,6 @@ payment_sequence& payment_sequence::operator=(std::string const& s)
 
 std::map<std::string,std::string> const payment_sequence::allowed_keywords() const
 {
-    if(keyword_values_are_blocked())
-        {
-        return std::map<std::string,std::string>();
-        }
-
     static std::map<std::string,std::string> all_keywords;
     if(all_keywords.empty())
         {
@@ -229,7 +192,6 @@ std::string const mode_sequence::default_keyword() const
 
 std::map<std::string,std::string> const mode_sequence::allowed_keywords() const
 {
-    LMI_ASSERT(!keyword_values_are_blocked());
     static std::map<std::string,std::string> all_keywords;
     if(all_keywords.empty())
         {
@@ -262,11 +224,6 @@ specamt_sequence& specamt_sequence::operator=(std::string const& s)
 
 std::map<std::string,std::string> const specamt_sequence::allowed_keywords() const
 {
-    if(keyword_values_are_blocked())
-        {
-        return std::map<std::string,std::string>();
-        }
-
     static std::map<std::string,std::string> all_keywords;
     if(all_keywords.empty())
         {
@@ -303,7 +260,6 @@ std::string const dbo_sequence::default_keyword() const
 
 std::map<std::string,std::string> const dbo_sequence::allowed_keywords() const
 {
-    LMI_ASSERT(!keyword_values_are_blocked());
     static std::map<std::string,std::string> all_keywords;
     if(all_keywords.empty())
         {

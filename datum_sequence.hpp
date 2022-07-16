@@ -37,9 +37,7 @@
 /// be specified by numbers, keywords, or a combination of both. Each
 /// sequence's semantics determines whether its allowable values may
 /// be numbers, or keywords, or both; that's a fixed property of each
-/// derived class. Keyword values may be blocked in context even if
-/// they would be allowed in general; that's a runtime property of
-/// each derived-class instance.
+/// derived class.
 ///
 /// For some sequences, no keywords are defined, and therefore none
 /// are ever permitted. It is difficult, e.g., to conceive of a
@@ -78,14 +76,8 @@ class sequence_base
 
     sequence_base& operator=(std::string const&);
 
-    void block_keyword_values(bool);
-
-    bool keyword_values_are_blocked() const;
-
   private:
     void assert_sanity() const;
-
-    bool keyword_values_are_blocked_;
 };
 
 inline sequence_base::~sequence_base() = default;
