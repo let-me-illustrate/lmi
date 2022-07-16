@@ -38,7 +38,7 @@ sequence_base::sequence_base()
 /// Throws if insane.
 
 sequence_base::sequence_base(std::string const& s)
-    :datum_string_base           {s}
+    :datum_string_base{s}
 {
 }
 
@@ -134,7 +134,7 @@ numeric_sequence::numeric_sequence()
 }
 
 numeric_sequence::numeric_sequence(std::string const& s)
-    :sequence_base(s)
+    :sequence_base{s}
 {
     assert_sanity();
 }
@@ -163,7 +163,7 @@ payment_sequence::payment_sequence()
 }
 
 payment_sequence::payment_sequence(std::string const& s)
-    :sequence_base(s)
+    :sequence_base{s}
 {
     assert_sanity();
 }
@@ -205,7 +205,7 @@ mode_sequence::mode_sequence()
 }
 
 mode_sequence::mode_sequence(std::string const& s)
-    :sequence_base(s)
+    :sequence_base{s}
 {
     assert_sanity();
 }
@@ -248,7 +248,7 @@ specamt_sequence::specamt_sequence()
 }
 
 specamt_sequence::specamt_sequence(std::string const& s)
-    :sequence_base(s)
+    :sequence_base{s}
 {
     assert_sanity();
 }
@@ -295,7 +295,7 @@ dbo_sequence::dbo_sequence()
 }
 
 dbo_sequence::dbo_sequence(std::string const& s)
-    :sequence_base(s)
+    :sequence_base{s}
 {
     assert_sanity();
 }

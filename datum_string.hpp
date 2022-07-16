@@ -62,7 +62,7 @@ class datum_string final
 {
   public:
     datum_string() = default;
-    explicit datum_string(std::string const& s) : datum_string_base(s) {}
+    explicit datum_string(std::string const& s) : datum_string_base{s} {}
 
     datum_string(datum_string const&) = default;
     datum_string(datum_string&&) = default;
