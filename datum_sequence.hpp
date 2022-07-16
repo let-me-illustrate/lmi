@@ -104,8 +104,8 @@ class numeric_sequence final
     :public sequence_base
 {
   public:
-    numeric_sequence() = default;
-    explicit numeric_sequence(std::string const& s) : sequence_base(s) {}
+    numeric_sequence();
+    explicit numeric_sequence(std::string const&);
 
     numeric_sequence& operator=(std::string const&);
 
@@ -134,8 +134,8 @@ class payment_sequence final
     :public sequence_base
 {
   public:
-    payment_sequence() = default;
-    explicit payment_sequence(std::string const& s) : sequence_base(s) {}
+    payment_sequence();
+    explicit payment_sequence(std::string const&);
 
     payment_sequence& operator=(std::string const&);
 
@@ -164,8 +164,8 @@ class mode_sequence final
     :public sequence_base
 {
   public:
-    mode_sequence() = default;
-    explicit mode_sequence(std::string const& s) : sequence_base(s) {}
+    mode_sequence();
+    explicit mode_sequence(std::string const&);
 
     mode_sequence& operator=(std::string const&);
 
@@ -195,8 +195,8 @@ class specamt_sequence final
     :public sequence_base
 {
   public:
-    specamt_sequence() = default;
-    explicit specamt_sequence(std::string const& s) : sequence_base(s) {}
+    specamt_sequence();
+    explicit specamt_sequence(std::string const&);
 
     specamt_sequence& operator=(std::string const&);
 
@@ -225,8 +225,8 @@ class dbo_sequence final
     :public sequence_base
 {
   public:
-    dbo_sequence() = default;
-    explicit dbo_sequence(std::string const& s) : sequence_base(s) {}
+    dbo_sequence();
+    explicit dbo_sequence(std::string const&);
 
     dbo_sequence& operator=(std::string const&);
 

@@ -130,6 +130,15 @@ bool operator==(sequence_base const& lhs, sequence_base const& rhs)
 
 // Numeric MVC input sequence.
 
+numeric_sequence::numeric_sequence()
+{
+}
+
+numeric_sequence::numeric_sequence(std::string const& s)
+    :sequence_base(s)
+{
+}
+
 numeric_sequence& numeric_sequence::operator=(std::string const& s)
 {
     sequence_base::operator=(s);
@@ -147,6 +156,15 @@ bool operator==(numeric_sequence const& lhs, numeric_sequence const& rhs)
 }
 
 // MVC input sequence for payments.
+
+payment_sequence::payment_sequence()
+{
+}
+
+payment_sequence::payment_sequence(std::string const& s)
+    :sequence_base(s)
+{
+}
 
 payment_sequence& payment_sequence::operator=(std::string const& s)
 {
@@ -179,6 +197,15 @@ bool operator==(payment_sequence const& lhs, payment_sequence const& rhs)
 
 // MVC input sequence for payment mode.
 
+mode_sequence::mode_sequence()
+{
+}
+
+mode_sequence::mode_sequence(std::string const& s)
+    :sequence_base(s)
+{
+}
+
 mode_sequence& mode_sequence::operator=(std::string const& s)
 {
     sequence_base::operator=(s);
@@ -210,6 +237,15 @@ bool operator==(mode_sequence const& lhs, mode_sequence const& rhs)
 }
 
 // MVC input sequence for specified amount.
+
+specamt_sequence::specamt_sequence()
+{
+}
+
+specamt_sequence::specamt_sequence(std::string const& s)
+    :sequence_base(s)
+{
+}
 
 specamt_sequence& specamt_sequence::operator=(std::string const& s)
 {
@@ -246,6 +282,15 @@ bool operator==(specamt_sequence const& lhs, specamt_sequence const& rhs)
 }
 
 // MVC input sequence for death benefit option.
+
+dbo_sequence::dbo_sequence()
+{
+}
+
+dbo_sequence::dbo_sequence(std::string const& s)
+    :sequence_base(s)
+{
+}
 
 dbo_sequence& dbo_sequence::operator=(std::string const& s)
 {
