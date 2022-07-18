@@ -96,6 +96,7 @@ gui_test_clutter='
 /^multiarch needs to be enabled first\.  as root, please$/d
 /^execute "dpkg --add-architecture i386 && apt-get update &&$/d
 /^apt-get install wine32"$/d
+/^apt-get install wine32:i386"$/d
 /^about_dialog_version: started$/d
 /^About dialog version string is .[[:digit:]]\+T[[:digit:]]\+Z.\.$/d
 /^time=[[:digit:]]\+ms (for about_dialog_version)$/d
@@ -357,7 +358,7 @@ make "$coefficiency" install check_physical_closure 2>&1 \
 if [ "x86_64-pc-linux-gnu" != "$LMI_TRIPLET" ]
 then
   printf '\n# GUI test\n\n'
-  WINEDEBUG="fixme-shell,fixme-event" \
+  WINEDEBUG="fixme-event,fixme-imm,fixme-shell" \
   xvfb-run "$PERFORM" "$prefix"/bin/wx_test"$EXEEXT" \
     --ash_nazg --data_path="$prefix"/data 2>&1 \
     | tee "$log_dir"/gui_test | sed -e "$build_clutter" -e "$gui_test_clutter"
