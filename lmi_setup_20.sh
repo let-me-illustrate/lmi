@@ -80,6 +80,9 @@ apt-get --assume-yes install \
   bsdmainutils \
   bzip2 \
   clang \
+  clang-format \
+  clang-tidy \
+  clang-tools \
   curl \
   cvs \
   default-jre \
