@@ -195,9 +195,11 @@ mkdir --parents /opt/lmi/data
 
 # To regenerate authentication files for production distributions:
 # cd /opt/lmi/data
-# printf '2450449 2472011'             >expiry
-# printf '%s\n' "$(md5sum expiry)"     >validated.md5
-# [wine] /opt/lmi/bin/generate_passkey >passkey
+# printf '2450449 2472011'         >expiry
+# printf '%s\n' "$(md5sum expiry)" >validated.md5
+# /opt/lmi/bin/generate_passkey    >passkey
+#   alternatively, for 'wine':
+# wine /opt/lmi/bin/generate_passkey.exe >passkey
 printf '2450449 2472011'                            >/opt/lmi/data/expiry
 printf '5fc68a795c9c60da1b32be989efc299a  expiry\n' >/opt/lmi/data/validated.md5
 printf '391daa5cbc54e118c4737446bcb84eea'           >/opt/lmi/data/passkey

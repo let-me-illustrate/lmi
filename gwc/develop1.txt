@@ -369,7 +369,8 @@ git diff --no-index --color=always --color-moved=plain /opt/lmi/logs/log-old /op
 
 mkdir /tmp/q
 pushd /tmp/q
-
-[wine] /opt/lmi/bin/rate_table_tool --accept --file=/opt/lmi/data/some_name --extract-all
-  # for example:
-wine /opt/lmi/bin/rate_table_tool --accept --file=/opt/lmi/data/qx_cso --extract-all
+  # examples using 'qx_cso' database
+  # GNU/linux native:
+     /opt/lmi/bin/rate_table_tool     --accept --file=/opt/lmi/data/qx_cso --extract-all
+  # wine:
+wine /opt/lmi/bin/rate_table_tool.exe --accept --file=/opt/lmi/data/qx_cso --extract-all

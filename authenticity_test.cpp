@@ -266,7 +266,7 @@ void PasskeyTest::CheckNominal(char const* file, int line) const
 /// By default, lmi authenticates itself at startup. Its executable
 /// and data files shouldn't need to be in any particular directory;
 /// an invocation like this:
-///   wine /opt/lmi/bin/lmi_wx_shared --data_path=/opt/lmi/data
+///   /opt/lmi/bin/lmi_wx_shared --data_path=/opt/lmi/data
 /// should just work. This test checks that invariant, as follows.
 ///
 /// First, change ${PWD}; authenticate; and restore ${PWD}, verifying

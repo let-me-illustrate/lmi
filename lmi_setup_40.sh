@@ -32,6 +32,7 @@ assert_chrooted
 
 # Initialize wine. See:
 #   https://lists.nongnu.org/archive/html/lmi/2016-10/msg00002.html
+#   (even with wine-7.0, no ".exe" suffix is required here)
 WINEDLLOVERRIDES=mscoree=d wine wineboot
 #
 # Don't worry about this:
@@ -70,8 +71,10 @@ winecfg
 #   HKCU\Control Panel\International:
 #     set sShortDate and sLongDate to "yyyy-MM-dd"
 # using either the 'regedit' GUI:
+#   (even with wine-7.0, no ".exe" suffix is required here)
 wine regedit
 # or the command-line registry editor:
+#   (even with wine-7.0, no ".exe" suffix is required here)
 #   wine reg add "HKCU\Control Panel\International" /v "sLongDate"  /d "yyyy-MM-dd" /f
 #   wine reg add "HKCU\Control Panel\International" /v "sShortDate" /d "yyyy-MM-dd" /f
 

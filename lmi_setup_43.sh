@@ -89,7 +89,7 @@ rm /opt/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/build/ship/my*
 # the first time, because there are no old files to remove):
 cd /opt/lmi/data || { printf 'failed: cd\n'; exit 3; }
 rm --force proprietary.dat proprietary.ndx
-wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
+wine /opt/lmi/bin/rate_table_tool.exe --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
 
 coefficiency="--jobs=$(nproc)"
 
