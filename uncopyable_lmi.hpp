@@ -24,16 +24,31 @@
 
 #include <type_traits>
 
+namespace lmi
+{
+
 /// Forbid compiler to generate copy and assignment functions.
+///
+/// Historical note. A mixin class like this was widely used prior to
+/// C++11, when the best way to prevent copying was a trick: declare
+/// the copy members private and don't implement them (and encapsulate
+/// that trick in a base class). Since C++11, no trickery is required:
+/// unwanted special members can be declared as deleted. While this
+/// class itself should no longer be used, it is preserved because its
+/// refinements to the less sophisticated base class typically used
+/// before C++11 demonstrate a useful technique that guides the design
+/// of other classes. Accordingly, this modernized implementation
+/// sheds its historical roots and explicitly deletes unwanted special
+/// members, including move as well as copy members.
 ///
 /// This implementation is an original work. The idea of a mixin with
 /// private copy and assignment members is very old and of uncertain
-/// provenance. The idea of making that mixin a template seems to have
+/// provenance. The idea of using CRTP for that mixin seems to have
 /// been suggested first by Cacciola:
 ///   http://lists.boost.org/Archives/boost/2001/09/16912.php
 ///   http://lists.boost.org/Archives/boost/2001/09/17385.php
 ///
-/// This class is often seen in a non-template guise, but consider:
+/// This class was often seen in a non-CRTP guise, but consider:
 ///
 ///   class B0 : private Uncopyable {};
 ///   class B1 : private Uncopyable {};
@@ -54,7 +69,7 @@
 /// Even where such inefficiencies don't matter, the template version
 /// is preferable for its clarity. Consider:
 ///
-//    class Uncopyable /* non-template implementation */;
+///   class Uncopyable /* non-template implementation */;
 ///   class B0 : private Uncopyable {};
 ///   class B1 : private Uncopyable {};
 ///   class D  : private Uncopyable, public B0, public B1 {};
@@ -72,38 +87,36 @@
 /// second example above--though that's inefficient, as already noted.
 /// It's also not ideal for documenting the derived class, because
 /// 'virtual' belongs in the base classes:
-///   http://www.parashift.com/c++-faq-lite/multiple-inheritance.html#faq-25.9
+///   https://isocpp.org/wiki/faq/multiple-inheritance#virtual-inheritance-where
 /// Adding a new class later, e.g.:
 ///   class E : private Uncopyable, public D {};
 /// would require changing D's inheritance to virtual, yet D and E are
 /// likely to be declared in different source files.
 ///
-/// The present class does requires a template parameter (which is
-/// reasonably constrained to name the class rendered uncopyable):
+/// The present class uses CRTP, making its use slightly more verbose:
 ///
 ///   class B0 : private uncopyable<B0> {};
 ///   class B1 : private uncopyable<B1> {};
 ///   class D  : private uncopyable<D>, public B0, public B1 {};
 ///
-/// but its clarity and efficiency make it the least objectionable
-/// option.
+/// but clarity and efficiency are more important. Asserted
+/// precondition: the template parameter names the derived class.
 
-namespace lmi
-{
 template<typename T>
 class uncopyable
 {
   protected:
     uncopyable() = default;
+    uncopyable(uncopyable const&)            = delete;
+    uncopyable(uncopyable&&)                 = delete;
+    uncopyable& operator=(uncopyable const&) = delete;
+    uncopyable& operator=(uncopyable&&)      = delete;
     ~uncopyable()
         {
-        static_assert(std::is_base_of<uncopyable<T>,T>::value, "");
+        static_assert(std::is_base_of_v<uncopyable<T>,T>);
         }
-
-  private:
-    uncopyable(uncopyable const&);
-    uncopyable& operator=(uncopyable const&);
 };
+
 } // namespace lmi
 
 // If lmi provided unit tests that deliberately fail to compile, then
