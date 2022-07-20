@@ -77,6 +77,7 @@ apt-get update
 apt-get --assume-yes install \
   automake \
   bc \
+  bear \
   bsdmainutils \
   bzip2 \
   clang \
