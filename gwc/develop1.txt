@@ -334,6 +334,10 @@ cd /opt/lmi/src/lmi
 
 /\%>80v.\+
 
+  # Find git conflict markers
+
+/^[<=>]\{7\}\( \|$\)
+
   # Change column 41 to a comma, for non-matching lines in a range
   # ('|41' seems incompatible with '|' separator, so use 'cursor')
 
