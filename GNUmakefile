@@ -236,9 +236,8 @@ $(build_dir): $(gpl_files)
 	+@[ -d $(localbindir)     ] || $(MKDIR) --parents $(localbindir)
 	+@[ -d $(locallibdir)     ] || $(MKDIR) --parents $(locallibdir)
 	+@[ -d $(localincludedir) ] || $(MKDIR) --parents $(localincludedir)
-	+@for z in $(compiler_runtime_files); do \
-	    $(INSTALL) -c -m 0775 -c $$z $(localbindir) ; \
-	  done;
+	+@[ -z "$(strip $(compiler_runtime_files))" ] \
+	  || $(INSTALL) -c -m 0775 -c $(compiler_runtime_files) $(localbindir)
 	+@$(MAKETARGET)
 
 % :: $(build_dir) ; @:
