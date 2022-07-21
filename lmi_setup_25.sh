@@ -58,6 +58,9 @@ vim -es -c ':mkspell! ~/.vim/spell/en.utf-8.add' -c ':q' ||
 git config --global color.ui auto
 git config --global commit.cleanup scissors
 git config --global commit.verbose true
+# An unexpanded tilde is clearer here:
+# shellcheck disable=SC2088
+git config --global core.excludesfile '~/.gitignore'
 git config --global core.pager "less -+F -+X"
 git config --global diff.colormoved plain
 git config --global log.date iso8601-strict-local
@@ -69,6 +72,8 @@ if [ "greg" = "$(whoami)" ]; then
 git config --global user.email gchicares@sbcglobal.net
 git config --global user.name "Gregory W. Chicares"
 fi
+
+echo '.*.sw?' > ~/.gitignore
 
 # Avoid "fatal: Invalid cleanup mode scissors" with ancient git.
 # This is just a temporary workaround that can be deleted once RHEL
