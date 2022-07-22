@@ -1,3 +1,5 @@
+// Convenient base classes that use CRTP.
+//
 // Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2022 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
@@ -17,8 +19,8 @@
 // email: <gchicares@sbcglobal.net>
 // snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-#ifndef uncopyable_lmi_hpp
-#define uncopyable_lmi_hpp
+#ifndef crtp_base_hpp
+#define crtp_base_hpp
 
 #include "config.hpp"
 
@@ -133,5 +135,5 @@ class uncopyable
 //     x = y;  // Error: cannot assign.
 // }
 
-#endif // uncopyable_lmi_hpp
+#endif // crtp_base_hpp
 
