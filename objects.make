@@ -385,6 +385,7 @@ unit_test_targets := \
   configurable_settings_test \
   contains_test \
   crc32_test \
+  crtp_base_test \
   currency_test \
   dbo_rules_test \
   duff_fmt_test \
@@ -582,6 +583,10 @@ crc32_test$(EXEEXT): \
   $(common_test_objects) \
   crc32.o \
   crc32_test.o \
+
+crtp_base_test$(EXEEXT): \
+  $(common_test_objects) \
+  crtp_base_test.o \
 
 currency_test$(EXEEXT): \
   $(common_test_objects) \

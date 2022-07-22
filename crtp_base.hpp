@@ -121,19 +121,4 @@ class uncopyable
 
 } // namespace lmi
 
-// If lmi provided unit tests that deliberately fail to compile, then
-// this could be used:
-//
-// #include "uncopyable_lmi.hpp"
-//
-// class X : private lmi::uncopyable<X> {};
-//
-// int main()
-// {
-//     X x;
-//     X y(x); // Error: cannot copy.
-//     x = y;  // Error: cannot assign.
-// }
-
 #endif // crtp_base_hpp
-

@@ -112,6 +112,7 @@ TESTS = \
     configurable_settings_test \
     contains_test \
     crc32_test \
+    crtp_base_test \
     currency_test \
     dbo_rules_test \
     duff_fmt_test \
@@ -692,6 +693,12 @@ crc32_test_CXXFLAGS = $(AM_CXXFLAGS)
 crc32_test_LDADD = \
   libtest_common.la
 
+crtp_base_test_SOURCES = \
+  crtp_base_test.cpp
+crtp_base_test_CXXFLAGS = $(AM_CXXFLAGS)
+crtp_base_test_LDADD = \
+  libtest_common.la
+
 currency_test_LDADD = \
   libtest_common.la
 
@@ -1166,6 +1173,7 @@ noinst_HEADERS = \
     configurable_settings.hpp \
     contains.hpp \
     crc32.hpp \
+    crtp_base.hpp \
     cso_table.hpp \
     currency.hpp \
     custom_io_0.hpp \
