@@ -690,6 +690,8 @@ fardel_checksummed_files = \
 
 .PHONY: fardel
 fardel: install
+	@[ "$$LMI_TRIPLET" = "x86_64-w64-mingw32" ] \
+	  || ($(ECHO) "Fardels are useful only for msw." && false)
 	+@[ -d $(fardel_dir) ] || $(MKDIR) --parents $(fardel_dir)
 	@$(MAKE) --file=$(this_makefile) --directory=$(fardel_dir) wrap_fardel
 	@$(ECHO) "Created '$(fardel_name)' archive in '$(fardel_root)'."
