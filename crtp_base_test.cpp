@@ -25,21 +25,23 @@
 
 #include "test_tools.hpp"
 
+#include <type_traits>
+
+class X : private lmi::uncopyable<X> {};
+
+/// Test uncopyability (and unmovability) of lmi::uncopyable derivatives.
+///
+/// Unlike most lmi unit tests, the conditions tested are all
+/// ascertainable at compile time.
+
 void test_uncopyable()
 {
-// If lmi provided unit tests that deliberately fail to compile, then
-// this could be used:
-//
-// #include "uncopyable_lmi.hpp"
-//
-// class X : private lmi::uncopyable<X> {};
-//
-// int main()
-// {
-//     X x;
-//     X y(x); // Error: cannot copy.
-//     x = y;  // Error: cannot assign.
-// }
+    static_assert( std::is_default_constructible_v <X>);
+    static_assert( std::is_destructible_v          <X>);
+    static_assert(!std::is_copy_constructible_v    <X>);
+    static_assert(!std::is_move_constructible_v    <X>);
+    static_assert(!std::is_copy_assignable_v       <X>);
+    static_assert(!std::is_move_assignable_v       <X>);
 }
 
 int test_main(int, char*[])
