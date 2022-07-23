@@ -529,9 +529,10 @@ lmi_msw_res.o: lmi.ico
 excluded_data_files :=
 
 data_files := \
-  $(wildcard $(addprefix $(srcdir)/,*.ico *.png *.xml *.xrc *.xsd *.xsl)) \
-
-data_files := $(filter-out $(excluded_data_files), $(data_files))
+  $(filter-out \
+               $(addprefix $(srcdir)/,$(excluded_data_files)), \
+    $(wildcard $(addprefix $(srcdir)/,*.ico *.png *.xml *.xrc *.xsd *.xsl)) \
+   )
 
 help_files := \
   $(wildcard $(addprefix $(srcdir)/,*.html)) \
