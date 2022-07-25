@@ -1159,6 +1159,7 @@ void CensusView::update_class_names()
         {
         all_class_names.push_back(i["EmployeeClass"].str());
         }
+    std::sort(all_class_names.begin(), all_class_names.end());
 
     std::vector<std::string> unique_class_names;
 
@@ -1166,7 +1167,6 @@ void CensusView::update_class_names()
         (unique_class_names
         ,unique_class_names.begin()
         );
-    std::sort(all_class_names.begin(), all_class_names.end());
     std::unique_copy(all_class_names.begin(), all_class_names.end(), iin);
 
     // Rebuild vector of class parameters so that it contains
