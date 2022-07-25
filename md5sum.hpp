@@ -47,7 +47,7 @@ enum class md5_file_mode
 
 struct md5sum_for_file
 {
-    md5sum_for_file(fs::path&& path, std::string&& sum, md5_file_mode mode)
+    md5sum_for_file(fs::path&& path, std::string&& sum, md5_file_mode mode) noexcept
         :filename {std::move(path)}
         ,md5sum   {std::move(sum)}
         ,file_mode{mode}
