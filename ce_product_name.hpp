@@ -52,7 +52,7 @@
 /// possible without adjusting the base class's 'allowed_' vector and
 /// perhaps changing the way ordinal() works?
 
-class LMI_SO ce_product_name
+class LMI_SO ce_product_name final
     :public mc_enum_base
 {
   public:
@@ -77,6 +77,8 @@ class LMI_SO ce_product_name
     std::string value() const;
 
   private:
+    void concrete_if_not_pure() override {}
+
     // datum_base required implementation.
     std::istream& read (std::istream&) override;
     std::ostream& write(std::ostream&) const override;

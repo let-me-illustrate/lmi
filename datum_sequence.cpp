@@ -25,17 +25,7 @@
 
 #include "assert_lmi.hpp"
 
-/// Default constructor.
-///
-/// Throws if insane.
-
-sequence_base::sequence_base()
-{
-}
-
 /// Construct from string.
-///
-/// Throws if insane.
 
 sequence_base::sequence_base(std::string const& s)
     :datum_string_base{s}

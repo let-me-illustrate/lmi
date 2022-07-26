@@ -24,6 +24,7 @@
 
 #include "config.hpp"
 
+#include "crtp_base.hpp"                // abstract_base
 #include "so_attributes.hpp"
 
 #include <iosfwd>
@@ -33,7 +34,7 @@
 /// Special member functions are protected simply because no need has
 /// arisen for them to be public.
 
-class LMI_SO datum_base
+class LMI_SO datum_base : private lmi::abstract_base<datum_base>
 {
   public:
     void enable(bool);
@@ -41,14 +42,6 @@ class LMI_SO datum_base
 
     virtual std::istream& read (std::istream&)       = 0;
     virtual std::ostream& write(std::ostream&) const = 0;
-
-  protected:
-    datum_base() = default;
-    datum_base(datum_base const&) = default;
-    datum_base(datum_base&&) = default;
-    datum_base& operator=(datum_base const&) = default;
-    datum_base& operator=(datum_base&&) = default;
-    virtual ~datum_base() = default;
 
   private:
     bool enabled_ {true};

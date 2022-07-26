@@ -37,12 +37,6 @@ class datum_string_base
     datum_string_base() = default;
     explicit datum_string_base(std::string const&);
 
-    datum_string_base(datum_string_base const&) = default;
-    datum_string_base(datum_string_base&&) = default;
-    datum_string_base& operator=(datum_string_base const&) = default;
-    datum_string_base& operator=(datum_string_base&&) = default;
-    ~datum_string_base() override = default;
-
     datum_string_base& operator=(std::string const&);
 
     std::string const& value() const;
@@ -64,13 +58,10 @@ class datum_string final
     datum_string() = default;
     explicit datum_string(std::string const& s) : datum_string_base{s} {}
 
-    datum_string(datum_string const&) = default;
-    datum_string(datum_string&&) = default;
-    datum_string& operator=(datum_string const&) = default;
-    datum_string& operator=(datum_string&&) = default;
-    ~datum_string() override = default;
-
     datum_string& operator=(std::string const&);
+
+  private:
+    void concrete_if_not_pure() override {}
 };
 
 bool operator==(datum_string const&, datum_string const&);

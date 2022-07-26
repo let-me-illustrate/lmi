@@ -132,6 +132,8 @@ class mc_enum final
     static char const* const* c();
     static std::vector<std::string> const& s();
 
+    void concrete_if_not_pure() override {}
+
     // datum_base required implementation.
     std::istream& read (std::istream&) override;
     std::ostream& write(std::ostream&) const override;

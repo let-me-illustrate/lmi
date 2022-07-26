@@ -32,12 +32,6 @@ class datum_boolean final
   public:
     explicit datum_boolean(bool = true);
 
-    datum_boolean(datum_boolean const&) = default;
-    datum_boolean(datum_boolean&&) = default;
-    datum_boolean& operator=(datum_boolean const&) = default;
-    datum_boolean& operator=(datum_boolean&&) = default;
-    ~datum_boolean() override = default;
-
     datum_boolean& operator=(bool);
 
     bool value() const;
@@ -47,6 +41,8 @@ class datum_boolean final
     std::ostream& write(std::ostream&) const override;
 
   private:
+    void concrete_if_not_pure() override {}
+
     bool value_;
 };
 

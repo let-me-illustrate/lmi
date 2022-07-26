@@ -65,14 +65,8 @@ class sequence_base
     virtual std::map<std::string,std::string> const allowed_keywords() const;
 
   protected:
-    sequence_base();
+    sequence_base() = default;
     explicit sequence_base(std::string const&);
-
-    sequence_base(sequence_base const&) = default;
-    sequence_base(sequence_base&&) = default;
-    sequence_base& operator=(sequence_base const&) = default;
-    sequence_base& operator=(sequence_base&&) = default;
-    ~sequence_base() override = default;
 
     sequence_base& operator=(std::string const&);
 
@@ -109,6 +103,9 @@ class numeric_sequence final
     bool numeric_values_are_allowable() const override {return true;}
     bool keyword_values_are_allowable() const override {return false;}
     std::map<std::string,std::string> const allowed_keywords() const override;
+
+  private:
+    void concrete_if_not_pure() override {}
 };
 
 bool operator==(numeric_sequence const&, numeric_sequence const&);
@@ -139,6 +136,9 @@ class payment_sequence final
     bool numeric_values_are_allowable() const override {return true;}
     bool keyword_values_are_allowable() const override {return true;}
     std::map<std::string,std::string> const allowed_keywords() const override;
+
+  private:
+    void concrete_if_not_pure() override {}
 };
 
 bool operator==(payment_sequence const&, payment_sequence const&);
@@ -170,6 +170,9 @@ class mode_sequence final
     bool keyword_values_are_allowable() const override {return true;}
     std::string const default_keyword() const override;
     std::map<std::string,std::string> const allowed_keywords() const override;
+
+  private:
+    void concrete_if_not_pure() override {}
 };
 
 bool operator==(mode_sequence const&, mode_sequence const&);
@@ -200,6 +203,9 @@ class specamt_sequence final
     bool numeric_values_are_allowable() const override {return true;}
     bool keyword_values_are_allowable() const override {return true;}
     std::map<std::string,std::string> const allowed_keywords() const override;
+
+  private:
+    void concrete_if_not_pure() override {}
 };
 
 bool operator==(specamt_sequence const&, specamt_sequence const&);
@@ -231,6 +237,9 @@ class dbo_sequence final
     bool keyword_values_are_allowable() const override {return true;}
     std::string const default_keyword() const override;
     std::map<std::string,std::string> const allowed_keywords() const override;
+
+  private:
+    void concrete_if_not_pure() override {}
 };
 
 bool operator==(dbo_sequence const&, dbo_sequence const&);

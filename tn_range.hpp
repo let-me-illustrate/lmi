@@ -241,12 +241,6 @@ class tn_range final
     explicit tn_range(Number);
     explicit tn_range(std::string const&);
 
-    tn_range(tn_range const&) = default;
-    tn_range(tn_range&&) = default;
-    tn_range& operator=(tn_range const&) = default;
-    tn_range& operator=(tn_range&&) = default;
-    ~tn_range() override = default;
-
     tn_range& operator=(Number);
     tn_range& operator=(std::string const&);
 
@@ -272,6 +266,8 @@ class tn_range final
     Number curb(Number) const;
     std::string format_limits_for_error_message() const;
     bool is_valid(Number) const;
+
+    void concrete_if_not_pure() override {}
 
     // datum_base required implementation.
     std::istream& read (std::istream&) override;

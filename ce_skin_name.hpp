@@ -42,7 +42,7 @@
 /// to end users, but skin names are more esoteric and it is less
 /// confusing to show them as file names rather than apparent phrases.
 
-class ce_skin_name
+class ce_skin_name final
     :public mc_enum_base
 {
   public:
@@ -67,6 +67,8 @@ class ce_skin_name
     std::string value() const;
 
   private:
+    void concrete_if_not_pure() override {}
+
     // datum_base required implementation.
     std::istream& read (std::istream&) override;
     std::ostream& write(std::ostream&) const override;
