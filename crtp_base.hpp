@@ -119,6 +119,84 @@ class uncopyable
         }
 };
 
+/// Root class for a polymorphic hierarchy
+///
+/// A polymorphic hierarchy's root class generally has a virtual dtor.
+/// Declaring a dtor inhibits implicit declaration of certain special
+/// member functions (move functions are non-declared; copy functions
+/// are declared in C++20, but that behavior is deprecated), so the
+/// root class must declare them explicitly if they are wanted (as is
+/// most often the case). Deriving from class polymorphic_base and
+/// relying on the Rule of Zero is preferable to copying and pasting
+/// these six declarations into every class.
+///
+/// CRTP rationale: same as class uncopyable.
+
+template<typename T>
+class polymorphic_base
+{
+  protected:
+    polymorphic_base()                                   = default;
+    virtual ~polymorphic_base()                          = default;
+    polymorphic_base(polymorphic_base const&)            = default;
+    polymorphic_base(polymorphic_base&&)                 = default;
+    polymorphic_base& operator=(polymorphic_base const&) = default;
+    polymorphic_base& operator=(polymorphic_base&&)      = default;
+};
+
+// This gcc warning appears to be invalid: class abstract_base has
+// (public) implicitly-declared special member functions.
+#if defined __GNUC__
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wctor-dtor-privacy"
+#endif // defined __GNUC__
+
+/// Root class for an abstract-xor-final hierarchy
+///
+/// "Make every class in a polymorphic hierarchy abstract or final" is
+/// a reasonable guideline, which this class is intended to support.
+/// To be abstract, it must have at least one pure virtual function.
+/// It is often recommended to make the dtor pure, especially if no
+/// other function is an obvious candidate. Instead, this class uses
+/// concrete_if_not_pure() for that purpose. Rationale:
+///   - First and foremost, if the dtor is the only pure function,
+///     then derived classes are concrete by default. Making non-leaf
+///     derived classes abstract by repeatedly declaring each one's
+///     dtor pure requires extra work, which is too easily overlooked;
+///     and neither gcc-11 nor clang-13 offers a warning option that
+///     identifies overlooked cases. But using concrete_if_not_pure()
+///     instead of a pure dtor makes derived classes both polymorphic
+///     and abstract by default.
+///   - Second, because a pure-specifier cannot be combined with a
+///     default definition on the same line, a pure dtor requires an
+///     out-of-line definition--omission of which is an error that
+///     compilers diagnose, so this poses no danger, but it does
+///     increase verbosity in each non-leaf class.
+/// This approach does require defining concrete_if_not_pure() in each
+/// leaf class, but compilers enforce constructibility for classes
+/// that are actually instantiated, so there's no risk if this is
+/// overlooked. Adding that one line is a reasonable tradeoff for
+/// eliding several lines of boilerplate thanks to the Rule of Zero.
+///
+/// Unfortunately, the "final" keyword must be typed manually in order
+/// to complete the "abstract or final" paradigm. Code such as
+///   static_assert(std::is_final_v<T>);
+/// could be pasted into the concrete_if_not_pure() function body to
+/// ensure a compiler warning if desired.
+///
+/// CRTP rationale: same as class uncopyable.
+
+template<typename T>
+class abstract_base : private polymorphic_base<T>
+{
+  private:
+    virtual void concrete_if_not_pure() = 0;
+};
+
+#if defined __GNUC__
+#   pragma GCC diagnostic pop
+#endif // defined __GNUC__
+
 } // namespace lmi
 
 #endif // crtp_base_hpp
