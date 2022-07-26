@@ -233,6 +233,7 @@ bourn_cast_test.o: gcc_common_extra_warnings += \
 
 $(cgicc_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
+  -Wno-deprecated-declarations \
   -Wno-zero-as-null-pointer-constant \
 
 wno_sign_conv_objects := \
