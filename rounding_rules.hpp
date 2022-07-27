@@ -47,12 +47,6 @@ class LMI_SO rounding_parameters final
         ,std::string const& gloss = std::string()
         );
 
-    rounding_parameters(rounding_parameters const&) = default;
-    rounding_parameters(rounding_parameters&&) = default;
-    rounding_parameters& operator=(rounding_parameters const&) = default;
-    rounding_parameters& operator=(rounding_parameters&&) = default;
-    ~rounding_parameters() = default;
-
     bool operator==(rounding_parameters const&) const;
 
     int                       decimals() const;

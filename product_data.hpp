@@ -49,12 +49,6 @@ class glossed_string final
         ,std::string const& gloss = std::string()
         );
 
-    glossed_string(glossed_string const&) = default;
-    glossed_string(glossed_string&&) = default;
-    glossed_string& operator=(glossed_string const&) = default;
-    glossed_string& operator=(glossed_string&&) = default;
-    ~glossed_string() = default;
-
     glossed_string& operator=(std::string const&);
 
     bool operator==(glossed_string const&) const;
@@ -63,8 +57,8 @@ class glossed_string final
     std::string const& gloss() const;
 
   private:
-    std::string datum_;
-    std::string gloss_;
+    std::string datum_ {};
+    std::string gloss_ {};
 };
 
 class product_data;

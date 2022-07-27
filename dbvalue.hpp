@@ -76,12 +76,6 @@ class LMI_SO database_entity final
         ,std::string const& gloss = std::string()
         );
 
-    database_entity(database_entity const&) = default;
-    database_entity(database_entity&&) = default;
-    database_entity& operator=(database_entity const&) = default;
-    database_entity& operator=(database_entity&&) = default;
-    ~database_entity() = default;
-
     bool operator==(database_entity const&) const;
 
     void reshape(std::vector<int> const& dims);

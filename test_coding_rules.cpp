@@ -1167,14 +1167,6 @@ void enforce_taboos(file const& f)
 class statistics
 {
   public:
-    statistics() = default;
-
-    statistics(statistics const&) = default;
-    statistics(statistics&&) = default;
-    statistics& operator=(statistics const&) = default;
-    statistics& operator=(statistics&&) = default;
-    ~statistics() = default;
-
     statistics& operator+=(statistics const&);
 
     static statistics analyze_file(file const&);

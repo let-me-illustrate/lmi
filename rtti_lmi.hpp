@@ -125,12 +125,6 @@ class TypeInfo final
   public:
     TypeInfo(std::type_info const& z): ti_(&z) {}
 
-    TypeInfo(TypeInfo const&) = default;
-    TypeInfo(TypeInfo&&) = default;
-    TypeInfo& operator=(TypeInfo const&) = default;
-    TypeInfo& operator=(TypeInfo&&) = default;
-    ~TypeInfo() = default;
-
     bool operator==(TypeInfo const& z) const {return *z.ti_ == *ti_;}
     bool  operator<(TypeInfo const& z) const {return ti_->before(*z.ti_);}
 

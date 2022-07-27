@@ -46,12 +46,6 @@ class LMI_SO FundInfo final
         ,std::string const& gloss = std::string()
         );
 
-    FundInfo(FundInfo const&) = default;
-    FundInfo(FundInfo&&) = default;
-    FundInfo& operator=(FundInfo const&) = default;
-    FundInfo& operator=(FundInfo&&) = default;
-    ~FundInfo() = default;
-
     double ScalarIMF() const;
     std::string const& ShortName() const;
     std::string const& LongName() const;
@@ -69,7 +63,6 @@ class LMI_SO FundData final
 {
   public:
     explicit FundData(fs::path const& a_Filename);
-    ~FundData() = default;
 
     static void write_funds_files();
     static void write_proprietary_funds_files();

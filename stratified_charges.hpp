@@ -76,12 +76,6 @@ class LMI_SO stratified_entity final
         ,std::string const&         gloss = std::string()
         );
 
-    stratified_entity(stratified_entity const&) = default;
-    stratified_entity(stratified_entity&&) = default;
-    stratified_entity& operator=(stratified_entity const&) = default;
-    stratified_entity& operator=(stratified_entity&&) = default;
-    ~stratified_entity() = default;
-
     bool operator==(stratified_entity const&) const;
 
     void read (xml::element const& node);
@@ -94,9 +88,9 @@ class LMI_SO stratified_entity final
     std::vector<double> const& values() const;
     std::string const&         gloss () const;
 
-    std::vector<double> limits_;
-    std::vector<double> values_;
-    std::string         gloss_;
+    std::vector<double> limits_ {};
+    std::vector<double> values_ {};
+    std::string         gloss_  {};
 };
 
 /// Rates that depend upon the amount they're multiplied by.

@@ -46,12 +46,6 @@ class LMI_SO gpt_server final
   public:
     explicit gpt_server(mcenum_emission);
 
-    gpt_server(gpt_server const&) = default;
-    gpt_server(gpt_server&&) = default;
-    gpt_server& operator=(gpt_server const&) = default;
-    gpt_server& operator=(gpt_server&&) = default;
-    ~gpt_server() = default;
-
     bool operator()(fs::path const&);
     bool operator()(fs::path const&, gpt_input const&);
 
