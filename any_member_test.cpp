@@ -23,6 +23,7 @@
 
 #include "any_member.hpp"
 
+#include "crtp_base.hpp"                // abstract_base
 #include "test_tools.hpp"
 
 #include <cmath>                        // exp()
@@ -32,17 +33,11 @@
 #include <ostream>
 #include <sstream>
 
-struct base_datum
+struct base_datum : private lmi::abstract_base<base_datum>
 {
     base_datum() :sane(7) {}
 
-    base_datum(base_datum const&) = default;
-    base_datum(base_datum&&) = default;
-    base_datum& operator=(base_datum const&) = default;
-    base_datum& operator=(base_datum&&) = default;
-    virtual ~base_datum() = default;    // Just to make it polymorphic.
-
-    virtual int virtual_function() = 0; // Just to make it abstract.
+    virtual int virtual_function() = 0;
     bool base_function()
         {
         std::cout << "base_datum::base_function() called " << sane << std::endl;
@@ -63,12 +58,15 @@ std::ostream& operator<<(std::ostream& os, base_datum const& z)
     return os << z.sane << '\n';
 }
 
-struct derived_datum
+struct derived_datum final
     :public base_datum
 {
     bool operator==(derived_datum const& z) const
         {return 7 == sane && 7 == z.sane;}
     int virtual_function() override {return 1729;}
+
+  private:
+    void concrete_if_not_pure() override {}
 };
 
 // Unused stub.

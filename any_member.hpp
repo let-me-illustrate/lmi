@@ -265,6 +265,8 @@ class any_member final
     template<typename ExactMemberType>
     ExactMemberType* exact_cast();
 
+    void concrete_if_not_pure() override {}
+
     // any_entity required implementation.
     any_member& assign(std::string const&) override;
 
