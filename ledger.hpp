@@ -77,7 +77,7 @@ class LMI_SO Ledger final
     Ledger(Ledger&&) = default;
     Ledger& operator=(Ledger const&) = default;
     Ledger& operator=(Ledger&&) = default;
-    virtual ~Ledger() = default;
+    ~Ledger() = default;
 
     void ZeroInforceAfterLapse();
     Ledger& PlusEq(Ledger const& a_Addend);
