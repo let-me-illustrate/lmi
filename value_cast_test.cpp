@@ -35,12 +35,14 @@
 #include <istream>
 #include <limits>
 #include <ostream>
+#include <type_traits>
 
 class NotDefaultConstructible
 {
   public:
     NotDefaultConstructible(std::istream const&) {}
 };
+static_assert(!std::is_default_constructible_v<NotDefaultConstructible>);
 
 struct X {std::string s;};
 std::istream& operator>>(std::istream& is, X&       x) {is >> x.s; return is;}
