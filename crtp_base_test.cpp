@@ -46,9 +46,10 @@ void test_uncopyable()
 
 // Rule of Zero: all special members are defaulted.
 
+class A  : private lmi::polymorphic_base<A> {};
 class B0 : private lmi::abstract_base<B0> {};
 class B1 : private lmi::abstract_base<B1> {};
-class C : private B0, private B1 {};
+class C : private A, private B0, private B1 {};
 
 #if defined __GNUC__
 #   pragma GCC diagnostic push
@@ -62,6 +63,27 @@ class D final : private C
 #if defined __GNUC__
 #   pragma GCC diagnostic pop
 #endif // defined __GNUC__
+
+/// Test derivation from class polymorphic_base.
+
+void test_polymorphic_base()
+{
+    static_assert(!std::is_abstract_v <A>);
+    static_assert(!std::is_final_v    <A>);
+
+    static_assert( std::is_default_constructible_v <A>);
+    static_assert( std::is_destructible_v          <A>);
+    static_assert( std::is_copy_constructible_v    <A>);
+    static_assert( std::is_move_constructible_v    <A>);
+    static_assert( std::is_copy_assignable_v       <A>);
+    static_assert( std::is_move_assignable_v       <A>);
+
+    A da;                 // A()
+    A db(da);             // A(A const&)
+    db = da;              // A& operator=(A const&)
+    A dd {std::move(da)}; // A(A&&)
+    db = std::move(da);   // A& operator=(A&&)
+}
 
 /// Test abstract-xor-final hierarchy.
 
@@ -104,6 +126,7 @@ void test_abstract_or_final()
 int test_main(int, char*[])
 {
     test_uncopyable();
+    test_polymorphic_base();
     test_abstract_or_final();
     return 0;
 }
