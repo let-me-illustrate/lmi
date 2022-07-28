@@ -68,8 +68,9 @@ class D final : private C
 
 void test_polymorphic_base()
 {
-    static_assert(!std::is_abstract_v <A>);
-    static_assert(!std::is_final_v    <A>);
+    static_assert( std::is_polymorphic_v           <A>);
+    static_assert(!std::is_abstract_v              <A>);
+    static_assert(!std::is_final_v                 <A>);
 
     static_assert( std::is_default_constructible_v <A>);
     static_assert( std::is_destructible_v          <A>);
@@ -89,15 +90,21 @@ void test_polymorphic_base()
 
 void test_abstract_or_final()
 {
-    static_assert( std::is_abstract_v <B0>);
-    static_assert( std::is_abstract_v <B1>);
-    static_assert( std::is_abstract_v <C>); // abstract by inheritance
-    static_assert(!std::is_abstract_v <D>);
+    static_assert( std::is_polymorphic_v           <B0>);
+    static_assert( std::is_polymorphic_v           <B1>);
+    static_assert( std::is_polymorphic_v           <C>);
+    static_assert( std::is_polymorphic_v           <D>);
 
-    static_assert(!std::is_final_v    <B0>);
-    static_assert(!std::is_final_v    <B1>);
-    static_assert(!std::is_final_v    <C>);
-    static_assert( std::is_final_v    <D>);
+    static_assert( std::is_abstract_v              <B0>);
+    static_assert( std::is_abstract_v              <B1>);
+    // class C is abstract by inheritance:
+    static_assert( std::is_abstract_v              <C>);
+    static_assert(!std::is_abstract_v              <D>);
+
+    static_assert(!std::is_final_v                 <B0>);
+    static_assert(!std::is_final_v                 <B1>);
+    static_assert(!std::is_final_v                 <C>);
+    static_assert( std::is_final_v                 <D>);
 
     static_assert(!std::is_default_constructible_v <B0>);
     static_assert(!std::is_default_constructible_v <B1>);
