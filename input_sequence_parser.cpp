@@ -186,7 +186,7 @@ void SequenceParser::duration_scalar()
         {
         case e_duration:
             {
-            ; // Do nothing.
+            // Do nothing.
             }
             break;
         case e_attained_age:

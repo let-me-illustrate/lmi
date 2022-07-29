@@ -185,7 +185,7 @@ inline double binary64_midpoint(double d0, double d1)
         {d0 = std::copysign(d0, d1);}
     else if(0.0 == s1)
         {d1 = std::copysign(d1, d0);}
-    else {;} // Do nothing.
+    else {} // Do nothing.
 
     u_dbl_int_t u0;
     u_dbl_int_t u1;
@@ -569,7 +569,7 @@ root_type lmi_root
                 }
             else
                 {
-                ; // Do nothing.
+                // Do nothing.
                 }
             }
         if(sprauchling_limit < n_eval)

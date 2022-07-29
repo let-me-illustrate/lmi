@@ -136,7 +136,7 @@ std::string adjust_interest_rates
         }
     else
         {
-        ; // Do nothing.
+        // Do nothing.
         }
     return canonicalized_input_sequence(general_account_rate);
 }

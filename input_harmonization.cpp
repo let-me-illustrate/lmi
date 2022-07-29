@@ -882,7 +882,7 @@ void Input::set_solve_durations()
         {
         case mce_to_year:
             {
-            ; // Do nothing.
+            // Do nothing.
             }
             break;
         case mce_to_age:
@@ -906,7 +906,7 @@ void Input::set_solve_durations()
         {
         case mce_from_year:
             {
-            ; // Do nothing.
+            // Do nothing.
             }
             break;
         case mce_from_age:
@@ -930,7 +930,7 @@ void Input::set_solve_durations()
         {
         case mce_to_year:
             {
-            ; // Do nothing.
+            // Do nothing.
             }
             break;
         case mce_to_age:

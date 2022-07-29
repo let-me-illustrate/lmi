@@ -84,7 +84,7 @@ void concrete_system_command(std::string const& cmd_line)
     wxFrame const* f =
                                  wxTheApp
         ? dynamic_cast<wxFrame*>(wxTheApp->GetTopWindow())
-        : nullptr;
+        : nullptr
         ;
     bool const b = f && f->GetStatusBar();
     std::ostream null_output {nullptr};

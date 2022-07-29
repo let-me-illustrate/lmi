@@ -1813,7 +1813,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         }
     else
         {
-        ; // Do nothing: neither age nor DOB pasted.
+        // Do nothing: neither age nor DOB pasted.
         }
 
     cells.reserve(std::count(census_data.begin(), census_data.end(), '\n'));
@@ -1860,7 +1860,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
                 int z = value_cast<int>(values[j]);
                 if(jdn_min <= z && z <= jdn_max)
                     {
-                    ; // Do nothing: JDN is the default expectation.
+                    // Do nothing: JDN is the default expectation.
                     }
                 else if(ymd_min <= z && z <= ymd_max)
                     {

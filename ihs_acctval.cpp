@@ -1190,7 +1190,7 @@ void AccountValue::FinalizeYear()
     // that cannot cause the contract to lapse.
     if(Solving && C0 < surr_chg && LapseIgnoresSurrChg)
         {
-        ; // Do nothing.
+        // Do nothing.
         }
     else
         {

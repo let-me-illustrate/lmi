@@ -826,7 +826,7 @@ void sample_results()
         << "  double prec, expm1 and log1p (production)\n"
         << "  " << i_upper_n_over_n_from_i_naive<double,12>()(intrate)
         << "  double prec, pow\n"
-        << std::endl;
+        << std::endl
         ;
 
     fenv_initialize();

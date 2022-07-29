@@ -168,7 +168,7 @@ std::string getopt_test::test(int argc, char* argv[])
 
             case '?':
                 {
-                ; // Do nothing.
+                // Do nothing.
                 }
                 break;
 

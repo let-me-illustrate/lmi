@@ -38,7 +38,7 @@ bool volatile ensure_setup = set_alert_functions
 
 void status_alert(std::string const&)
 {
-    ; // Do nothing.
+    // Do nothing.
 }
 
 // With cgicc, the most natural way to treat any alert that must be

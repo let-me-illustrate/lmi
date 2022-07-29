@@ -328,7 +328,7 @@ std::string InputSequence::canonical_form() const
                 {
                 if(1 == i.end_duration - i.begin_duration)
                     {
-                    ; // Do nothing: leave 's' empty.
+                    // Do nothing: leave 's' empty.
                     }
                 else
                     {
@@ -377,7 +377,7 @@ std::string InputSequence::canonical_form() const
             }
         else
             {
-            ; // Do nothing.
+            // Do nothing.
             }
         }
     return oss.str();

@@ -441,7 +441,7 @@ void wx_table_generator::enroll_column(column_parameters const& z)
             break;
         case oe_elastic:
             {
-            ; // Do nothing: 'width' already initialized to zero.
+            // Do nothing: 'width' already initialized to zero.
             }
             break;
         }

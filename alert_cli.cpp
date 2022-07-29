@@ -66,7 +66,7 @@ goto ask;
 
 void status_alert(std::string const&)
 {
-    ; // Do nothing.
+    // Do nothing.
 }
 
 void warning_alert(std::string const& s)

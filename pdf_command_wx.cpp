@@ -402,7 +402,7 @@ class table_mixin
                 std::string output_value;
                 if(columns[j].variable_name.empty())
                     {
-                    ; // Separator column: use empty string.
+                    // Separator column: use empty string.
                     }
                 else
                     {

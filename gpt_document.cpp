@@ -52,7 +52,7 @@ bool gpt_document::OnCreate(wxString const& filename, long int flags)
 {
     if(wxDOC_NEW & flags)
         {
-        ; // Do nothing.
+        // Do nothing.
         }
     else
         {
