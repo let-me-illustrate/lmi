@@ -76,19 +76,23 @@
     << ", line " << __LINE__ << "]\n" \
     << std::flush                     \
 
-#define LMI_TEST(expr)              \
-    if(expr)                        \
-        {                           \
-        lmi_test::record_success(); \
-        }                           \
-    else                            \
-        {                           \
-        lmi_test::record_error();   \
-        lmi_test::error_stream()    \
-            << (expr)               \
-            << LMI_TEST_FLUSH       \
-            ;                       \
-        }                           \
+#define LMI_TEST(expr)                  \
+    do                                  \
+        {                               \
+        if(expr)                        \
+            {                           \
+            lmi_test::record_success(); \
+            }                           \
+        else                            \
+            {                           \
+            lmi_test::record_error();   \
+            lmi_test::error_stream()    \
+                << (expr)               \
+                << LMI_TEST_FLUSH       \
+                ;                       \
+            }                           \
+        }                               \
+    while(0)                            \
 
 // Relational macros require their arguments to be streamable.
 
@@ -98,17 +102,21 @@
 #define LMI_TEST_UNEQUAL(a,b) \
     LMI_TEST_RELATION(a,!=,b) \
 
-#define LMI_TEST_RELATION(a,op,b)                        \
-    if((a) op (b))                                       \
-        lmi_test::record_success();                      \
-    else                                                 \
-        {                                                \
-        lmi_test::record_error();                        \
-        lmi_test::error_stream()                         \
-            << "  '" << (a) << "' "#op" '" << (b) << "'" \
-            << LMI_TEST_FLUSH                            \
-            ;                                            \
-        }                                                \
+#define LMI_TEST_RELATION(a,op,b)                            \
+    do                                                       \
+        {                                                    \
+        if((a) op (b))                                       \
+            lmi_test::record_success();                      \
+        else                                                 \
+            {                                                \
+            lmi_test::record_error();                        \
+            lmi_test::error_stream()                         \
+                << "  '" << (a) << "' "#op" '" << (b) << "'" \
+                << LMI_TEST_FLUSH                            \
+                ;                                            \
+            }                                                \
+        }                                                    \
+    while(0)                                                 \
 
 namespace lmi_test
 {
@@ -152,72 +160,78 @@ bool whats_what(std::string const& observed, what_regex const& expected);
 ///
 /// Don't display a backtrace--it would be superfluous clutter here.
 
-#define LMI_TEST_THROW(expression,TYPE,WHAT)                  \
-    {                                                         \
-    scoped_unwind_toggler meaningless_name;                   \
-    try                                                       \
-        {                                                     \
-        expression;                                           \
-        lmi_test::error_stream()                              \
-            << "Expression '"                                 \
-            << #expression                                    \
-            << "' failed to throw expected exception '"       \
-            << #TYPE                                          \
-            << "'"                                            \
-            << LMI_TEST_FLUSH                                 \
-            ;                                                 \
-        lmi_test::record_error();                             \
-        }                                                     \
-    catch(std::exception const& e)                            \
-        {                                                     \
-        if(typeid(e) != typeid(TYPE))                         \
-            {                                                 \
-            lmi_test::error_stream()                          \
-                << "Caught exception of type\n    '"          \
-                << typeid(e).name()                           \
-                << "'\n  when type\n    '"                    \
-                << typeid(TYPE).name()                        \
-                << "'\n  was expected."                       \
-                << LMI_TEST_FLUSH                             \
-                ;                                             \
-            lmi_test::record_error();                         \
-            }                                                 \
-        else if(!lmi_test::whats_what((e.what()), (WHAT)))    \
-            {                                                 \
-            lmi_test::error_stream()                          \
-                << "Caught exception\n    '"                  \
-                << (e).what()                                 \
-                << "'\n  when\n    '"                         \
-                << (WHAT)                                     \
-                << "'\n  was expected."                       \
-                << LMI_TEST_FLUSH                             \
-                ;                                             \
-            lmi_test::record_error();                         \
-            }                                                 \
-        else                                                  \
-            {                                                 \
-            lmi_test::record_success();                       \
-            }                                                 \
-        }                                                     \
-    }                                                         \
+#define LMI_TEST_THROW(expression,TYPE,WHAT)                      \
+    do                                                            \
+        {                                                         \
+        scoped_unwind_toggler meaningless_name;                   \
+        try                                                       \
+            {                                                     \
+            expression;                                           \
+            lmi_test::error_stream()                              \
+                << "Expression '"                                 \
+                << #expression                                    \
+                << "' failed to throw expected exception '"       \
+                << #TYPE                                          \
+                << "'"                                            \
+                << LMI_TEST_FLUSH                                 \
+                ;                                                 \
+            lmi_test::record_error();                             \
+            }                                                     \
+        catch(std::exception const& e)                            \
+            {                                                     \
+            if(typeid(e) != typeid(TYPE))                         \
+                {                                                 \
+                lmi_test::error_stream()                          \
+                    << "Caught exception of type\n    '"          \
+                    << typeid(e).name()                           \
+                    << "'\n  when type\n    '"                    \
+                    << typeid(TYPE).name()                        \
+                    << "'\n  was expected."                       \
+                    << LMI_TEST_FLUSH                             \
+                    ;                                             \
+                lmi_test::record_error();                         \
+                }                                                 \
+            else if(!lmi_test::whats_what((e.what()), (WHAT)))    \
+                {                                                 \
+                lmi_test::error_stream()                          \
+                    << "Caught exception\n    '"                  \
+                    << (e).what()                                 \
+                    << "'\n  when\n    '"                         \
+                    << (WHAT)                                     \
+                    << "'\n  was expected."                       \
+                    << LMI_TEST_FLUSH                             \
+                    ;                                             \
+                lmi_test::record_error();                         \
+                }                                                 \
+            else                                                  \
+                {                                                 \
+                lmi_test::record_success();                       \
+                }                                                 \
+            }                                                     \
+        }                                                         \
+    while(0)                                                      \
 
-#define INVOKE_LMI_TEST(expr,file,line)     \
-    if(!(expr))                             \
-        {                                   \
-        lmi_test::record_error();           \
-        lmi_test::error_stream()            \
-            << lmi_test::error_prefix       \
-            << "test failed: "              \
-            << (expr)                       \
-            << "\n[invoked from "           \
-            << "file " << (file) << ", "    \
-            << "line: " << (line)           \
-            << "]"                          \
-            << LMI_TEST_FLUSH               \
-            ;                               \
-        }                                   \
-    else                                    \
-        lmi_test::record_success();         \
+#define INVOKE_LMI_TEST(expr,file,line)         \
+    do                                          \
+        {                                       \
+        if(!(expr))                             \
+            {                                   \
+            lmi_test::record_error();           \
+            lmi_test::error_stream()            \
+                << lmi_test::error_prefix       \
+                << "test failed: "              \
+                << (expr)                       \
+                << "\n[invoked from "           \
+                << "file " << (file) << ", "    \
+                << "line: " << (line)           \
+                << "]"                          \
+                << LMI_TEST_FLUSH               \
+                ;                               \
+            }                                   \
+        else                                    \
+            lmi_test::record_success();         \
+        }                                       \
+    while(0)                                    \
 
 #define INVOKE_LMI_TEST_EQUAL(a,b,file,line)   \
     INVOKE_LMI_TEST_RELATION(a,==,b,file,line) \
@@ -225,21 +239,25 @@ bool whats_what(std::string const& observed, what_regex const& expected);
 #define INVOKE_LMI_TEST_UNEQUAL(a,b,file,line) \
     INVOKE_LMI_TEST_RELATION(a,!=,b,file,line) \
 
-#define INVOKE_LMI_TEST_RELATION(a,op,b,file,line)       \
-    if((a) op (b))                                       \
-        lmi_test::record_success();                      \
-    else                                                 \
-        {                                                \
-        lmi_test::record_error();                        \
-        lmi_test::error_stream()                         \
-            << "  '" << (a) << "' "#op" '" << (b) << "'" \
-            << "\n[invoked from "                        \
-            << "file " << (file) << ", "                 \
-            << "line: " << (line)                        \
-            << "]"                                       \
-            << LMI_TEST_FLUSH                            \
-            ;                                            \
-        }                                                \
+#define INVOKE_LMI_TEST_RELATION(a,op,b,file,line)           \
+    do                                                       \
+        {                                                    \
+        if((a) op (b))                                       \
+            lmi_test::record_success();                      \
+        else                                                 \
+            {                                                \
+            lmi_test::record_error();                        \
+            lmi_test::error_stream()                         \
+                << "  '" << (a) << "' "#op" '" << (b) << "'" \
+                << "\n[invoked from "                        \
+                << "file " << (file) << ", "                 \
+                << "line: " << (line)                        \
+                << "]"                                       \
+                << LMI_TEST_FLUSH                            \
+                ;                                            \
+            }                                                \
+        }                                                    \
+    while(0)                                                 \
 
 // GWC changed namespace 'boost' to prevent any conflict with code in
 // a later version of boost.
