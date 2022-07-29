@@ -34,6 +34,7 @@ struct RttiLmiTest
 {
     class X {};
     static void TestTypeInfo();
+    static void test_particularized_type();
 };
 
 void RttiLmiTest::TestTypeInfo()
@@ -91,8 +92,41 @@ void RttiLmiTest::TestTypeInfo()
 //    std::cout << lmi::TypeId<int>() << std::endl;
 }
 
+namespace
+{
+// Shorter name for testing.
+//
+// C++20 generic lambdas can be written tersely:
+//   auto f = []<typename T>(){return lmi::particularized_type<T>();};
+// but must be called verbosely:
+//   f.template operator()<int const volatile&>();
+// which isn't as tidy an alias as "p_t".
+template<typename T>
+std::string p_t()
+{
+    return lmi::particularized_type<T>();
+}
+} // Unnamed namespace.
+
+void RttiLmiTest::test_particularized_type()
+{
+    LMI_TEST_EQUAL("int const volatile"   , p_t<int const volatile  >());
+    LMI_TEST_EQUAL("int volatile"         , p_t<int volatile        >());
+    LMI_TEST_EQUAL("int const"            , p_t<int const           >());
+    LMI_TEST_EQUAL("int"                  , p_t<int                 >());
+    LMI_TEST_EQUAL("int const volatile&"  , p_t<int const volatile& >());
+    LMI_TEST_EQUAL("int volatile&"        , p_t<int volatile&       >());
+    LMI_TEST_EQUAL("int const&"           , p_t<int const&          >());
+    LMI_TEST_EQUAL("int&"                 , p_t<int&                >());
+    LMI_TEST_EQUAL("int const volatile&&" , p_t<int const volatile&&>());
+    LMI_TEST_EQUAL("int volatile&&"       , p_t<int volatile&&      >());
+    LMI_TEST_EQUAL("int const&&"          , p_t<int const&&         >());
+    LMI_TEST_EQUAL("int&&"                , p_t<int&&               >());
+}
+
 int test_main(int, char*[])
 {
     RttiLmiTest::TestTypeInfo();
+    RttiLmiTest::test_particularized_type();
     return 0;
 }

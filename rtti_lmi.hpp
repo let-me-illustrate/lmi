@@ -31,6 +31,7 @@
 
 #include <ostream>
 #include <string>
+#include <type_traits>
 #include <typeinfo>
 
 class RttiLmiTest;
@@ -116,7 +117,8 @@ namespace lmi
 ///   lmi::TypeInfo(&ti); // Would refer to typeid(lmi::TypeInfo*).
 /// Those problems are avoided by requiring the idiomatic usage
 ///   lmi::TypeInfo(typeid(X));
-/// and resisting the temptation to add syntactic sugar.
+/// and resisting the temptation to add syntactic sugar here. Use
+/// particularized_type<>() when such information is desired.
 
 class TypeInfo final
 {
@@ -137,6 +139,26 @@ class TypeInfo final
 inline std::ostream& operator<<(std::ostream& os, TypeInfo const& z)
 {
     return os << z.Name();
+}
+
+/// Underlying 'typeid' type, with cv and reference garniture.
+///
+/// This could be extended, e.g., to handle (multi-level) pointers,
+/// as needs arise.
+
+template<typename T>
+std::string particularized_type()
+{
+    std::string s {lmi::TypeInfo(typeid(T)).Name()};
+    using U = std::remove_reference_t<T>;
+    s += std::is_const_v   <U> ? " const"    : "";
+    s += std::is_volatile_v<U> ? " volatile" : "";
+    s +=
+          std::is_lvalue_reference_v<T> ? "&"
+        : std::is_rvalue_reference_v<T> ? "&&"
+        :                                 ""
+        ;
+    return s;
 }
 
 } // namespace lmi
