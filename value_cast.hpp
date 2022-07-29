@@ -237,7 +237,7 @@ To value_cast(From const& from)
 }
 
 template<typename To, typename From>
-To value_cast(From const& from, To)
+To value_cast(From const& from, To const&)
 {
     return value_cast<To,From>(from);
 }
