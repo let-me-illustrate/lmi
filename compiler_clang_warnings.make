@@ -57,7 +57,6 @@ clang_c_warnings := \
 # -Wdocumentation-unknown-command: warns about comments
 # -Wdouble-promotion: not actually useful
 # -Wexit-time-destructors: for analysis only--all positives are false
-# -Wextra-semi-stmt: all positives are false
 # -Wfloat-conversion: false positives for double-to-bool conversion
 # -Wfloat-equal: too many false positives, e.g., 0.0 == X
 # -Wglobal-constructors: for analysis only--all positives are false
@@ -86,7 +85,6 @@ clang_cxx_warnings := \
   -Wno-documentation-unknown-command \
   -Wno-double-promotion \
   -Wno-exit-time-destructors \
-  -Wno-extra-semi-stmt \
   -Wno-float-conversion \
   -Wno-float-equal \
   -Wno-global-constructors \
