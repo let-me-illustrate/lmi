@@ -50,7 +50,7 @@ class census_benchmark
         wxTEST_DIALOG
             (wxYield()
             ,wxExpectModal<wxFileDialog>(wxString::FromUTF8(path.string()))
-            );
+            )//;
         wxYield();
         }
 

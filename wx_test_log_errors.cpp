@@ -42,5 +42,5 @@ LMI_WX_TEST_CASE(log_error)
         (wxLog::FlushActive()
         ,wxExpectModal<wxMessageDialog>(wxOK).
             Describe("warning about being unable to determine file format")
-        );
+        )//;
 }

@@ -97,7 +97,7 @@ class expect_preferences_dialog_base
         wxUIActionSimulator ui;
         ui.Char('f', wxMOD_CONTROL);    // "File|Preferences"
 
-        wxTEST_DIALOG(wxYield(), *this);
+        wxTEST_DIALOG(wxYield(), *this)//;
         }
 
     int OnInvoked(MvcController* dialog) const override

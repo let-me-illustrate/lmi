@@ -246,7 +246,7 @@ LMI_WX_TEST_CASE(about_dialog_version)
             wxTEST_DIALOG
                 (wxYield()
                 ,expect_license_dialog()
-                );
+                )//;
 
             return wxID_OK;
             }
@@ -263,5 +263,5 @@ LMI_WX_TEST_CASE(about_dialog_version)
     wxTEST_DIALOG
         (wxYield()
         ,expect_about_dialog()
-        );
+        )//;
 }

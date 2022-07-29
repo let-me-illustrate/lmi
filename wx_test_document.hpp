@@ -78,7 +78,7 @@ class wx_test_document_base
                 wxTEST_DIALOG
                     (wxYield()
                     ,wxExpectModal<wxMessageDialog>(wxNO).Optional()
-                    );
+                    )//;
                 }
             else
                 {
@@ -108,7 +108,7 @@ class wx_test_document_base
         wxTEST_DIALOG(wxYield()
                      ,wxExpectModal<wxMessageDialog>(wxNO).
                         Describe("message box confirming closing modified file")
-                     );
+                     )//;
     }
 
   protected:
@@ -156,7 +156,7 @@ class wx_test_existing_illustration
             ,wxExpectModal<wxFileDialog>(file_ill)
             ,wxExpectDismissableModal<MvcController>(wxID_OK)
                 .Describe("illustration properties for " + file_ill)
-            );
+            )//;
 
         set_opened();
     }
