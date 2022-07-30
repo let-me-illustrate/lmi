@@ -154,7 +154,7 @@ LMI_WX_TEST_CASE(input_validation)
             wxTEST_DIALOG
                 (wxYield()
                 ,test_coi_multiplier_dialog(td.value)
-                )//;
+                );
 
             // A special case: when using one of the special command line back
             // door options, the test for the minimal COI multiplier value is

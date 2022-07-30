@@ -149,7 +149,7 @@ LMI_WX_TEST_CASE(default_update)
     wxTEST_DIALOG
         (wxYield()
         ,change_dob_in_defaults_dialog()
-        )//;
+        );
 
     // Save the default document.
     ui.Char('s', wxMOD_CONTROL); // "File|Save"

@@ -26,6 +26,11 @@
 
 #include "path.hpp"
 
+#if defined __clang__
+#   pragma clang diagnostic ignored "-Wextra-semi"
+#   pragma clang diagnostic ignored "-Wextra-semi-stmt"
+#endif // defined __clang__
+
 /// Base class for the test case objects.
 ///
 /// It is only supposed to be used by LMI_WX_TEST_CASE macro and not directly.

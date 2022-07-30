@@ -152,7 +152,7 @@ void init_test_census
         ,change_corp_in_case_defaults_dialog(corp_name)
         ,wxExpectModal<wxMessageDialog>(wxYES).
             Describe("message box asking whether to apply changes to all cells")
-        )//;
+        );
 
     // Change the cell.
     struct change_name_in_cell_dialog
@@ -189,7 +189,7 @@ void init_test_census
     wxTEST_DIALOG
         (wxYield()
         ,change_name_in_cell_dialog(insured_name)
-        )//;
+        );
 
     ui.Char('+', wxMOD_CONTROL); // "Census|Add cell"
     wxYield();
@@ -532,7 +532,7 @@ LMI_WX_TEST_CASE(validate_output_census)
         (wxYield()
         ,wxExpectModal<wxFileDialog>(census_file_name).
             Describe("census save file dialog")
-        )//;
+        );
 
     LMI_ASSERT(output_cns.exists());
 
@@ -574,7 +574,7 @@ LMI_WX_TEST_CASE(validate_output_mec)
         (wxYield()
         ,wxExpectDismissableModal<MvcController>(wxID_OK).
             Describe("new MEC parameters dialog")
-        )//;
+        );
 
     ui.Char('l', wxMOD_CONTROL);    // "File|Close"
     wxYield();

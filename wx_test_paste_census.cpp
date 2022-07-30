@@ -318,7 +318,7 @@ LMI_WX_TEST_CASE(paste_census)
         ,change_gender_in_class_defaults_dialog()
         ,wxExpectModal<wxMessageDialog>(wxYES).
             Describe("message box asking whether to apply gender changes to all")
-        )//;
+        );
 
     // Check that all columns, including the "Gender" one, are still shown.
     check_grid_columns
@@ -384,7 +384,7 @@ LMI_WX_TEST_CASE(paste_census)
         ,change_class_in_case_defaults_dialog()
         ,wxExpectModal<wxMessageDialog>(wxYES).
             Describe("message box asking whether to apply class changes to all")
-        )//;
+        );
 
     // Check that we still have the same cells but that now the underwriting
     // class column has disappeared as its value has been fixed.
@@ -407,7 +407,7 @@ LMI_WX_TEST_CASE(paste_census)
         (wxYield()
         ,wxExpectModal<wxFileDialog>(census_file_name).
             Describe("census save file dialog")
-        )//;
+        );
 
     LMI_ASSERT(output_cns.exists());
 

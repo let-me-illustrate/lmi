@@ -139,7 +139,7 @@ LMI_WX_TEST_CASE(input_sequences)
                 (wxYield()
                 ,wxExpectDismissableModal<wxDialog>(wxOK).
                     Describe("sequence entry dialog" + sequence_describe())
-                )//;
+                );
 
             return wxID_OK;
             }
@@ -165,7 +165,7 @@ LMI_WX_TEST_CASE(input_sequences)
     for(auto const& test : test_cases)
         {
         ui.Char('e', wxMOD_CONTROL); // "Illustration|Edit Cell"
-        wxTEST_DIALOG(wxYield(), test_sequence_dialog(test))//;
+        wxTEST_DIALOG(wxYield(), test_sequence_dialog(test));
         }
 
     ill.close_discard_changes();

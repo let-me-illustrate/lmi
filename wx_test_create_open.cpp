@@ -64,7 +64,7 @@ void do_test_create_open
             (wxYield()
             ,wxExpectDismissableModal<MvcController>(wxID_OK).
                 Describe("new file properties")
-            )//;
+            );
         }
     wxYield();
 
@@ -72,7 +72,7 @@ void do_test_create_open
     wxTEST_DIALOG
         (wxYield()
         ,wxExpectModal<wxFileDialog>(file).Describe("save file dialog")
-        )//;
+        );
     wxYield();
 
     LMI_ASSERT(output_file.exists());
@@ -89,14 +89,14 @@ void do_test_create_open
             ,wxExpectModal<wxFileDialog>(file).Describe("open file dialog")
             ,wxExpectDismissableModal<MvcController>(wxID_OK).
                 Describe("existing file properties")
-            )//;
+            );
         }
     else
         {
         wxTEST_DIALOG
             (wxYield()
             ,wxExpectModal<wxFileDialog>(file).Describe("open file dialog")
-            )//;
+            );
         }
     wxYield();
 

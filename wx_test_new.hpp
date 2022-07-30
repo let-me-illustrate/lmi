@@ -59,7 +59,7 @@ class wx_test_new_illustration
         ui.Char('n', wxMOD_CONTROL);    // "File|New"
         ui.Char('i');                   // "Illustration"
 
-        wxTEST_DIALOG(wxYield(), e)//;
+        wxTEST_DIALOG(wxYield(), e);
 
         set_opened();
     }
