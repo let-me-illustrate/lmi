@@ -434,6 +434,7 @@ unit_test_targets := \
   rtti_lmi_test \
   safely_dereference_as_test \
   sandbox_test \
+  smf_test \
   snprintf_test \
   ssize_lmi_test \
   stratified_algorithms_test \
@@ -1034,6 +1035,10 @@ safely_dereference_as_test$(EXEEXT): \
 sandbox_test$(EXEEXT): \
   $(common_test_objects) \
   sandbox_test.o \
+
+smf_test$(EXEEXT): \
+  $(common_test_objects) \
+  smf_test.o \
 
 snprintf_test$(EXEEXT): \
   $(common_test_objects) \

@@ -161,6 +161,7 @@ TESTS = \
     rtti_lmi_test \
     safely_dereference_as_test \
     sandbox_test \
+    smf_test \
     snprintf_test \
     ssize_lmi_test \
     stratified_algorithms_test \
@@ -1085,6 +1086,12 @@ safely_dereference_as_test_LDADD = \
 sandbox_test_LDADD = \
   libtest_common.la
 
+smf_test_SOURCES = \
+  smf_test.cpp
+smf_test_CXXFLAGS = $(AM_CXXFLAGS)
+smf_test_LDADD = \
+  libtest_common.la
+
 snprintf_test_LDADD =\
   libtest_common.la
 
@@ -1335,6 +1342,7 @@ noinst_HEADERS = \
     single_cell_document.hpp \
     single_choice_popup_menu.hpp \
     skeleton.hpp \
+    smf.hpp \
     so_attributes.hpp \
     ssize_lmi.hpp \
     stratified_algorithms.hpp \
