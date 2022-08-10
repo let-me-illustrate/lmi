@@ -48,11 +48,13 @@
         <bitmap stock_id="wxART_PRINT"/>
         <longhelp>Print this document</longhelp>
     </object>
+<!--
     <object class="tool" name="wxID_PREVIEW">
         <tooltip>Print preview</tooltip>
         <bitmap stock_id="print-preview"/>
         <longhelp>See what this document will look like when printed</longhelp>
     </object>
+-->
     <object class="tool" name="print_pdf">
         <tooltip>Print to PDF</tooltip>
         <bitmap stock_id="save-pdf"/>

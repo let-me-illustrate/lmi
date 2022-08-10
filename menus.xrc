@@ -66,6 +66,7 @@
         <bitmap platform="win" stock_id="wxART_PRINT"/>
         <help>Print this document</help>
     </object>
+<!--
     <object class="wxMenuItem" name="wxID_PAGE_SETUP">
         <label>Page set_up...\tCtrl-U</label>
         <bitmap platform="win" stock_id="print-options"/>
@@ -76,6 +77,7 @@
         <bitmap platform="win" stock_id="print-preview"/>
         <help>See what this document will look like when printed</help>
     </object>
+-->
     <object class="wxMenuItem" name="print_pdf">
         <label>Pr_int to PDF\tCtrl-I</label>
         <bitmap platform="win" stock_id="save-pdf"/>
