@@ -373,6 +373,7 @@ unit_test_targets := \
   actuarial_table_test \
   alert_test \
   any_member_test \
+  archetype_test \
   assert_lmi_test \
   authenticity_test \
   bin_exp_test \
@@ -496,6 +497,11 @@ any_member_test$(EXEEXT): \
   miscellany.o \
   null_stream.o \
   path_utility.o \
+
+archetype_test$(EXEEXT): \
+  $(common_test_objects) \
+  archetype.o \
+  archetype_test.o \
 
 assert_lmi_test$(EXEEXT): \
   $(common_test_objects) \

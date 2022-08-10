@@ -100,6 +100,7 @@ TESTS = \
     actuarial_table_test \
     alert_test \
     any_member_test \
+    archetype_test \
     assert_lmi_test \
     authenticity_test \
     bin_exp_test \
@@ -621,6 +622,13 @@ alert_test_LDADD = \
   libtest_common.la
 
 any_member_test_LDADD = \
+  libtest_common.la
+
+archetype_test_SOURCES = \
+  archetype.cpp \
+  archetype_test.cpp
+archetype_test_CXXFLAGS = $(AM_CXXFLAGS)
+archetype_test_LDADD = \
   libtest_common.la
 
 assert_lmi_test_LDADD = \
@@ -1150,6 +1158,7 @@ noinst_HEADERS = \
     alert.hpp \
     any_entity.hpp \
     any_member.hpp \
+    archetype.hpp \
     assert_lmi.hpp \
     authenticity.hpp \
     basic_tables.hpp \
