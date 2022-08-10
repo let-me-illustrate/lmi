@@ -24,4 +24,50 @@
 
 #include "config.hpp"
 
+#include <type_traits>
+
+namespace smf_mechanics
+{
+/// Induce ambiguity between a class's copy and move SMFs.
+///
+/// If class T has both a copy and a move ctor, both of which can be
+/// considered in overload resolution, then instantiating this:
+///   T t {ambiguator<T>{}};
+/// would be an error because neither ctor is better than the other.
+/// However, detecting that ambiguity in this way:
+///   !std::is_constructible_v<T, ambiguator<T>>
+/// is not an error. Similarly, this:
+///   !std::is_assignable_v   <T, ambiguator<T>>
+/// detects equiplausible assignment without inducing an error.
+///
+/// Those non-erroneous expressions happen to do the right thing even
+/// if class T is an aggregate, for which instantiating this:
+///   T t {ambiguator<T>{}};
+/// would be an error for a different reason. See:
+///   https://lists.nongnu.org/archive/html/lmi/2022-08/msg00005.html
+
+template<typename T>
+struct ambiguator
+{
+    operator T const&();
+    operator T&&();
+};
+
+template<typename T> concept equiplausibly_constructible =
+    !std::is_constructible_v<T,ambiguator<T>>;
+
+template<typename T> concept equiplausibly_assignable =
+    !std::is_assignable_v<T,ambiguator<T>>;
+} // namespace smf_mechanics
+
+template<typename T> concept well_move_constructible =
+       std::is_move_constructible_v<T>
+    && smf_mechanics::equiplausibly_constructible<T>
+    ;
+
+template<typename T> concept well_move_assignable =
+       std::is_move_assignable_v<T>
+    && smf_mechanics::equiplausibly_assignable<T>
+    ;
+
 #endif // smf_hpp
