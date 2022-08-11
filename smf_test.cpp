@@ -58,19 +58,20 @@ struct no_can_move
 
 // Classes for unit testing.
 //
-// See the smf_test::test_classes() documentation below for a key
-// to class names.
+// See the smf_test::test_classes() documentation for a key to
+// class names.
 
-/// This struct is an 'aggregate'.
+/// This struct is an aggregate.
 ///
 /// It is important to test an aggregate because this:
 ///   A1111 a1111 {smf_mechanics::ambiguator<A1111>{}};
-/// isn't ambiguous; instead, it has too many initializers. See:
+/// is not ambiguous; instead, it has too many initializers. See:
 ///   https://lists.nongnu.org/archive/html/lmi/2022-08/msg00005.html
 
 struct A1111
 {
 };
+static_assert(std::is_aggregate_v<A1111>);
 
 struct C0000
 {
@@ -155,6 +156,31 @@ struct C3030
     C3030& operator=(C3030&&)      = default;
 };
 
+/// Statically tested properties, encoded as bits in an 'int'.
+///
+/// There is no great advantage to representing this as a std::bitset.
+///
+/// See the smf_test::test_classes() documentation for a key to
+/// the two-letter codes (such as "Cc") used in comments.
+
+template<typename T>
+constexpr int complexion()
+{
+    using namespace smf_mechanics;
+    return
+          128 * std::is_copy_constructible_v<T> // Cc
+        +  64 * std::is_move_constructible_v<T> // Mc
+        +  32 * equiplausibly_constructible <T> // Ec
+        +  16 * well_move_constructible     <T> // Wc
+        +   8 * std::is_copy_assignable_v   <T> // Ca
+        +   4 * std::is_move_assignable_v   <T> // Ma
+        +   2 * equiplausibly_assignable    <T> // Ea
+        +   1 * well_move_assignable        <T> // Wa
+        ;
+}
+
+/// Test various properties of unit-testing classes.
+///
 /// Class names are generally one capital letter and four digits,
 /// signifying {cp_ctor, mv_ctor, cp_assign, mv_assign}:
 ///   0 = user declared as defaulted
@@ -164,121 +190,61 @@ struct C3030
 ///   4 = implicitly deleted [due to base]
 ///   5 = unassignable [due to reference or const member]
 ///
-/// properties:
-///   p: is_copy_constructible
-///   q: is_move_constructible
-///   r: equiplausibly_constructible
-///   s: is_copy_assignable
-///   t: is_move_assignable
-///   u: equiplausibly_assignable
-///   v: move construct has move semantics
-///   w: move assign has move semantics
-///   y: move construct compiles without error
-///   z: move assign compiles without error
+/// Statically tested properties:
+///   Cc: is_copy_constructible
+///   Mc: is_move_constructible
+///   Ec: equiplausibly_constructible
+///   Wc: well_move_constructible
+///   Ca: is_copy_assignable
+///   Ma: is_move_assignable
+///   Ea: equiplausibly_assignable
+///   Wa: well_move_assignable
+/// Compile-time properties:
+///   e: move construct compiles without error
+///   f: move assign compiles without error
 ///
-/// 1111 0000 0101 0202 0303 0404 0505 3030
-///   +    +    +    +    +    +    +    -   p
-///   +    +    +    -    -    +    +    +   q
-///   +    +    -    +    +    -    +    +   r
-///   +    +    +    +    +    +    -    -   s
-///   +    +    +    -    -    +    -    +   t
-///   +    +    -    +    +    -    +    +   u
-///   +    +    -    -    -    -    +    +   v
-///   +    +    -    -    -    -    -    +   w
-///   +    +    +    -    -    +    +    +   y
-///   +    +    +    -    -    +    -    +   z
-///
+/// True by definition:
+///   Wc ≡ Mc ∧ Ec
+///   Wa ≡ Ma ∧ Ea
 /// Hypotheses:
-///   r ≡ u [need example to falsify this]
-///   v ≡ q ∧ r
-///   w ≡ t ∧ u
-///   y ≡ q
-///   z ≡ t
+///   e ?≡ Mc
+///   f ?≡ Ma
+///   Ec ?≡ Ea [need example to falsify this]
+///   Wc ?≡ move construct has move semantics
+///   Wa ?≡ move assign has move semantics
 
 void smf_test::test_classes()
 {
     using namespace smf_mechanics;
 
-    // Reproduce each element of the table above except {y,z}.
+    // Tabulate and assert statically tested properties.
     //
     // It might also be interesting to explore such properties as:
     //   std::copy_constructible
     //   std::move_constructible
     //   std::copyable
     //   std::movable
-
-    static_assert( std::is_aggregate_v         <A1111>);
-    static_assert( std::is_copy_constructible_v<A1111>); // p
-    static_assert( std::is_move_constructible_v<A1111>); // q
-    static_assert( equiplausibly_constructible <A1111>); // r
-    static_assert( std::is_copy_assignable_v   <A1111>); // s
-    static_assert( std::is_move_assignable_v   <A1111>); // t
-    static_assert( equiplausibly_assignable    <A1111>); // u
-    static_assert( well_move_constructible     <A1111>);
-    static_assert( well_move_assignable        <A1111>);
-
-    static_assert( std::is_copy_constructible_v<C0000>);
-    static_assert( std::is_move_constructible_v<C0000>);
-    static_assert( equiplausibly_constructible <C0000>);
-    static_assert( std::is_copy_assignable_v   <C0000>);
-    static_assert( std::is_move_assignable_v   <C0000>);
-    static_assert( equiplausibly_assignable    <C0000>);
-    static_assert( well_move_constructible     <C0000>);
-    static_assert( well_move_assignable        <C0000>);
-
-    static_assert( std::is_copy_constructible_v<C0101>);
-    static_assert( std::is_move_constructible_v<C0101>);
-    static_assert(!equiplausibly_constructible <C0101>);
-    static_assert( std::is_copy_assignable_v   <C0101>);
-    static_assert( std::is_move_assignable_v   <C0101>);
-    static_assert(!equiplausibly_assignable    <C0101>);
-    static_assert(!well_move_constructible     <C0101>);
-    static_assert(!well_move_assignable        <C0101>);
-
-    static_assert( std::is_copy_constructible_v<C0202>);
-    static_assert(!std::is_move_constructible_v<C0202>);
-    static_assert( equiplausibly_constructible <C0202>);
-    static_assert( std::is_copy_assignable_v   <C0202>);
-    static_assert(!std::is_move_assignable_v   <C0202>);
-    static_assert( equiplausibly_assignable    <C0202>);
-    static_assert(!well_move_constructible     <C0202>);
-    static_assert(!well_move_assignable        <C0202>);
-
-    static_assert( std::is_copy_constructible_v<C0303>);
-    static_assert(!std::is_move_constructible_v<C0303>);
-    static_assert( equiplausibly_constructible <C0303>);
-    static_assert( std::is_copy_assignable_v   <C0303>);
-    static_assert(!std::is_move_assignable_v   <C0303>);
-    static_assert( equiplausibly_assignable    <C0303>);
-    static_assert(!well_move_constructible     <C0303>);
-    static_assert(!well_move_assignable        <C0303>);
-
-    static_assert( std::is_copy_constructible_v<C0404>);
-    static_assert( std::is_move_constructible_v<C0404>);
-    static_assert(!equiplausibly_constructible <C0404>);
-    static_assert( std::is_copy_assignable_v   <C0404>);
-    static_assert( std::is_move_assignable_v   <C0404>);
-    static_assert(!equiplausibly_assignable    <C0404>);
-    static_assert(!well_move_constructible     <C0404>);
-    static_assert(!well_move_assignable        <C0404>);
-
-    static_assert( std::is_copy_constructible_v<C0505>);
-    static_assert( std::is_move_constructible_v<C0505>);
-    static_assert( equiplausibly_constructible <C0505>);
-    static_assert(!std::is_copy_assignable_v   <C0505>);
-    static_assert(!std::is_move_assignable_v   <C0505>);
-    static_assert( equiplausibly_assignable    <C0505>);
-    static_assert( well_move_constructible     <C0505>);
-    static_assert(!well_move_assignable        <C0505>);
-
-    static_assert(!std::is_copy_constructible_v<C3030>);
-    static_assert( std::is_move_constructible_v<C3030>);
-    static_assert( equiplausibly_constructible <C3030>);
-    static_assert(!std::is_copy_assignable_v   <C3030>);
-    static_assert( std::is_move_assignable_v   <C3030>);
-    static_assert( equiplausibly_assignable    <C3030>);
-    static_assert( well_move_constructible     <C3030>);
-    static_assert( well_move_assignable        <C3030>);
+    //
+    //              ╭────────Cc: is_copy_constructible
+    //              │╭───────Mc: is_move_constructible
+    //              ││╭──────Ec: equiplausibly_constructible
+    //              │││╭─────Wc: move construct has move semantics
+    //              ││││╭────Ca: is_copy_assignable
+    //              │││││╭───Ma: is_move_assignable
+    //              ││││││╭──Ea: equiplausibly_assignable
+    //              │││││││╭─Wa: move assign has move semantics
+    //              ││││││││
+    //              CMEWCMEW Copy, Move, Equiplausibly, Well
+    //              ccccaaaa Constructible, Assignable
+    //              --------
+    static_assert(0b11111111 == complexion<A1111>());
+    static_assert(0b11111111 == complexion<C0000>());
+    static_assert(0b11001100 == complexion<C0101>());
+    static_assert(0b10101010 == complexion<C0202>());
+    static_assert(0b10101010 == complexion<C0303>());
+    static_assert(0b11001100 == complexion<C0404>());
+    static_assert(0b11110010 == complexion<C0505>());
+    static_assert(0b01110111 == complexion<C3030>());
 
     // Instantiate unit-testing classes, and attempt to move them.
     //
@@ -293,6 +259,7 @@ void smf_test::test_classes()
     C0505 t_C0505 {};
     C3030 t_C3030 {};
 
+    // Test hypothesis: e ?≡ Mc
     A1111 u_A1111 {std::move(t_A1111)};
     C0000 u_C0000 {std::move(t_C0000)};
     C0101 u_C0101 {std::move(t_C0101)};
@@ -302,6 +269,7 @@ void smf_test::test_classes()
     C0505 u_C0505 {std::move(t_C0505)};
     C3030 u_C3030 {std::move(t_C3030)};
 
+    // Test hypothesis: f ?≡ Ma
     A1111 v_A1111; v_A1111 = std::move(t_A1111);
     C0000 v_C0000; v_C0000 = std::move(t_C0000);
     C0101 v_C0101; v_C0101 = std::move(t_C0101);
