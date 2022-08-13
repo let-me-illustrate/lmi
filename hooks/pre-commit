@@ -25,13 +25,16 @@ set -e
 
 check_concinnity()
 {
+    coefficiency=${coefficiency:-"--jobs=$(nproc)"}
     make \
+      "$coefficiency" \
       LMI_COMPILER=gcc \
       LMI_TRIPLET=x86_64-pc-linux-gnu \
       custom_tools \
       --directory=/opt/lmi/src/lmi >/dev/null 2>&1
     output=$( \
         make \
+          "$coefficiency" \
           LMI_COMPILER=gcc \
           LMI_TRIPLET=x86_64-pc-linux-gnu \
           prefascicle_dir="$1" \
