@@ -102,7 +102,11 @@ endif
 # definitions below.
 
 LMI_ENV_FILE := /tmp/lmi_env_$(shell date -u +'%s_%N').eraseme
-$(shell $(srcdir)/transume_toolchain.sh > $(LMI_ENV_FILE))
+$(shell \
+  LMI_COMPILER="$(LMI_COMPILER)" \
+   LMI_TRIPLET="$(LMI_TRIPLET)" \
+  $(srcdir)/transume_toolchain.sh > $(LMI_ENV_FILE) \
+ )
 include $(LMI_ENV_FILE)
 $(LMI_ENV_FILE):: ;
 
