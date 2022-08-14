@@ -253,6 +253,7 @@ show_env:
 	@printf 'LMI_TRIPLET     = "%s"\n' "$(LMI_TRIPLET)"
 	@printf 'coefficiency    = "%s"\n' "$(coefficiency)"
 	@printf 'PATH            = "%s"\n' "$(PATH)"
+	@printf 'LD_LIBRARY_PATH = "%s"\n' "$(LD_LIBRARY_PATH)"
 	@printf 'WINEPATH        = "%s"\n' "$(WINEPATH)"
 	@printf 'PERFORM         = "%s"\n' "$(PERFORM)"
 	@printf 'prefix          = "%s"\n' "$(prefix)"
