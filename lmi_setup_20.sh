@@ -46,6 +46,15 @@ chmod 755 /usr/sbin/policy-rc.d
 dpkg-divert --divert /usr/bin/ischroot.debianutils --rename /usr/bin/ischroot
 ln -s /bin/true /usr/bin/ischroot
 
+# Prefer google's DNS server in case the host system's changes. See:
+#   https://lists.nongnu.org/archive/html/lmi/2022-08/msg00014.html
+# Prepending a record is brutally simple. A corporate server used
+# for building lmi lists five nameservers in its configuration file,
+# with a comment indicating that the last two might be ignored, so
+# adding a new record at the end might not work.
+
+sed -i /etc/resolv.conf -e'1s/^/nameserver 8.8.8.8\n/'
+
 # For now at least, ignore this warning:
 #   dpkg-divert: warning: diverting file '/usr/bin/ischroot' from an Essential
 #   package with rename is dangerous, use --no-rename
