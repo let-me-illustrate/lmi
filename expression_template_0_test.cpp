@@ -296,7 +296,16 @@ void mete_valarray_typical()
         std::valarray<double> va9 = 3.14 - va0;
         va8 += va0;
         va8 += va0 * va1;
+
+        // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106664
+#if defined LMI_GCC
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Walloc-zero"
+#endif // defined LMI_GCC
         va9 = (1.0 - va8) * va9;
+#if defined LMI_GCC
+#   pragma GCC diagnostic pop
+#endif // defined LMI_GCC
 
 // This doesn't compile, and std::valarray's only comparable facility
 // is its apply() member function, which applies only unary functions.
