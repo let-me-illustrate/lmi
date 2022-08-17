@@ -296,11 +296,12 @@ void mete_valarray_typical()
         std::valarray<double> va9 = 3.14 - va0;
         va8 += va0;
         va8 += va0 * va1;
+        va9 = (1.0 - va8) * va9;
+
 // This doesn't compile, and std::valarray's only comparable facility
 // is its apply() member function, which applies only unary functions.
 //    va0 = std::max(2.7, va8);
 //    va0 = std::max(va8, va9);
-        va9 = (1.0 - va8) * va9;
         }
 }
 
