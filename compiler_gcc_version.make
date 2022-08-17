@@ -63,6 +63,8 @@ ifeq      (10,$(gnu_cpp_version))
 else ifeq (10.0,$(gnu_cpp_version))
 else ifeq (11,$(gnu_cpp_version))
 else ifeq (11.0,$(gnu_cpp_version))
+else ifeq (12,$(gnu_cpp_version))
+else ifeq (12.0,$(gnu_cpp_version))
 else
   $(warning Untested $(GNU_CPP) version '$(gnu_cpp_version)')
 endif
@@ -71,6 +73,8 @@ ifeq      (10,$(gnu_cxx_version))
 else ifeq (10.0,$(gnu_cxx_version))
 else ifeq (11,$(gnu_cxx_version))
 else ifeq (11.0,$(gnu_cxx_version))
+else ifeq (12,$(gnu_cxx_version))
+else ifeq (12.0,$(gnu_cxx_version))
 else
   $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
 endif
