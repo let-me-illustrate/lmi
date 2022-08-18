@@ -44,6 +44,18 @@ else ifneq (,$(filter $(gcc_version), 11 11.0))
     -Wenum-conversion \
     -Winvalid-imported-macros \
 
+else ifneq (,$(filter $(gcc_version), 12 12.0))
+
+# g++-11 warnings not recognized by g++-10
+# [also consider any new warnings added in gcc-12]
+
+  gcc_version_specific_cxx_warnings := \
+    -Wctad-maybe-unsupported \
+    -Wdeprecated-enum-enum-conversion \
+    -Wdeprecated-enum-float-conversion \
+    -Wenum-conversion \
+    -Winvalid-imported-macros \
+
 endif
 
 # Write '-Wno' options at the end, with a rationale here.
@@ -248,6 +260,19 @@ wno_sign_conv_objects := \
 #   grep 'error:' | sed -e '/size_type/d'
 
 $(wno_sign_conv_objects): gcc_common_extra_warnings += -Wno-sign-conversion
+
+# gcc-12 gives spurious warnings when <regex> is used. See:
+#   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105562
+# For lmi, this seems to affect only UBSAN builds.
+
+wno_maybe_uninitialized_objects := \
+  my_prod.o \
+  pdf_command_wx.o \
+  wx_test_about_version.o \
+
+ifeq (ubsan,$(build_type))
+  $(wno_maybe_uninitialized_objects): gcc_common_extra_warnings += -Wno-maybe-uninitialized
+endif
 
 # Keep version-specific warnings last, so that they override others.
 
