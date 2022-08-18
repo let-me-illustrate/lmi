@@ -40,7 +40,15 @@ void istream_to_string_1
 {
     typedef std::basic_string<Char_t,Traits,Allocator> string_type;
     typedef std::istreambuf_iterator<Char_t,Traits> bisbi;
+    // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105580
+#if defined LMI_GCC
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wnull-dereference"
+#endif // defined LMI_GCC
     string_type((bisbi(is)), bisbi()).swap(s);
+#if defined LMI_GCC
+#   pragma GCC diagnostic pop
+#endif // defined LMI_GCC
     if(!is)
         {
         throw std::runtime_error("Unable to read stream into string.");
