@@ -75,6 +75,7 @@ namespace
                 << " is outside the range [1, 12]."
                 << LMI_FLUSH
                 ;
+            throw "Unreachable--silences a compiler diagnostic.";
             }
         int n_days = month_lengths[month - 1];
         if(leap_year && 2 == month)
