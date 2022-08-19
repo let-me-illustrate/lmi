@@ -155,7 +155,12 @@ fstamp=$(date -u +"%Y%m%dT%H%MZ" -d "$stamp0")
 
 (cd "${logdir}"
 logfiles=
-for z in "${flavor}-log" "${CHRTNAME}"-apt-get-log lmi-log; do
+for z in \
+    "${CHRTNAME}"-debootstrap-log \
+    "${CHRTNAME}"-apt-get-log \
+    lmi-log \
+    "${flavor}-log" \
+  ; do
   z_stamped="${z}_${fstamp}"
   mv "${z}" "${z_stamped}"
   logfiles="${logfiles} ${z_stamped}"
