@@ -30,6 +30,10 @@ set -evx
 assert_not_su
 assert_chrooted
 
+# Suppress unwanted "wine32 is missing" messages--see:
+#   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00016.html
+export WINEDEBUG=-all,err+all,fixme+all
+
 # Allow script to continue even if some test fails.
 /opt/lmi/src/lmi/nychthemeral_test.sh || true
 
