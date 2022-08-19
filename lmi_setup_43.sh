@@ -30,6 +30,10 @@ set -evx
 assert_not_su
 assert_chrooted
 
+# Suppress unwanted "wine32 is missing" messages--see:
+#   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00016.html
+export WINEDEBUG=-all,err+all,fixme+all
+
 # Symlink the repository's hooks/ directory:
 cd /opt/lmi/src/lmi || { printf 'failed: cd\n'; exit 3; }
 mv .git/hooks .git/hooks-orig
