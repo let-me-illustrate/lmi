@@ -70,6 +70,7 @@ struct no_can_move
 
 struct A1111
 {
+    smf_mechanics::sensor s;
 };
 static_assert(std::is_aggregate_v<A1111>);
 
@@ -81,6 +82,7 @@ struct C0000
     C0000(C0000&&)                 = default;
     C0000& operator=(C0000 const&) = default;
     C0000& operator=(C0000&&)      = default;
+    smf_mechanics::sensor s;
 };
 
 struct C0101
@@ -91,6 +93,7 @@ struct C0101
 //  C0101(C0101&&)                 // not declared
     C0101& operator=(C0101 const&) = default;
 //  C0101& operator=(C0101&&)      // not declared
+    smf_mechanics::sensor s;
 };
 
 struct C0202
@@ -99,6 +102,7 @@ struct C0202
     ~C0202()                       = default;
     C0202(C0202 const&)            = default;
     C0202& operator=(C0202 const&) = default;
+    smf_mechanics::sensor s;
   protected:
     C0202(C0202&&)                 = default;
     C0202& operator=(C0202&&)      = default;
@@ -112,6 +116,7 @@ struct C0303
     C0303(C0303&&)                 = delete;
     C0303& operator=(C0303 const&) = default;
     C0303& operator=(C0303&&)      = delete;
+    smf_mechanics::sensor s;
 };
 
 #if defined LMI_CLANG
@@ -126,6 +131,7 @@ struct C0404 : public no_can_move
     C0404(C0404&&)                 = default; // implicitly deleted
     C0404& operator=(C0404 const&) = default;
     C0404& operator=(C0404&&)      = default; // implicitly deleted
+    smf_mechanics::sensor s;
 };
 
 struct C0505
@@ -136,6 +142,7 @@ struct C0505
     C0505(C0505&&)                 = default;
     C0505& operator=(C0505 const&) = default; // implicitly deleted
     C0505& operator=(C0505&&)      = default; // implicitly deleted
+    smf_mechanics::sensor s;
     // reference or const member:
     //  - allows copy and move construction
     //  - inhibits copy and move assignment
@@ -154,7 +161,28 @@ struct C3030
     C3030(C3030&&)                 = default;
     C3030& operator=(C3030 const&) = delete;
     C3030& operator=(C3030&&)      = default;
+    smf_mechanics::sensor s;
 };
+
+template<typename T>
+constexpr bool was_move_constructed_as_expected(T const& t)
+{
+    return
+        well_move_constructible<T>
+        ? smf_mechanics::move_constructed == t.s.p()
+        : smf_mechanics::copy_constructed == t.s.p()
+        ;
+}
+
+template<typename T>
+constexpr bool was_move_assigned_as_expected(T const& t)
+{
+    return
+        well_move_assignable<T>
+        ? smf_mechanics::move_assigned == t.s.p()
+        : smf_mechanics::copy_assigned == t.s.p()
+        ;
+}
 
 /// Statically tested properties, encoded as bits in an 'int'.
 ///
@@ -202,6 +230,8 @@ constexpr int complexion()
 /// Compile-time properties:
 ///   e: move construct compiles without error
 ///   f: move assign compiles without error
+///   g: move construct has move semantics
+///   h: move assign has move semantics
 ///
 /// True by definition:
 ///   Wc ≡ Mc ∧ Ec
@@ -210,8 +240,8 @@ constexpr int complexion()
 ///   e ?≡ Mc
 ///   f ?≡ Ma
 ///   Ec ?≡ Ea [need example to falsify this]
-///   Wc ?≡ move construct has move semantics
-///   Wa ?≡ move assign has move semantics
+///   g ?≡ Wc
+///   h ?≡ Wa
 
 void smf_test::test_classes()
 {
@@ -263,21 +293,41 @@ void smf_test::test_classes()
     A1111 u_A1111 {std::move(t_A1111)};
     C0000 u_C0000 {std::move(t_C0000)};
     C0101 u_C0101 {std::move(t_C0101)};
-//  C0202 u_C0202 {std::move(t_C0202)}; // protected
-//  C0303 u_C0303 {std::move(t_C0303)}; // deleted
+//  C0202 u_C0202 {std::move(t_C0202)}; // !e: protected
+//  C0303 u_C0303 {std::move(t_C0303)}; // !e: deleted
     C0404 u_C0404 {std::move(t_C0404)};
     C0505 u_C0505 {std::move(t_C0505)};
     C3030 u_C3030 {std::move(t_C3030)};
+
+    // Test hypothesis: g ?≡ Wc
+    LMI_TEST(was_move_constructed_as_expected(u_A1111));
+    LMI_TEST(was_move_constructed_as_expected(u_C0000));
+    LMI_TEST(was_move_constructed_as_expected(u_C0101));
+//  LMI_TEST(was_move_constructed_as_expected(u_C0202));
+//  LMI_TEST(was_move_constructed_as_expected(u_C0303));
+    LMI_TEST(was_move_constructed_as_expected(u_C0404));
+    LMI_TEST(was_move_constructed_as_expected(u_C0505));
+    LMI_TEST(was_move_constructed_as_expected(u_C3030));
 
     // Test hypothesis: f ?≡ Ma
     A1111 v_A1111; v_A1111 = std::move(t_A1111);
     C0000 v_C0000; v_C0000 = std::move(t_C0000);
     C0101 v_C0101; v_C0101 = std::move(t_C0101);
-//  C0202 v_C0202; v_C0202 = std::move(t_C0202); // protected
-//  C0303 v_C0303; v_C0303 = std::move(t_C0303); // deleted
+//  C0202 v_C0202; v_C0202 = std::move(t_C0202); // !f: protected
+//  C0303 v_C0303; v_C0303 = std::move(t_C0303); // !f: deleted
     C0404 v_C0404; v_C0404 = std::move(t_C0404);
-//  C0505 v_C0505; v_C0505 = std::move(t_C0505); // implicitly deleted
+//  C0505 v_C0505; v_C0505 = std::move(t_C0505); // !f: implicitly deleted
     C3030 v_C3030; v_C3030 = std::move(t_C3030);
+
+    // Test hypothesis: h ?≡ Wa
+    LMI_TEST(was_move_assigned_as_expected(v_A1111));
+    LMI_TEST(was_move_assigned_as_expected(v_C0000));
+    LMI_TEST(was_move_assigned_as_expected(v_C0101));
+//  LMI_TEST(was_move_assigned_as_expected(v_C0202));
+//  LMI_TEST(was_move_assigned_as_expected(v_C0303));
+    LMI_TEST(was_move_assigned_as_expected(v_C0404));
+//  LMI_TEST(was_move_assigned_as_expected(v_C0505));
+    LMI_TEST(was_move_assigned_as_expected(v_C3030));
 
     stifle_unused_warning(t_C0202);
     stifle_unused_warning(t_C0303);

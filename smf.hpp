@@ -28,6 +28,36 @@
 
 namespace smf_mechanics
 {
+enum provenience
+    {extraordinary
+    ,default_constructed
+    ,copy_constructed
+    ,move_constructed
+    ,copy_assigned
+    ,move_assigned
+    };
+
+/// Detect another class's move and copy operations.
+///
+/// Add a data member of this class to the class to be instrumented
+/// (or, less plainly, inherit from it as a mixin).
+
+class sensor
+{
+  public:
+    sensor()                         : p_ {default_constructed} {}
+    ~sensor() = default;
+    sensor(sensor const&)            : p_ {copy_constructed} {}
+    sensor(sensor&&)                 : p_ {move_constructed} {}
+    sensor& operator=(sensor const&) {p_ = copy_assigned; return *this;}
+    sensor& operator=(sensor&&)      {p_ = move_assigned; return *this;}
+
+    provenience p() const {return p_;}
+
+  private:
+    provenience p_ {extraordinary};
+};
+
 /// Induce ambiguity between a class's copy and move SMFs.
 ///
 /// If class T has both a copy and a move ctor, both of which can be
