@@ -108,7 +108,7 @@ AccountValue::AccountValue(Input const& input)
 {
     SetInitialValues();
     LMI_ASSERT(InforceYear < methuselah);
-    PerformSpecAmtStrategy();
+    PerformSpecAmtStrategy(enforce_minimum);
     PerformSupplAmtStrategy();
     InvariantValues().Init(this);
 
