@@ -116,9 +116,7 @@ currency AccountValue::CalculateSpecAmtFromStrategy
 /// For inforce, warn before increasing specamt to the minimum in the
 /// first inforce year: either an underwriting exception was made, or
 /// input is erroneous; but apply the minimum silently if specamt is
-/// to be calculated from a strategy, or if a lower amount is given in
-/// any other year (which doesn't represent the present state of the
-/// contract, and presumably results from manual editing).
+/// to be calculated from a strategy, or if a solve is in progress.
 
 void AccountValue::PerformSpecAmtStrategy()
 {
