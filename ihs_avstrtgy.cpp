@@ -139,7 +139,7 @@ void AccountValue::PerformSpecAmtStrategy()
             (
                 mce_solve_specamt == yare_input_.SolveType
             &&  yare_input_.SolveBeginYear <= j
-            &&  j < std::min(yare_input_.SolveEndYear, BasicValues::Length)
+            &&  j < yare_input_.SolveEndYear
             )
             {
             strategy = mce_sa_input_scalar;
