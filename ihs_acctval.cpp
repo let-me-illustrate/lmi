@@ -407,6 +407,26 @@ void AccountValue::InitializeLife(mcenum_run_basis a_Basis)
     // be called OAOO.
     SetInitialValues();
 
+    if
+        (  Solving
+        && !SolvingForGuarPremium
+        && (  mce_solve_ee_prem == yare_input_.SolveType
+           || mce_solve_er_prem == yare_input_.SolveType
+           )
+        && mce_run_gen_curr_sep_full == RunBasis_
+        && (  contains(yare_input_.SpecifiedAmountStrategy, mce_sa_maximum)
+           || contains(yare_input_.SpecifiedAmountStrategy, mce_sa_target)
+           || contains(yare_input_.SpecifiedAmountStrategy, mce_sa_mep)
+           || contains(yare_input_.SpecifiedAmountStrategy, mce_sa_glp)
+           || contains(yare_input_.SpecifiedAmountStrategy, mce_sa_gsp)
+           || contains(yare_input_.SpecifiedAmountStrategy, mce_sa_corridor)
+           )
+        )
+        {
+        PerformSpecAmtStrategy(ignore_minimum);
+        PerformSupplAmtStrategy();
+        }
+
     VariantValues().Init(*this, GenBasis_, SepBasis_);
     InvariantValues().ReInit(this);
 
