@@ -359,9 +359,11 @@ if [ "x86_64-pc-linux-gnu" != "$LMI_TRIPLET" ]
 then
   printf '\n# GUI test\n\n'
   WINEDEBUG="fixme-event,fixme-imm,fixme-shell" \
+  timeout 5m \
   xvfb-run "$PERFORM" "$prefix"/bin/wx_test"$EXEEXT" \
     --ash_nazg --data_path="$prefix"/data 2>&1 \
-    | tee "$log_dir"/gui_test | sed -e "$build_clutter" -e "$gui_test_clutter"
+    | tee "$log_dir"/gui_test | sed -e "$build_clutter" -e "$gui_test_clutter" \
+  || true ;
 else
   printf '\n# GUI test skipped--it does not work properly with GTK\n'
 fi
