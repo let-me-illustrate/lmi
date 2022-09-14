@@ -818,6 +818,18 @@ void SkeletonTest::RunTheTests()
         return;
         }
 
+    if(1.0 != MainWin->GetDPIScaleFactor())
+        {
+        // See:
+        //   https://lists.nongnu.org/archive/html/lmi/2022-09/msg00000.html
+        // et seqq., as well as
+        //   https://lists.nongnu.org/archive/html/lmi/2022-09/msg00017.html
+        std::cout
+            << "DPI scale factor is not unity, so tests may fail with xvfb"
+            << std::endl
+            ;
+        }
+
     // Close any initially opened dialogs (e.g. "About" dialog shown unless a
     // special command line option is specified).
     for(;;)
