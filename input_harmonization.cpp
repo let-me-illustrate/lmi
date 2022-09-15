@@ -504,6 +504,14 @@ void Input::DoHarmonize()
     // strategy, then toggle back and forth between gpt and cvat to
     // see what difference that makes. TAXATION !! Rethink that.
 
+    // Conditionally restricting SpecifiedAmountStrategyFromIssue has
+    // no visible effect because that scalar variable is obsolete,
+    // having been supplanted by
+    //   specamt_sequence SpecifiedAmount
+    // which has no knowledge of class Input. This is a general issue:
+    // input-sequence controls are unaware of the context that would
+    // be required for selective enablement.
+
     SpecifiedAmountStrategyFromIssue.allow(mce_sa_input_scalar, !specamt_solve && !specamt_from_term_proportion);
     SpecifiedAmountStrategyFromIssue.allow(mce_sa_salary      , !specamt_solve && !specamt_from_term_proportion);
     SpecifiedAmountStrategyFromIssue.allow(mce_sa_maximum     , !inhibit_premium_based_strategies);
