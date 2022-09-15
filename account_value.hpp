@@ -209,8 +209,7 @@ class LMI_SO AccountValue final
 
     currency SolveGuarPremium        ();
 
-    enum e_specamt_minimum_toggle {enforce_minimum, ignore_minimum};
-    void PerformSpecAmtStrategy(e_specamt_minimum_toggle);
+    void PerformSpecAmtStrategy();
     void PerformSupplAmtStrategy();
     currency CalculateSpecAmtFromStrategy
         (int                actual_year

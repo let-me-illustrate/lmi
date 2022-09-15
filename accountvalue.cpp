@@ -241,7 +241,7 @@ void AccountValue::RunOneCell(mcenum_run_basis TheBasis)
     // designed to allow inforce loans.
     AVUnloaned = InforceAVGenAcct;
 
-    PerformSpecAmtStrategy(enforce_minimum);
+    PerformSpecAmtStrategy();
 
     for(Year = InforceYear; Year < BasicValues::GetLength(); ++Year)
         {
@@ -431,10 +431,8 @@ inline int AccountValue::MonthsToNextModalPmtDate() const
 }
 
 /// Set specamt according to selected strategy, in every year.
-///
-/// The argument is ignored because this code knows no minimum.
 
-void AccountValue::PerformSpecAmtStrategy(e_specamt_minimum_toggle)
+void AccountValue::PerformSpecAmtStrategy()
 {
     currency SA = C0;
     switch(yare_input_.SpecifiedAmountStrategy[0])

@@ -107,7 +107,7 @@ currency AccountValue::CalculateSpecAmtFromStrategy
     throw "Unreachable--silences a compiler diagnostic.";
 }
 
-/// Set specamt according to a strategy, optionally enforcing minimum.
+/// Set specamt according to selected strategy, respecting minimum.
 ///
 /// The actual minimum, set dynamically, is ascertainable only during
 /// monthiversary processing because, e.g., it may depend on whether
@@ -118,7 +118,7 @@ currency AccountValue::CalculateSpecAmtFromStrategy
 /// input is erroneous; but apply the minimum silently if specamt is
 /// to be calculated from a strategy, or if a solve is in progress.
 
-void AccountValue::PerformSpecAmtStrategy(e_specamt_minimum_toggle e)
+void AccountValue::PerformSpecAmtStrategy()
 {
     // Store original input specamt for first inforce year, for
     // comparison below. Using DeathBfts_->specamt() here instead of
@@ -129,8 +129,7 @@ void AccountValue::PerformSpecAmtStrategy(e_specamt_minimum_toggle e)
     for(int j = 0; j < BasicValues::Length; ++j)
         {
         bool t = yare_input_.TermRider && 0.0 != yare_input_.TermRiderAmount;
-        bool const ignore_min {ignore_minimum == e};
-        currency m = ignore_min ? C0 : minimum_specified_amount(0 == j, t);
+        currency m = minimum_specified_amount(0 == j, t);
         currency explicit_value = DeathBfts_->specamt()[j];
         mcenum_sa_strategy strategy = yare_input_.SpecifiedAmountStrategy[j];
         // Don't override a specamt that's being solved for.
