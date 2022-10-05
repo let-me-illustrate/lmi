@@ -27,8 +27,6 @@ bool g_unwind = true;
 
 #if defined LMI_X86_64 && defined LMI_POSIX && defined __GLIBCXX__
 
-#define UNW_LOCAL_ONLY
-
 #include <cstdio>                       // fprintf()
 #include <cstdlib>                      // free()
 #include <cxxabi.h>

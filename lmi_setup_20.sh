@@ -103,13 +103,14 @@ apt-get --assume-yes install \
   gnupg \
   jing \
   libarchive-tools \
+  libc++-dev \
+  libc++abi-dev \
   libc6-dbg \
   libdw-dev \
   libgtk-3-dev \
   libpcre2-dev \
   libtool \
   libxml2-utils \
-  libunwind-dev \
   libxslt1-dev \
   lld \
   make \

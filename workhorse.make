@@ -343,6 +343,7 @@ sys_include_directories := \
   $(compiler_include_directory) \
   $(wx_include_paths) \
   /opt/lmi/third_party/include \
+  /usr/include/libunwind \
   $(localincludedir) \
   $(localincludedir)/libxml2 \
 
