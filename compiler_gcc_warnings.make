@@ -266,7 +266,6 @@ $(wno_sign_conv_objects): gcc_common_extra_warnings += -Wno-sign-conversion
 # For lmi, this seems to affect only UBSAN builds.
 
 wno_maybe_uninitialized_objects := \
-  $(unit_test_targets) \
   my_prod.o \
   pdf_command_wx.o \
   wx_test_about_version.o \

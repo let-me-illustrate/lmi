@@ -67,7 +67,15 @@
 #include <atomic>
 #include <iostream>
 #include <ostream>
+// Avoid UBSAN clash with libstdc++'s <regex>.
+#if defined LMI_GCC
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wmaybe-uninitialized"
+#endif // defined LMI_GCC
 #include <regex>
+#if defined LMI_GCC
+#   pragma GCC diagnostic pop
+#endif // defined LMI_GCC
 #include <stdexcept>
 #include <string>
 
