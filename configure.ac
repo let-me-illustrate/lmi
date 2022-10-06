@@ -416,9 +416,37 @@ fi
 
 dnl --- libunwind and libdw, only used under Linux and only with gcc/libstdc++
 if test "$USE_LINUX" = "1" -a "$CLANG" != "yes"; then
-    PKG_CHECK_MODULES(UNWIND, libunwind libdw)
-    CXXFLAGS="$CXXFLAGS $UNWIND_CFLAGS"
-    LIBS="$LIBS $UNWIND_LIBS -ldl"
+    PKG_CHECK_MODULES(LIBDW, libdw)
+    CXXFLAGS="$CXXFLAGS $LIBDW_CFLAGS"
+    LIBS="$LIBS $LIBDW_LIBS -ldl"
+
+    dnl Unfortunately LLVM libunwind doesn't have pkg-config support and so we
+    dnl have to test for it manually. Moreover, it installs its header in an
+    dnl apparently inconsistent way and we need to add a non-standard include
+    dnl directory to the search path to find them.
+    CXXFLAGS="$CXXFLAGS -I/usr/include/libunwind"
+    LIBS="$LIBS -lunwind"
+
+    AC_CACHE_CHECK([for libunwind],
+        lmi_cv_libunwind,
+        [
+            AC_LINK_IFELSE([AC_LANG_SOURCE([
+#include <libunwind.h>
+
+int main() {
+    unw_context_t context;
+    unw_getcontext(&context);
+}
+                ])],
+                lmi_cv_libunwind=yes,
+                lmi_cv_libunwind=no
+            )
+        ]
+    )
+
+    if test "x$lmi_cv_libunwind" != "xyes"; then
+        AC_MSG_FAILURE([Unable to build test program using libunwind, please check its installation.])
+    fi
 fi
 
 dnl --- CGICC (optional) ----------------
