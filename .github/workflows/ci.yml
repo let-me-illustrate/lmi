@@ -95,7 +95,11 @@ jobs:
           if [ -z "${{ matrix.autotools }}" -o -z "${{ matrix.mingw }}" ]; then
             # Those are never used with clang currently.
             if [ "${{ matrix.compiler }}" != clang ]; then
-              packages="$packages libunwind-dev libdw-dev"
+              # Instead of installing libunwind-NN-dev directly, install
+              # libc++-dev depending on it, as the latter depends on the
+              # former but has a version-independent name which doesn't need
+              # to be updated with each clang release.
+              packages="$packages libc++-dev libdw-dev"
             fi
             packages="$packages libpcre2-dev"
           fi
