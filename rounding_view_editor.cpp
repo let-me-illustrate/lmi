@@ -29,7 +29,6 @@
 
 #include <wx/bitmap.h>
 #include <wx/bmpbuttn.h>
-#include <wx/dcclient.h>                // class wxClientDC
 #include <wx/sizer.h>
 #include <wx/spinctrl.h>
 #include <wx/tglbtn.h>
@@ -228,12 +227,9 @@ wxSize RoundingButtons::CalculateMinimumTextControlSize
     ,unsigned int n
     )
 {
-    wxClientDC dc(window);
-    dc.SetFont(window->GetFont());
-
     wxCoord w, h;
     // Assume that 'W' is the widest letter.
-    dc.GetTextExtent("W", &w, &h);
+    window->GetTextExtent("W", &w, &h);
 
     wxSize size(w * n, h);
     size += window->GetSize() - window->GetClientSize();
