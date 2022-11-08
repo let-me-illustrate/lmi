@@ -93,8 +93,6 @@ config_options="
   --with-cxx=11
   --without-opengl
   --without-subdirs
-  CPPFLAGS=-I$prefix/include
-  LDFLAGS=-L$exec_prefix/lib
 "
 
 [ -n "$mingw_bin_dir" ] && export PATH="$mingw_bin_dir:${PATH}"
@@ -118,8 +116,10 @@ cd "$build_dir"
 # 'config_options' must not be double-quoted
 # shellcheck disable=SC2086
 "$wx_dir"/configure $config_options \
+  CPPFLAGS="-I$prefix/include" \
     CFLAGS="$wx_cc_flags" \
   CXXFLAGS="$wx_cxx_flags" \
+   LDFLAGS="-L$exec_prefix/lib" \
 
 $MAKE
 $MAKE install
