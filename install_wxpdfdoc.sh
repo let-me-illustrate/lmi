@@ -100,9 +100,12 @@ fi
 mkdir --parents "$build_dir"
 
 cd "$build_dir"
-# 'configure' options must not be double-quoted
+# 'config_options' must not be double-quoted
 # shellcheck disable=SC2086
-"$wxpdfdoc_dir"/configure $config_options CFLAGS="$wxpdfdoc_cc_flags" CXXFLAGS="$wxpdfdoc_cxx_flags"
+"$wxpdfdoc_dir"/configure $config_options \
+    CFLAGS="$wxpdfdoc_cc_flags" \
+  CXXFLAGS="$wxpdfdoc_cxx_flags" \
+
 $MAKE
 $MAKE install
 # autotools: 'make install' doesn't respect group permissions--see:
