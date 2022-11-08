@@ -292,8 +292,8 @@ for lib in xmlwrapp; do
                       CC=clang \
                      CXX=clang++ \
                   CFLAGS="-g -O2 -fno-ms-extensions $valid_math" \
-                CXXFLAGS="-g -O2 -fno-ms-extensions $valid_math" \
-                LDFLAGS="-fuse-ld=lld" \
+                CXXFLAGS="-g -O2 -fno-ms-extensions $valid_math -stdlib=libc++" \
+                LDFLAGS="-fuse-ld=lld -stdlib=libc++" \
                 $xmlwrapp_options || err=$?
             ;;
         (*)

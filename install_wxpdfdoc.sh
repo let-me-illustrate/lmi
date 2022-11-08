@@ -113,15 +113,28 @@ case "$LMI_COMPILER" in
 
         ;;
     (clang)
+        # To use the LLVM linker, it seems necessary to specify it
+        # in $CXX (and ignore the resulting
+        #   argument unused during compilation: '-fuse-ld=lld'
+        # warning). Otherwise, a command such as
+        #   readelf --string-dump .comment /opt/lmi/local/clang_x86_64-pc-linux-gnu/lib/libwxcode_gtk3u_pdfdoc-3.2.so
+        # will lack the expected
+        #   Linker: Debian LLD
+        # comment, even though it is specified in $LDFLAGS, and
+        # even if LD is specified in any of the following ways:
+        #   LD=clang++
+        #   LD=ld.lld
+        #   LD="clang++ -fuse-ld=lld -stdlib=libc++"
+
         valid_math="-Woverriding-t-option -ffp-model=strict -ffp-exception-behavior=ignore -Wno-overriding-t-option"
         # 'config_options' must not be double-quoted
         # shellcheck disable=SC2086
         "$wxpdfdoc_dir"/configure $config_options \
                 CC=clang \
-               CXX=clang++ \
+               CXX="clang++ -fuse-ld=lld -stdlib=libc++" \
             CFLAGS="$wxpdfdoc_cc_flags  $valid_math" \
-          CXXFLAGS="$wxpdfdoc_cxx_flags $valid_math" \
-           LDFLAGS="-fuse-ld=lld" \
+          CXXFLAGS="$wxpdfdoc_cxx_flags $valid_math -stdlib=libc++" \
+           LDFLAGS="-fuse-ld=lld -stdlib=libc++" \
 
         ;;
     (*)

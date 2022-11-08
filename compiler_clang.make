@@ -163,7 +163,7 @@ CFLAGS =
 
 # C++ compiler flags.
 
-REQUIRED_CXXFLAGS = -std=c++20 $(CXX_WARNINGS) $(REQUIRED_COMPILER_FLAGS)
+REQUIRED_CXXFLAGS = -std=c++20 -stdlib=libc++ $(CXX_WARNINGS) $(REQUIRED_COMPILER_FLAGS)
 
 CXXFLAGS =
 
@@ -213,6 +213,7 @@ EXTRA_LDFLAGS :=
 REQUIRED_LDFLAGS = \
   -fuse-ld=lld \
   -Wl,-Map,$@.map \
+  -stdlib=libc++ \
   $(c_l_flags) \
   $(addprefix -L , $(all_library_directories)) \
   $(EXTRA_LDFLAGS) \

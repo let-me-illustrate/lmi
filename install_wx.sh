@@ -136,8 +136,8 @@ case "$LMI_COMPILER" in
                CXX=clang++ \
           CPPFLAGS="-I$prefix/include" \
             CFLAGS="$wx_cc_flags  $valid_math" \
-          CXXFLAGS="$wx_cxx_flags $valid_math" \
-           LDFLAGS="-L$exec_prefix/lib -fuse-ld=lld" \
+          CXXFLAGS="$wx_cxx_flags $valid_math -stdlib=libc++" \
+           LDFLAGS="-L$exec_prefix/lib -fuse-ld=lld -stdlib=libc++" \
 
         ;;
     (*)
