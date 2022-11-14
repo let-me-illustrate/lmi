@@ -27,7 +27,7 @@ $(srcdir)/compiler_clang_version.make:: ;
 
 AR      := ar
 CC      := clang
-CPP     := cpp
+#CPP    # Not used.
 CXX     := clang++
 LD      := clang++
 # For GNU/Linux, $(RC) is never invoked.
@@ -42,5 +42,5 @@ RC      := windres
 # Override these definitions to specify GNU tools when using an
 # incompatible toolchain.
 
-GNU_CPP := $(CPP)
+GNU_CPP := $(CXX) -E
 GNU_CXX := $(CXX)
