@@ -270,16 +270,33 @@ make "$coefficiency" --output-sync=recurse -f install_miscellanea.make
 # This for-loop can iterate over as many toolchains as desired.
 # Make sure the current production architecture is built last, so that
 # it's the one installed to /opt/lmi/bin/ when this script ends.
-triplets="x86_64-w64-mingw32"
+lmi_toolchains="gcc_msw64"
 if [ "Cygwin" != "$platform" ] && [ "WSL" != "$platform" ]
 then
-    triplets="x86_64-pc-linux-gnu x86_64-w64-mingw32"
+  lmi_toolchains="clang_gnu64 gcc_gnu64 gcc_msw64"
 fi
-export LMI_COMPILER=gcc
+export LMI_COMPILER
 export LMI_TRIPLET
-# shellcheck disable=SC2043
-for LMI_TRIPLET in ${triplets} ;
+for toolchain in ${lmi_toolchains} ;
 do
+    case "$toolchain" in
+        (clang_gnu64)
+            LMI_COMPILER="clang"
+            LMI_TRIPLET="x86_64-pc-linux-gnu"
+            ;;
+        (gcc_gnu64)
+            LMI_COMPILER="gcc"
+            LMI_TRIPLET="x86_64-pc-linux-gnu"
+            ;;
+        (gcc_msw64)
+            LMI_COMPILER="gcc"
+            LMI_TRIPLET="x86_64-w64-mingw32"
+            ;;
+        (*)
+            printf 'Unknown toolchain "%s".\n' "$toolchain"
+            return 1;
+            ;;
+    esac
     # Set a minimal path for makefiles and scripts that are
     # designed to be independent of lmi's runtime path.
     export PATH="$minimal_path"
