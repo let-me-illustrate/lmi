@@ -68,7 +68,7 @@ export PKG_CONFIG_SYSROOT_DIR=
 # failure. Apparently the problem is colons in header paths, e.g.:
 #   c:/MinGW-20050827/bin/../lib/gcc/mingw32/3.4.4/include/stddef.h:
 # which elicit fatal errors such as this:
-#   .deps/DOCBparser.Plo:1: *** multiple target patterns.  Stop.
+#   .deps/DOCBparser.Plo:1: [*]* multiple target patterns.  Stop.
 
 # We can't have new lines in the CFLAGS, so get rid of them explicitly.
 xmlsoft_common_cflags=$(echo '
@@ -228,10 +228,10 @@ for lib in libxml2 libxslt; do
         CFLAGS="-g -O2 $xmlsoft_common_cflags" \
         $(eval "echo \$${lib}_options") || err=$?
     if [ -n "$err" ]; then
-        echo '*** Configuring failed, contents of config.log follows: ***'
-        echo '-----------------------------------------------------------'
+        echo '* Configuring failed, contents of config.log follows: *'
+        echo '-------------------------------------------------------'
         cat config.log
-        echo '-----------------------------------------------------------'
+        echo '-------------------------------------------------------'
         exit $err
     fi
     $MAKE install
@@ -256,10 +256,10 @@ for lib in xmlwrapp; do
         PKG_CONFIG_LIBDIR="$exec_prefix"/lib/pkgconfig \
         $xmlwrapp_options || err=$?
     if [ -n "$err" ]; then
-        echo '*** Configuring failed, contents of config.log follows: ***'
-        echo '-----------------------------------------------------------'
+        echo '* Configuring failed, contents of config.log follows: *'
+        echo '-------------------------------------------------------'
         cat config.log
-        echo '-----------------------------------------------------------'
+        echo '-------------------------------------------------------'
         exit $err
     fi
     $MAKE install
