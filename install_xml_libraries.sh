@@ -206,6 +206,7 @@ export XML_CATALOG_FILES="$throwaway_catalog"
 # Actually build ##############################################################
 
 for lib in libxml2 libxslt; do
+    printf 'Building %s with %s for %s.\n' "$lib" "$LMI_COMPILER" "$LMI_TRIPLET"
     libdir="$srcdir/third_party/$lib"
     cd "$libdir"
     if [ ! -x "configure" ]; then
@@ -234,6 +235,7 @@ for lib in libxml2 libxslt; do
         exit $err
     fi
     $MAKE install
+    printf 'Built %s with %s for %s.\n' "$lib" "$LMI_COMPILER" "$LMI_TRIPLET"
 done
 
 # Building xmlwrapp is similar, but sufficiently different to not try to fit it
@@ -241,6 +243,7 @@ done
 # the similarity.
 # shellcheck disable=SC2043
 for lib in xmlwrapp; do
+    printf 'Building %s with %s for %s.\n' "$lib" "$LMI_COMPILER" "$LMI_TRIPLET"
     libdir="$srcdir/third_party/$lib"
     # As this library doesn't have any special autogen.sh script, we can just
     # always run autoreconf unconditionally (without "--force").
@@ -260,6 +263,7 @@ for lib in xmlwrapp; do
         exit $err
     fi
     $MAKE install
+    printf 'Built %s with %s for %s.\n' "$lib" "$LMI_COMPILER" "$LMI_TRIPLET"
 done
 
 # Expunge the throwaway XML catalog.

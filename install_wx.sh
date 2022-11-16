@@ -113,6 +113,7 @@ fi
 mkdir --parents "$build_dir"
 
 cd "$build_dir"
+printf 'Building %s with %s for %s.\n' "wx" "$LMI_COMPILER" "$LMI_TRIPLET"
 # 'config_options' must not be double-quoted
 # shellcheck disable=SC2086
 "$wx_dir"/configure $config_options \
@@ -123,6 +124,8 @@ cd "$build_dir"
 
 $MAKE
 $MAKE install
+printf 'Built %s with %s for %s.\n' "wx" "$LMI_COMPILER" "$LMI_TRIPLET"
+
 # autotools: 'make install' doesn't respect group permissions--see:
 #   https://lists.gnu.org/archive/html/automake/2019-01/msg00000.html
 chmod -R g=u "$prefix"/include/wx*

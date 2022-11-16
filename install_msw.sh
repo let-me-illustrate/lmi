@@ -297,6 +297,9 @@ do
             return 1;
             ;;
     esac
+
+    printf 'Building %s with %s for %s.\n' "lmi" "$LMI_COMPILER" "$LMI_TRIPLET"
+
     # Set a minimal path for makefiles and scripts that are
     # designed to be independent of lmi's runtime path.
     export PATH="$minimal_path"
@@ -325,6 +328,7 @@ do
             && printf '\ncygcheck %s\n' "$z" && cmd /c "$CYGCHECK $z" ;
           done
     fi
+    printf 'Built %s with %s for %s.\n' "lmi" "$LMI_COMPILER" "$LMI_TRIPLET"
 done
 
 # GID should be the same for all files.
