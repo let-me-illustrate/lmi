@@ -54,8 +54,8 @@ case "$build_type" in
         ;;
 esac
 
-wxpdfdoc_cc_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math -fsignaling-nans'
-wxpdfdoc_cxx_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math -fsignaling-nans'
+ wxpdfdoc_cc_flags='-fno-ms-extensions -fno-omit-frame-pointer'
+wxpdfdoc_cxx_flags='-fno-ms-extensions -fno-omit-frame-pointer'
 
 config_options="
   --prefix=$prefix
@@ -101,11 +101,34 @@ mkdir --parents "$build_dir"
 
 cd "$build_dir"
 printf 'Building %s with %s for %s.\n' "wxpdfdoc" "$LMI_COMPILER" "$LMI_TRIPLET"
-# 'config_options' must not be double-quoted
-# shellcheck disable=SC2086
-"$wxpdfdoc_dir"/configure $config_options \
-    CFLAGS="$wxpdfdoc_cc_flags" \
-  CXXFLAGS="$wxpdfdoc_cxx_flags" \
+
+case "$LMI_COMPILER" in
+    (gcc)
+        valid_math="-frounding-math -fsignaling-nans"
+        # 'config_options' must not be double-quoted
+        # shellcheck disable=SC2086
+        "$wxpdfdoc_dir"/configure $config_options \
+            CFLAGS="$wxpdfdoc_cc_flags  $valid_math" \
+          CXXFLAGS="$wxpdfdoc_cxx_flags $valid_math" \
+
+        ;;
+    (clang)
+        valid_math="-Woverriding-t-option -ffp-model=strict -ffp-exception-behavior=ignore -Wno-overriding-t-option"
+        # 'config_options' must not be double-quoted
+        # shellcheck disable=SC2086
+        "$wxpdfdoc_dir"/configure $config_options \
+                CC=clang \
+               CXX=clang++ \
+            CFLAGS="$wxpdfdoc_cc_flags  $valid_math" \
+          CXXFLAGS="$wxpdfdoc_cxx_flags $valid_math" \
+           LDFLAGS="-fuse-ld=lld" \
+
+        ;;
+    (*)
+        printf '%s\n' "Unknown toolchain '$LMI_COMPILER'."
+        return 2;
+        ;;
+esac
 
 $MAKE
 $MAKE install

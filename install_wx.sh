@@ -63,8 +63,8 @@ vendor=${LMI_TRIPLET}-$gcc_version-$(git rev-parse --short HEAD:third_party/wx)
 # Configuration reference:
 #   https://lists.nongnu.org/archive/html/lmi/2007-11/msg00001.html
 
-wx_cc_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math -fsignaling-nans'
-wx_cxx_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math -fsignaling-nans'
+ wx_cc_flags='-fno-ms-extensions -fno-omit-frame-pointer'
+wx_cxx_flags='-fno-ms-extensions -fno-omit-frame-pointer'
 
 config_options="
   --prefix=$prefix
@@ -114,13 +114,37 @@ mkdir --parents "$build_dir"
 
 cd "$build_dir"
 printf 'Building %s with %s for %s.\n' "wx" "$LMI_COMPILER" "$LMI_TRIPLET"
-# 'config_options' must not be double-quoted
-# shellcheck disable=SC2086
-"$wx_dir"/configure $config_options \
-  CPPFLAGS="-I$prefix/include" \
-    CFLAGS="$wx_cc_flags" \
-  CXXFLAGS="$wx_cxx_flags" \
-   LDFLAGS="-L$exec_prefix/lib" \
+
+case "$LMI_COMPILER" in
+    (gcc)
+        valid_math="-frounding-math -fsignaling-nans"
+        # 'config_options' must not be double-quoted
+        # shellcheck disable=SC2086
+        "$wx_dir"/configure $config_options \
+          CPPFLAGS="-I$prefix/include" \
+            CFLAGS="$wx_cc_flags  $valid_math" \
+          CXXFLAGS="$wx_cxx_flags $valid_math" \
+           LDFLAGS="-L$exec_prefix/lib" \
+
+        ;;
+    (clang)
+        valid_math="-Woverriding-t-option -ffp-model=strict -ffp-exception-behavior=ignore -Wno-overriding-t-option"
+        # 'config_options' must not be double-quoted
+        # shellcheck disable=SC2086
+        "$wx_dir"/configure $config_options \
+                CC=clang \
+               CXX=clang++ \
+          CPPFLAGS="-I$prefix/include" \
+            CFLAGS="$wx_cc_flags  $valid_math" \
+          CXXFLAGS="$wx_cxx_flags $valid_math" \
+           LDFLAGS="-L$exec_prefix/lib -fuse-ld=lld" \
+
+        ;;
+    (*)
+        printf '%s\n' "Unknown toolchain '$LMI_COMPILER'."
+        return 2;
+        ;;
+esac
 
 $MAKE
 $MAKE install

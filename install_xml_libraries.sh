@@ -72,9 +72,6 @@ export PKG_CONFIG_SYSROOT_DIR=
 
 # We can't have new lines in the CFLAGS, so get rid of them explicitly.
 xmlsoft_common_cflags=$(echo '
-  -fno-ms-extensions
-  -frounding-math
-  -fsignaling-nans
   -Wno-cpp
   -Wno-discarded-qualifiers
   -Wno-format
@@ -220,13 +217,36 @@ for lib in libxml2 libxslt; do
     fi
     mkdir --parents "$build_dir/$lib"
     cd "$build_dir/$lib"
-    # 'configure' options must not be double-quoted
-    # shellcheck disable=SC2046
-    "$libdir/configure" \
-        LDFLAGS="$xmlsoft_common_ldflags" \
-        CPPFLAGS='-w' \
-        CFLAGS="-g -O2 $xmlsoft_common_cflags" \
-        $(eval "echo \$${lib}_options") || err=$?
+
+    case "$LMI_COMPILER" in
+        (gcc)
+            valid_math="-frounding-math -fsignaling-nans"
+            # 'configure' options must not be double-quoted
+            # shellcheck disable=SC2046
+            "$libdir/configure" \
+                CPPFLAGS='-w' \
+                CFLAGS="-g -O2 $xmlsoft_common_cflags -fno-ms-extensions $valid_math" \
+                LDFLAGS="$xmlsoft_common_ldflags" \
+                $(eval "echo \$${lib}_options") || err=$?
+            ;;
+        (clang)
+            valid_math="-Woverriding-t-option -ffp-model=strict -ffp-exception-behavior=ignore -Wno-overriding-t-option"
+            # 'configure' options must not be double-quoted
+            # shellcheck disable=SC2046
+            "$libdir/configure" \
+                CC=clang \
+                CXX=clang++ \
+                CPPFLAGS='-w' \
+                CFLAGS="-g -O2 $xmlsoft_common_cflags -fno-ms-extensions $valid_math" \
+                LDFLAGS="$xmlsoft_common_ldflags -fuse-ld=lld" \
+                $(eval "echo \$${lib}_options") || err=$?
+                ;;
+            (*)
+                printf '%s\n' "Unknown toolchain '$LMI_COMPILER'."
+                return 2;
+            ;;
+    esac
+
     if [ -n "$err" ]; then
         echo '* Configuring failed, contents of config.log follows: *'
         echo '-------------------------------------------------------'
@@ -251,10 +271,37 @@ for lib in xmlwrapp; do
     autoreconf --install
     mkdir --parents "$build_dir/$lib"
     cd "$build_dir/$lib"
-    # shellcheck disable=SC2086
-    "$libdir/configure" \
-        PKG_CONFIG_LIBDIR="$exec_prefix"/lib/pkgconfig \
-        $xmlwrapp_options || err=$?
+
+    case "$LMI_COMPILER" in
+        (gcc)
+            valid_math="-frounding-math -fsignaling-nans"
+            # 'configure' options must not be double-quoted
+            # shellcheck disable=SC2086
+            "$libdir/configure" \
+                PKG_CONFIG_LIBDIR="$exec_prefix"/lib/pkgconfig \
+                  CFLAGS="-g -O2 -fno-ms-extensions $valid_math" \
+                CXXFLAGS="-g -O2 -fno-ms-extensions $valid_math" \
+                $xmlwrapp_options || err=$?
+            ;;
+        (clang)
+            valid_math="-Woverriding-t-option -ffp-model=strict -ffp-exception-behavior=ignore -Wno-overriding-t-option"
+            # 'configure' options must not be double-quoted
+            # shellcheck disable=SC2086
+            "$libdir/configure" \
+                PKG_CONFIG_LIBDIR="$exec_prefix"/lib/pkgconfig \
+                      CC=clang \
+                     CXX=clang++ \
+                  CFLAGS="-g -O2 -fno-ms-extensions $valid_math" \
+                CXXFLAGS="-g -O2 -fno-ms-extensions $valid_math" \
+                LDFLAGS="-fuse-ld=lld" \
+                $xmlwrapp_options || err=$?
+            ;;
+        (*)
+            printf '%s\n' "Unknown toolchain '$LMI_COMPILER'."
+            return 2;
+            ;;
+    esac
+
     if [ -n "$err" ]; then
         echo '* Configuring failed, contents of config.log follows: *'
         echo '-------------------------------------------------------'
