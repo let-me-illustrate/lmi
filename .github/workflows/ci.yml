@@ -105,7 +105,7 @@ jobs:
           fi
 
           if [ "${{ matrix.compiler }}" = clang ]; then
-            packages="$packages clang libc++abi-dev libc++-dev"
+            packages="$packages clang libc++abi-dev libc++-dev lld"
           fi
 
           # Work around for an apparent bug in either Debian slim Docker image
