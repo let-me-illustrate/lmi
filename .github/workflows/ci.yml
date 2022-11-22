@@ -116,12 +116,12 @@ jobs:
           sudo apt-get -qq install $packages
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: 'recursive'
 
       - name: Install CCache
-        uses: vadz/ccache-action@51a14bafac785236dfc551c76c779429eaf85a13
+        uses: hendrikmuhs/ccache-action@v1.2.5
         with:
           key: ${{ matrix.name }}
           max-size: 900M
@@ -217,7 +217,7 @@ jobs:
           fi
 
       - name: Cache downloaded archives
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           # Using the hash of the makefile means that we're going to have
           # false negatives, i.e. re-download the files unnecessarily if the
@@ -232,7 +232,7 @@ jobs:
 
       - name: Cache third-party libraries
         id: cache-local
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             /opt/lmi/local/${{ env.LMI_COMPILER }}_${{ env.LMI_TRIPLET }}
