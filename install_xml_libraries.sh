@@ -248,10 +248,15 @@ for lib in libxml2 libxslt; do
     esac
 
     if [ -n "$err" ]; then
-        echo '* Configuring failed, contents of config.log follows: *'
-        echo '-------------------------------------------------------'
+        error_marker='*''*''*'
+        # Use ${error_marker} instead of a literal triple asterisk,
+        # because this script uses 'set -vx' and routinely echoing
+        # a line that contains the error marker's value makes it
+        # harder to find actual errors that use that marker.
+        echo "${error_marker} Configuring failed; 'config.log' contains:"
+        echo "-------------------------------------------------------"
         cat config.log
-        echo '-------------------------------------------------------'
+        echo "-------------------------------------------------------"
         exit $err
     fi
     $MAKE install
@@ -303,10 +308,11 @@ for lib in xmlwrapp; do
     esac
 
     if [ -n "$err" ]; then
-        echo '* Configuring failed, contents of config.log follows: *'
-        echo '-------------------------------------------------------'
+        error_marker='*''*''*'
+        echo "${error_marker} Configuring failed; 'config.log' contains:"
+        echo "-------------------------------------------------------"
         cat config.log
-        echo '-------------------------------------------------------'
+        echo "-------------------------------------------------------"
         exit $err
     fi
     $MAKE install
