@@ -257,7 +257,7 @@ for lib in libxml2 libxslt; do
         echo "-------------------------------------------------------"
         cat config.log
         echo "-------------------------------------------------------"
-        exit $err
+        exit "$err"
     fi
     $MAKE install
     printf 'Built %s with %s for %s.\n' "$lib" "$LMI_COMPILER" "$LMI_TRIPLET"
@@ -313,7 +313,7 @@ for lib in xmlwrapp; do
         echo "-------------------------------------------------------"
         cat config.log
         echo "-------------------------------------------------------"
-        exit $err
+        exit "$err"
     fi
     $MAKE install
     printf 'Built %s with %s for %s.\n' "$lib" "$LMI_COMPILER" "$LMI_TRIPLET"

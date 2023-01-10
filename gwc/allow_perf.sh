@@ -24,8 +24,9 @@
 # The copyright notice above is pro forma only. This is all based on:
 #   https://www.kernel.org/doc/html/latest/admin-guide/perf-security.html
 
-# This may become useful someday, but for now...
-exit 9
+# This script may become useful someday, but don't run it for now.
+# 'shellcheck' complained of a simple 'exit' here, so...
+printf 'DO NOT RUN THIS SCRIPT--PRESS ^C NOW\n'; sleep 60;
 
 # See:
 #   https://lists.nongnu.org/archive/html/lmi/2020-09/msg00073.html
