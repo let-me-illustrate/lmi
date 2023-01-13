@@ -131,5 +131,11 @@ EOF
 # been run previously:
 du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 
+# These two files are necessary, but as of 2023-01 'schroot' provides
+# no '/etc/hosts' at all; copy '/etc/nsswitch.conf' as well because it
+# has been a problem in the past--see:
+#   https://lists.nongnu.org/archive/html/lmi/2022-08/msg00014.html
+cp -a /etc/hosts /etc/nsswitch.conf /srv/chroot/"${CHRTNAME}"/etc
+
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Ran 'debootstrap'."  | tee /dev/tty
+echo "$stamp $0: Ran 'debootstrap'; configured networking."  | tee /dev/tty
