@@ -158,4 +158,4 @@ apt-get --assume-yes install \
 #   Not creating home directory `/run/uuidd'.
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Installed debian packages."  | tee /dev/tty
+echo "$stamp $0: Installed debian packages." | tee /dev/tty || true

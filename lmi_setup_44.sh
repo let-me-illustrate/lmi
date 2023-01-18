@@ -38,4 +38,4 @@ export WINEDEBUG=-all,err+all,fixme+all
 /opt/lmi/src/lmi/nychthemeral_test.sh || true
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Ran nychthemeral test for '$(whoami)'."  | tee /dev/tty
+echo "$stamp $0: Ran nychthemeral test for '$(whoami)'." | tee /dev/tty || true

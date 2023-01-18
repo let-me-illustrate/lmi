@@ -58,4 +58,4 @@ if [ -e "${loc0}" ] || [ -e "${loc1}" ] ; then echo "Oops."; exit 9; fi
 rm --force /etc/schroot/chroot.d/centos7lmi.conf
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Removed old centos chroot."  | tee /dev/tty
+echo "$stamp $0: Removed old centos chroot." | tee /dev/tty || true

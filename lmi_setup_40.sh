@@ -119,4 +119,4 @@ cd ~/.wine/drive_c/users/"${user}"/var/opt/ || { printf 'failed: cd\n'; exit 3; 
 ln --symbolic --relative --force --no-dereference /var/opt/lmi/ ./lmi
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Configured 'wine' for user '$user'."  | tee /dev/tty
+echo "$stamp $0: Configured 'wine' for user '$user'." | tee /dev/tty || true

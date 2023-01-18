@@ -97,4 +97,4 @@ do
 } done
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Configured users."  | tee /dev/tty
+echo "$stamp $0: Configured users." | tee /dev/tty || true

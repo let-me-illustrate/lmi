@@ -60,4 +60,4 @@ subscription-manager repos --enable "rhel-*-optional-rpms" --enable "rhel-*-extr
 yum --assumeyes install epel-release
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Installed EPEL."  | tee /dev/tty
+echo "$stamp $0: Installed EPEL." | tee /dev/tty || true

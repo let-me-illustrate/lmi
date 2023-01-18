@@ -138,4 +138,4 @@ du   -sb /srv/chroot/"${CHRTNAME}"/var/cache/apt/archives
 cp -a /etc/hosts /etc/nsswitch.conf /srv/chroot/"${CHRTNAME}"/etc
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Ran 'debootstrap'; configured networking."  | tee /dev/tty
+echo "$stamp $0: Ran 'debootstrap'; configured networking." | tee /dev/tty || true

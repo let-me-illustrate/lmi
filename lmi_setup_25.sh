@@ -85,4 +85,4 @@ case "$(git --version)" in
 esac
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Configured {zsh,vim,git} for user '$(whoami)'."  | tee /dev/tty
+echo "$stamp $0: Configured {zsh,vim,git} for user '$(whoami)'." | tee /dev/tty || true

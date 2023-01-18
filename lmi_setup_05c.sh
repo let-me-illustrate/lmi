@@ -58,4 +58,4 @@ yum --assumeyes install git less ncurses-term sudo vim zsh
 chsh -s /bin/zsh root
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Reconfigured centos chroot."  | tee /dev/tty
+echo "$stamp $0: Reconfigured centos chroot." | tee /dev/tty || true

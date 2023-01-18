@@ -73,4 +73,4 @@ schroot --chroot="${CHRTNAME}" --user="${NORMAL_USER}" --directory=/tmp ./lmi_se
 schroot --chroot="${CHRTNAME}" --user=nemo             --directory=/tmp ./lmi_setup_44.sh
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0 [centos host]"  | tee /dev/tty
+echo "$stamp $0 [centos host]" | tee /dev/tty || true

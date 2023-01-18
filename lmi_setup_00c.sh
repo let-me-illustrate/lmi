@@ -116,4 +116,4 @@ cp -a install_msw.sh   /srv/chroot/centos7lmi/tmp
 schroot --chroot=centos7lmi --user=root --directory=/tmp ./lmi_setup_01c.sh
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0 Installed in centos chroot."  | tee /dev/tty
+echo "$stamp $0 Installed in centos chroot." | tee /dev/tty || true

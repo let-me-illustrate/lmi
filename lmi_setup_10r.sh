@@ -36,4 +36,4 @@ yum --assumeyes install debootstrap schroot
 #   ls /usr/share/debootstrap/scripts
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Installed 'debootstrap' [redhat]."  | tee /dev/tty
+echo "$stamp $0: Installed 'debootstrap' [redhat]." | tee /dev/tty || true

@@ -50,4 +50,4 @@ mkdir -p "${logdir}"
 # wine ./lmi_wx_shared.exe --ash_nazg --data_path=../data
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Installed lmi for '$NORMAL_USER'."  | tee /dev/tty
+echo "$stamp $0: Installed lmi for '$NORMAL_USER'." | tee /dev/tty || true

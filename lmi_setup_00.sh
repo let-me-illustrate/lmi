@@ -177,5 +177,5 @@ seconds=$(($(date -u '+%s' -d "$stamp1") - $(date -u '+%s' -d "$stamp0")))
 elapsed=$(date -u -d @"$seconds" +'%H:%M:%S')
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0 Installed and tested lmi."    | tee /dev/tty
-echo "Elapsed: $elapsed; log suffix: $fstamp" | tee /dev/tty
+echo "$stamp $0 Installed and tested lmi."    | tee /dev/tty || true
+echo "Elapsed: $elapsed; log suffix: $fstamp" | tee /dev/tty || true

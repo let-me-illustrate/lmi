@@ -70,4 +70,4 @@ apt-get --assume-yes update
 apt-get --assume-yes dist-upgrade
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Updated debian chroot."  | tee /dev/tty
+echo "$stamp $0: Updated debian chroot." | tee /dev/tty || true

@@ -67,4 +67,4 @@ assert_not_chrooted
 findmnt /srv
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Reconfigured redhat chroot."  | tee /dev/tty
+echo "$stamp $0: Reconfigured redhat chroot." | tee /dev/tty || true

@@ -58,4 +58,4 @@ find /srv/cache_for_lmi/blessed -type d -exec chmod g+s {} +
 chmod -R g=u /srv/cache_for_lmi/blessed
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Created lmi directories; adjusted git."  | tee /dev/tty
+echo "$stamp $0: Created lmi directories; adjusted git." | tee /dev/tty || true
