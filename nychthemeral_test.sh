@@ -224,7 +224,14 @@ schemata_clutter='
 /^  Done\.$/d
 '
 
+# Escape a literal dollar sign as '[$]' rather than '\$'. The latter
+# is less weird, but 'shellcheck' thinks '\$VARIABLE' calls for an
+# expansion.
+
 nychthemeral_clutter='
+/^[[:xdigit:]]*:err:winediag:nodrv_CreateWindow Application tried to create a window, but no driver could be loaded\.$/d
+/^[[:xdigit:]]*:err:winediag:nodrv_CreateWindow Make sure that your X server is running and that [$]DISPLAY is set correctly\.$/d
+/^[[:xdigit:]]*:err:systray:initialize_systray Could not create tray window$/d
 /^# install; check physical closure/d
 /^# GUI test/d
 /^# cgi and cli tests/d
