@@ -6,9 +6,9 @@
 # then extract the results of the tests in the TOMS 748 paper and
 # save them to distinct files.
 
-printf 'i686-w64-mingw32 no longer supported; do' > /dev/tty
-printf '  "git switch --detach 72547df8069cfb"'   > /dev/tty
-printf 'if you require i686+x87 timings.'         > /dev/tty
+tty -s && printf 'i686-w64-mingw32 no longer supported; do' > /dev/tty
+tty -s && printf '  "git switch --detach 72547df8069cfb"'   > /dev/tty
+tty -s && printf 'if you require i686+x87 timings.'         > /dev/tty
 
 # 'triplets' really is used, but in a zsh-specific way
 # shellcheck disable=SC2034
@@ -20,7 +20,7 @@ for LMI_TRIPLET in ${=triplets} ;
 do
 log_dir=$(dirname "$(readlink --canonicalize "$0")")
 {
-printf 'LMI_TRIPLET = "%s"\n' "$LMI_TRIPLET" > /dev/tty
+tty -s && printf 'LMI_TRIPLET = "%s"\n' "$LMI_TRIPLET" > /dev/tty
 
 make clean
 # shellcheck disable=SC2039,SC2154,SC3001

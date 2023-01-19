@@ -246,4 +246,4 @@ seconds=$(($(date '+%s' -d "$stamp1") - $(date '+%s' -d "$stamp0")))
 elapsed=$(date -u -d @"$seconds" +'%H:%M:%S')
 echo "Elapsed: $elapsed"
 
-echo Finished building lmi. >/dev/tty
+tty -s && echo Finished building lmi. >/dev/tty

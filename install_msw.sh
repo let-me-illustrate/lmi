@@ -249,7 +249,7 @@ then
     restore_cache_mount=$(mount --mount-entries | grep '/srv/cache_for_lmi ')
     [ -z "$restore_cache_mount" ] \
       || printf '%s\n' "$restore_cache_mount" | grep --silent 'C:/srv/cache_for_lmi' \
-      || printf 'Replacing former cache mount:\n  %s\n' "$restore_cache_mount" >/dev/tty
+      || printf 'Replacing former cache mount:\n  %s\n' "$restore_cache_mount"
     mount --force "C:/srv/cache_for_lmi" "/srv/cache_for_lmi"
 fi
 
@@ -439,4 +439,4 @@ seconds=$(($(date '+%s' -d "$stamp1") - $(date '+%s' -d "$stamp0")))
 elapsed=$(date -u -d @"$seconds" +'%H:%M:%S')
 echo "Elapsed: $elapsed"
 
-echo Finished building lmi. >/dev/tty
+tty -s && echo Finished building lmi. >/dev/tty
