@@ -24,7 +24,7 @@ case "$toolchain" in
         ;;
 esac
 {
-tty -s && printf 'toolchain = "%s"\n' "$toolchain" > /dev/tty
+printf 'toolchain = "%s"\n' "$toolchain" > /dev/tty
 # shellcheck disable=SC2154
   make "$coefficiency" cli_timing > /dev/null
 }
