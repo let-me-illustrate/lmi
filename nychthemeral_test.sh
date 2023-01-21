@@ -224,14 +224,19 @@ schemata_clutter='
 /^  Done\.$/d
 '
 
+# When /dev/tty doesn't exist, 'wine' issues these extra diagnostics.
+#
 # Escape a literal dollar sign as '[$]' rather than '\$'. The latter
 # is less weird, but 'shellcheck' thinks '\$VARIABLE' calls for an
 # expansion.
 
-nychthemeral_clutter='
+absent_tty_clutter='
 /^[[:xdigit:]]*:err:winediag:nodrv_CreateWindow Application tried to create a window, but no driver could be loaded\.$/d
 /^[[:xdigit:]]*:err:winediag:nodrv_CreateWindow Make sure that your X server is running and that [$]DISPLAY is set correctly\.$/d
 /^[[:xdigit:]]*:err:systray:initialize_systray Could not create tray window$/d
+'
+
+nychthemeral_clutter='
 /^# install; check physical closure/d
 /^# GUI test/d
 /^# cgi and cli tests/d
@@ -272,6 +277,8 @@ nychthemeral_clutter='
 /^# test PETE rebuild/d
 /^$/d
 '
+
+if ! tty -s; then nychthemeral_clutter="${absent_tty_clutter}${nychthemeral_clutter}"; fi
 
 # Install a bland 'configurable_settings.xml' for all architectures.
 # This overwrites any existing file, but developers probably won't
