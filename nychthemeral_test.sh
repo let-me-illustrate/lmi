@@ -340,7 +340,7 @@ exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
 log_dir="$exec_prefix"/logs
 mkdir --parents "$log_dir"
 {
-printf 'toolchain: %s\n' "${LMI_COMPILER}_${LMI_TRIPLET}" > /dev/tty || true
+if tty -s; then printf 'toolchain: %s\n' "${LMI_COMPILER}_${LMI_TRIPLET}" > /dev/tty; fi
 
 # Cannot recursively check script on path determined at runtime, so
 # a directive like 'source="$srcdir"' doesn't work.
