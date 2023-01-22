@@ -32,7 +32,7 @@ assert_chrooted
 
 # Suppress unwanted "wine32 is missing" messages--see:
 #   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00016.html
-export WINEDEBUG=-all,err+all,fixme+all
+export WINEDEBUG=-all,err+all,fixme+all,fixme-hid,fixme-ntdll,fixme-win
 
 # Symlink the repository's hooks/ directory:
 cd /opt/lmi/src/lmi || { printf 'failed: cd\n'; exit 3; }
