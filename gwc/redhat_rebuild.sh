@@ -6,8 +6,14 @@ set -evx
 # maintained outside any chroot is up to date--i.e., that all changes
 # committed in any earlier chroot have been pushed.
 
-            echo 'check_certificate = off' >> ~/.wgetrc
-sudo sh -c "echo 'check_certificate = off' >> ~/.wgetrc"
+case "$(cat /proc/version)" in
+    (*"Red Hat"*)
+                    echo 'check_certificate = off' >> ~/.wgetrc
+        sudo sh -c "echo 'check_certificate = off' >> ~/.wgetrc"
+        ;;
+    (*)
+        ;;
+esac
 
 cd /srv/cache_for_lmi/logs || printf 'Cannot cd\n'
 wget -N -nv https://git.savannah.nongnu.org/cgit/lmi.git/plain/lmi_setup_00.sh
