@@ -232,6 +232,7 @@ schemata_clutter='
 
 absent_tty_clutter='
 /^[[:xdigit:]]*:err:winediag:nodrv_CreateWindow Application tried to create a window, but no driver could be loaded\.$/d
+/^[[:xdigit:]]*:err:winediag:nodrv_CreateWindow L"The explorer process failed to start."$/d
 /^[[:xdigit:]]*:err:winediag:nodrv_CreateWindow Make sure that your X server is running and that [$]DISPLAY is set correctly\.$/d
 /^[[:xdigit:]]*:err:systray:initialize_systray Could not create tray window$/d
 '
@@ -368,7 +369,7 @@ make "$coefficiency" install check_physical_closure 2>&1 \
 # The automated GUI test simulates keyboard and mouse actions, so
 # no such actions must be performed manually while it is running
 # (unless it is run in a virtual frame buffer, as with Xvfb here).
-# The $WINEDEBUG setting inhibits wine-{6,7}.0 nuisance messages.
+# The $WINEDEBUG setting inhibits wine-{6,7,8}.0 nuisance messages.
 if [ "x86_64-pc-linux-gnu" != "$LMI_TRIPLET" ]
 then
   printf '\n# GUI test\n\n'
