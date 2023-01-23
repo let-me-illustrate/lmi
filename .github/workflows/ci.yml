@@ -277,6 +277,34 @@ jobs:
             exit "$err"
           fi
 
+      - name: Launch Xvfb
+        if: matrix.mingw
+        run: |
+            sudo mkdir /tmp/.X11-unix
+            sudo chmod 1777 /tmp/.X11-unix
+            Xvfb :10 -screen 0 1600x1200x24 &
+            num_tries=1
+            while true; do
+                if xset -d :10 -q >/dev/null 2>&1; then
+                    echo 'Xvfb has become available.'
+                    # Trying to use it immediately can still result in errors
+                    # when creating the windows, somehow, so give it some time
+                    # to settle.
+                    sleep 3
+                    break
+                fi
+
+                if [[ $num_tries -gt 10 ]]; then
+                    echo 'Timed out waiting for Xvfb'
+                    exit 1
+                fi
+
+                ((num_tries++))
+                echo "Still waiting for Xvfb (attempt #$num_tries)"
+                sleep 3
+            done
+            echo 'DISPLAY=:10' >> "$GITHUB_ENV"
+
       - name: Build lmi
         run: |
           if [ ${{ matrix.autotools }} ]; then
@@ -352,34 +380,6 @@ jobs:
           else
             make "$coefficiency" unit_tests
           fi
-
-      - name: Launch Xvfb
-        if: matrix.mingw
-        run: |
-            sudo mkdir /tmp/.X11-unix
-            sudo chmod 1777 /tmp/.X11-unix
-            Xvfb :10 -screen 0 1600x1200x24 &
-            num_tries=1
-            while true; do
-                if xset -d :10 -q >/dev/null 2>&1; then
-                    echo 'Xvfb has become available.'
-                    # Trying to use it immediately can still result in errors
-                    # when creating the windows, somehow, so give it some time
-                    # to settle.
-                    sleep 3
-                    break
-                fi
-
-                if [[ $num_tries -gt 10 ]]; then
-                    echo 'Timed out waiting for Xvfb'
-                    exit 1
-                fi
-
-                ((num_tries++))
-                echo "Still waiting for Xvfb (attempt #$num_tries)"
-                sleep 3
-            done
-            echo 'DISPLAY=:10' >> "$GITHUB_ENV"
 
       - name: Run GUI tests
         if: matrix.mingw
