@@ -90,7 +90,10 @@ jobs:
             # run 64-bit programs in this build, so set WINEDEBUG to a
             # value equivalent to its default/unset value but recognized
             # as disabling error output by Debian /usr/bin/wine script.
-            echo 'WINEDEBUG=-all,err+all,fixme+all' >> "$GITHUB_ENV"
+            #
+            # Additionally disable some "fixme" messages that don't seem to be
+            # useful and that we can't do anything about.
+            echo 'WINEDEBUG=-all,err+all,fixme+all,fixme-hid,fixme-imm' >> "$GITHUB_ENV"
           else
             packages+=(libgtk-3-dev)
           fi
