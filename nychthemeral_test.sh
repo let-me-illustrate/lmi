@@ -281,10 +281,6 @@ nychthemeral_clutter='
 
 if ! tty -s; then nychthemeral_clutter="${absent_tty_clutter}${nychthemeral_clutter}"; fi
 
-# for temporary debugging...
-tty -s || echo "no tty"
-echo "${nychthemeral_clutter}"
-
 # Install a bland 'configurable_settings.xml' for all architectures.
 # This overwrites any existing file, but developers probably won't
 # care, and end users are unaffected. Without this step, the
