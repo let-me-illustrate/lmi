@@ -214,6 +214,7 @@ file::file(std::string const& file_path)
         // phyloanalyze() tests inspect only file name [sort by enumerator]
         : phyloanalyze("^ChangeLog-")  ? e_binary
         : phyloanalyze("^Speed_")      ? e_binary
+        : phyloanalyze("^nohup.out$")  ? e_binary
         : phyloanalyze("^tags$")       ? e_expungible
         : phyloanalyze("^COPYING$")    ? e_gpl
         : phyloanalyze("^quoted_gpl")  ? e_gpl
