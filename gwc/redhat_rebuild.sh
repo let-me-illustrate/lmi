@@ -27,5 +27,7 @@ sudo ./lmi_setup_00.sh >log_"$(date -u +"%Y%m%dT%H%MZ")" 2>&1
 # server whose administrators give lmi developers NOPASSWD access
 # in '/etc/sudoers'. On a personal debian system, if that access
 # is given to the current user, then this script may be run thus:
-#   $ rm nohup.out; nohup /srv/chroot/lmi_bookworm_5/opt/lmi/src/lmi/gwc/redhat_rebuild.sh & disown; exit
+#   $ rm nohup.out; nohup /wherever/gwc/redhat_rebuild.sh & disown; exit
+# where '/wherever/' is some up-to-date git directory, e.g.:
+#   /srv/chroot/lmi_bookworm_5x/opt/lmi/src/lmi/
 # in a freshly-opened terminal for testing.
