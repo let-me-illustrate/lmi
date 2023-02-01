@@ -124,10 +124,10 @@ git clone git://git.savannah.nongnu.org/lmi.git \
 cd lmi || { printf 'failed: cd\n'; exit 3; }
 
 if [ "greg" = "$(whoami)" ]; then
-git config --global user.email gchicares@sbcglobal.net
-git config --global user.name "Gregory W. Chicares"
-# Iff this chroot needs write access to savannah, then reconfigure
-# the URL, using your savannah ID instead of mine:
+  git config --global user.email gchicares@sbcglobal.net
+  git config --global user.name "Gregory W. Chicares"
+  # Iff this chroot needs write access to savannah, then reconfigure
+  # the URL, using your savannah ID instead of mine:
   git remote set-url --push origin chicares@git.sv.gnu.org:/srv/git/lmi.git
   git remote add xanadu     https://github.com/vadz/lmi.git   || echo "Oops."
   git remote add shangri-la https://github.com/thesiv/lmi.git || echo "Oops."
