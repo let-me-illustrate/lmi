@@ -118,5 +118,10 @@ mkdir -p ~/.wine/drive_c/users/"${user}"/var/opt/
 cd ~/.wine/drive_c/users/"${user}"/var/opt/ || { printf 'failed: cd\n'; exit 3; }
 ln --symbolic --relative --force --no-dereference /var/opt/lmi/ ./lmi
 
+  personalize="/srv/cache_for_lmi/$(whoami)/personalize.sh"
+  if [ -f "$personalize" ] && [ -x "$personalize" ]; then
+    "$personalize"
+  fi
+
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
 echo "$stamp $0: Configured 'wine' for user '$user'." | tee /dev/tty || true
