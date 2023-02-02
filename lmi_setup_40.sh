@@ -118,6 +118,24 @@ mkdir -p ~/.wine/drive_c/users/"${user}"/var/opt/
 cd ~/.wine/drive_c/users/"${user}"/var/opt/ || { printf 'failed: cd\n'; exit 3; }
 ln --symbolic --relative --force --no-dereference /var/opt/lmi/ ./lmi
 
+# Custom shell scripts to be run for each user, e.g.:
+#
+#   #!/bin/sh
+#   set -evx
+#   # Write personalization commands here.
+#   git config --global user.email me@example.com
+#   git config --global user.name "My Full Name"
+#   git config --global --add safe.directory /opt/lmi/proprietary
+#   git config --global --add safe.directory /opt/lmi/src/lmi
+#
+# This commit message:
+#   https://github.com/git/git/commit/8959555cee7ec045958f9b6dd62e541affb7e7d9
+# | add an owner check for the top-level directory
+# explains:
+# | This new default behavior is obviously incompatible with the concept of
+# | shared repositories
+# so lmi's shared repositories require 'safe.directory'.
+
 personalize="/srv/cache_for_lmi/$(whoami)/personalize.sh"
 if [ -f "$personalize" ] && [ -x "$personalize" ]; then
   "$personalize"
