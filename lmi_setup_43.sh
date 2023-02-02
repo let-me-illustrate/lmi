@@ -131,6 +131,11 @@ if [ "greg" = "$(whoami)" ]; then
   git remote set-url --push origin chicares@git.sv.gnu.org:/srv/git/lmi.git
   git remote add xanadu     https://github.com/vadz/lmi.git   || echo "Oops."
   git remote add shangri-la https://github.com/thesiv/lmi.git || echo "Oops."
+else
+  personalize="/srv/cache_for_lmi/$(whoami)/personalize.sh"
+  if [ -f "$personalize" ] && [ -x "$personalize" ]; then
+    "$personalize"
+  fi
 fi
 
 find . -path ./.git -prune -o -type f -print0 \
