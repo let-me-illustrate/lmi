@@ -125,8 +125,9 @@ ln --symbolic --relative --force --no-dereference /var/opt/lmi/ ./lmi
 #   # Write personalization commands here.
 #   git config --global user.email me@example.com
 #   git config --global user.name "My Full Name"
-#   git config --global --add safe.directory /opt/lmi/proprietary
 #   git config --global --add safe.directory /opt/lmi/src/lmi
+#   git config --global --add safe.directory /opt/lmi/proprietary
+#   git config --global --add safe.directory /srv/cache_for_lmi/blessed/proprietary
 #
 # This commit message:
 #   https://github.com/git/git/commit/8959555cee7ec045958f9b6dd62e541affb7e7d9
