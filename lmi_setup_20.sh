@@ -89,6 +89,7 @@ apt-get --assume-yes install \
   bear \
   bsdmainutils \
   bzip2 \
+  ccache \
   clang \
   clang-format \
   clang-tidy \
