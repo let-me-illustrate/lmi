@@ -134,7 +134,7 @@
     </Bscmake>
     <Manifest />
     <Manifest>
-      <AdditionalManifestFiles>3rdparty/wxWidgets/include/wx/msw/wx_dpi_aware_pmv2.manifest</AdditionalManifestFiles>
+      <AdditionalManifestFiles>third_party/wx/include/wx/msw/wx_dpi_aware_pmv2.manifest</AdditionalManifestFiles>
     </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -178,7 +178,7 @@
     </Bscmake>
     <Manifest />
     <Manifest>
-      <AdditionalManifestFiles>3rdparty/wxWidgets/include/wx/msw/wx_dpi_aware_pmv2.manifest</AdditionalManifestFiles>
+      <AdditionalManifestFiles>third_party/wx/include/wx/msw/wx_dpi_aware_pmv2.manifest</AdditionalManifestFiles>
     </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Release|Win32'">
@@ -217,7 +217,7 @@
     </Bscmake>
     <Manifest />
     <Manifest>
-      <AdditionalManifestFiles>3rdparty/wxWidgets/include/wx/msw/wx_dpi_aware_pmv2.manifest</AdditionalManifestFiles>
+      <AdditionalManifestFiles>third_party/wx/include/wx/msw/wx_dpi_aware_pmv2.manifest</AdditionalManifestFiles>
     </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DLL Debug|Win32'">
@@ -259,7 +259,7 @@
     </Bscmake>
     <Manifest />
     <Manifest>
-      <AdditionalManifestFiles>3rdparty/wxWidgets/include/wx/msw/wx_dpi_aware_pmv2.manifest</AdditionalManifestFiles>
+      <AdditionalManifestFiles>third_party/wx/include/wx/msw/wx_dpi_aware_pmv2.manifest</AdditionalManifestFiles>
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>

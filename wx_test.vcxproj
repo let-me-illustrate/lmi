@@ -52,7 +52,7 @@
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
   <ImportGroup Label="PropertySheets">
-    <Import Project="3rdparty\wxWidgets\wxwidgets.props" />
+    <Import Project="wxwidgets.props" />
     <Import Project="wxpdfdoc.props" />
     <Import Project="xmlwrapp.props" />
   </ImportGroup>
