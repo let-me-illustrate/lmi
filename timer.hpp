@@ -32,6 +32,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <cmath>
 
 void lmi_sleep(int seconds);
 
@@ -196,29 +197,59 @@ AliquotTimer<F>& AliquotTimer<F>::operator()()
     double       now        = start_time;
     double       previous   = start_time;
     double       minimum    = limit;
+    double       maximum    = 0.0;
+    // These variables are used to compute the mean and the standard deviation
+    // on the fly using Welford's algorithm (see TAoCP Vol 2, section 4.2.2).
+    double       last_m     = 0.0;
+    double       last_s     = 0.0;
     int j = 0;
     for(; now < expiry_min || j < 100 && now < expiry_max; ++j)
         {
         f_();
         previous = now;
         now = timer.inspect();
-        if(now - previous < minimum)
+        double const delta = now - previous;
+        if(j == 0)
             {
-            minimum = now - previous;
+            minimum =
+            maximum = delta;
+
+            last_m = delta;
+            last_s = 0;
+            }
+        else
+            {
+            if(delta < minimum)
+                {
+                minimum = delta;
+                }
+            if(delta > maximum)
+                {
+                maximum = delta;
+                }
+            double const oldM = last_m;
+            last_m += (delta - oldM) / (j + 1);
+            last_s += (delta - oldM) * (delta - last_m);
             }
         }
     timer.stop();
     unit_time_ = minimum / dbl_freq;
+    double const std_dev = j > 0 ? std::sqrt(last_s/j) : 0;
+    constexpr auto microsecond_factor = 1.0e6;
     std::ostringstream oss;
     oss
         << std::scientific << std::setprecision(3)
         << timer.elapsed_seconds() / j
-        << " s mean; "
+        << " s avg, "
         << std::fixed      << std::setprecision(0)
-        << std::setw(10) << 1.0e6 * unit_time_
-        << " us least of "
-        << std::setw( 3) << j
-        << " runs"
+        << std::setw(5) << microsecond_factor * std_dev / dbl_freq
+        << " us SD "
+        << std::setw(7) << microsecond_factor * unit_time_
+        << " min "
+        << std::setw(7) << microsecond_factor * maximum / dbl_freq
+        << " max ("
+        << std::setw(3) << j
+        << " runs)"
         ;
     str_ = oss.str();
 
