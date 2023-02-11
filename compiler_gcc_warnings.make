@@ -1,6 +1,6 @@
 # Compiler-specific makefile: gcc warnings.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -44,6 +44,18 @@ else ifneq (,$(filter $(gcc_version), 11 11.0))
     -Wenum-conversion \
     -Winvalid-imported-macros \
 
+else ifneq (,$(filter $(gcc_version), 12 12.0))
+
+# g++-11 warnings not recognized by g++-10
+# [also consider any new warnings added in gcc-12]
+
+  gcc_version_specific_cxx_warnings := \
+    -Wctad-maybe-unsupported \
+    -Wdeprecated-enum-enum-conversion \
+    -Wdeprecated-enum-float-conversion \
+    -Wenum-conversion \
+    -Winvalid-imported-macros \
+
 endif
 
 # Write '-Wno' options at the end, with a rationale here.
@@ -51,8 +63,7 @@ endif
 # -Wabi: useful only for a special purpose
 # -Wanalyzer-too-complex: not actually helpful
 # -Wdate-time: only for "bit-wise-identical reproducible compilations"
-# -Wfloat-equal: too many warnings on correct code, e.g.,
-#   exact comparison to zero
+# -Wfloat-equal: too many false positives, e.g., 0.0 == X
 # -Winline: 'inline' now refers to linkage, not inlining
 # -Wmissing-declarations: for C++, this flags valid functions that
 #   arguably belong in an unnamed namespace
@@ -60,7 +71,9 @@ endif
 # -Wparentheses: its diagnostics are beyond pedantic
 # -Wpsabi: undocumented--ARM only?
 # -Wsign-conversion: [see note elsewhere in this file]
-# -Wsuggest-attribute: too gcc-specific
+# -Wsuggest-attribute: these are all nonstandard and gcc-specific,
+#   except '-Wno-suggest-attribute=noreturn', which might occasionally
+#   be useful for C++ although it gives many false positives.
 # -Wsystem-headers: not generally useful
 # -Wswitch-default: false positives for switches on enums that
 #   include all cases (verified by -Wswitch-enum)
@@ -100,6 +113,7 @@ gcc_common_warnings := \
   -Wmultichar \
   -Wnull-dereference \
   -Wpacked \
+  -Wpedantic \
   -Wpointer-arith \
   -Wredundant-decls \
   -Wrestrict \
@@ -224,11 +238,14 @@ postponed_gcc_cxx_warnings := \
 
 gcc_common_extra_warnings := \
 
+# Target-specific modifications.
+
 bourn_cast_test.o: gcc_common_extra_warnings += \
   -Wno-double-promotion \
 
 $(cgicc_objects): gcc_common_extra_warnings += \
   -Wno-conversion \
+  -Wno-deprecated-declarations \
   -Wno-zero-as-null-pointer-constant \
 
 wno_sign_conv_objects := \
@@ -243,6 +260,19 @@ wno_sign_conv_objects := \
 #   grep 'error:' | sed -e '/size_type/d'
 
 $(wno_sign_conv_objects): gcc_common_extra_warnings += -Wno-sign-conversion
+
+# gcc-12 gives spurious warnings when <regex> is used. See:
+#   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105562
+# For lmi, this seems to affect only UBSAN builds.
+
+wno_maybe_uninitialized_objects := \
+  my_prod.o \
+  pdf_command_wx.o \
+  wx_test_about_version.o \
+
+ifeq (ubsan,$(build_type))
+  $(wno_maybe_uninitialized_objects): gcc_common_extra_warnings += -Wno-maybe-uninitialized
+endif
 
 # Keep version-specific warnings last, so that they override others.
 

@@ -1,6 +1,6 @@
 // Rates that depend on the amount they're multiplied by.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -62,8 +62,6 @@ enum e_stratified
     };
 
 /// A tiered or banded datum.
-///
-/// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO stratified_entity final
 {
@@ -77,7 +75,6 @@ class LMI_SO stratified_entity final
         ,std::vector<double> const& values
         ,std::string const&         gloss = std::string()
         );
-    ~stratified_entity() = default;
 
     bool operator==(stratified_entity const&) const;
 
@@ -91,9 +88,9 @@ class LMI_SO stratified_entity final
     std::vector<double> const& values() const;
     std::string const&         gloss () const;
 
-    std::vector<double> limits_;
-    std::vector<double> values_;
-    std::string         gloss_;
+    std::vector<double> limits_ {};
+    std::vector<double> values_ {};
+    std::string         gloss_  {};
 };
 
 /// Rates that depend upon the amount they're multiplied by.

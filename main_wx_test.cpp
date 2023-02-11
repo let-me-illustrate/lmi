@@ -1,6 +1,6 @@
 // Main file for automated testing of wx interface.
 //
-// Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -751,7 +751,9 @@ bool SkeletonTest::StoreCurrentException()
         return true;
         }
 
-    return false;
+#if defined LMI_GCC
+    throw "Unreachable--silences a compiler diagnostic.";
+#endif // defined LMI_GCC
 }
 
 void SkeletonTest::RethrowStoredException()
@@ -814,6 +816,18 @@ void SkeletonTest::RunTheTests()
         wxLogError("Failed to find the application main window.");
         ExitMainLoop();
         return;
+        }
+
+    if(1.0 != MainWin->GetDPIScaleFactor())
+        {
+        // See:
+        //   https://lists.nongnu.org/archive/html/lmi/2022-09/msg00000.html
+        // et seqq., as well as
+        //   https://lists.nongnu.org/archive/html/lmi/2022-09/msg00017.html
+        std::cout
+            << "DPI scale factor is not unity, so tests may fail with xvfb"
+            << std::endl
+            ;
         }
 
     // Close any initially opened dialogs (e.g. "About" dialog shown unless a

@@ -1,6 +1,6 @@
 // Numeric stinted cast, across whose bourn no value is returned.
 //
-// Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -205,7 +205,7 @@ constexpr To bourn_cast(From from, std::true_type, std::false_type)
 /// The underlying idea is discussed here:
 ///   https://groups.google.com/forum/#!original/comp.std.c++/WHu6gUiwXkU/ZyV_ejRrXFYJ
 /// and here:
-///   http://www.two-sdg.demon.co.uk/curbralan/code/numeric_cast/numeric_cast.hpp
+///   https://web.archive.org/web/20191015161113/http://www.two-sdg.demon.co.uk/curbralan/code/numeric_cast/numeric_cast.hpp
 /// and embodied in Kevlin Henney's original boost:numeric_cast,
 /// distributed under the GPL-compatible Boost Software License.
 

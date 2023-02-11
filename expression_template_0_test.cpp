@@ -1,6 +1,6 @@
 // Expression templates, investigation 0--unit test.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -296,11 +296,21 @@ void mete_valarray_typical()
         std::valarray<double> va9 = 3.14 - va0;
         va8 += va0;
         va8 += va0 * va1;
+
+        // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=106664
+#if defined LMI_GCC
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Walloc-zero"
+#endif // defined LMI_GCC
+        va9 = (1.0 - va8) * va9;
+#if defined LMI_GCC
+#   pragma GCC diagnostic pop
+#endif // defined LMI_GCC
+
 // This doesn't compile, and std::valarray's only comparable facility
 // is its apply() member function, which applies only unary functions.
 //    va0 = std::max(2.7, va8);
 //    va0 = std::max(va8, va9);
-        va9 = (1.0 - va8) * va9;
         }
 }
 

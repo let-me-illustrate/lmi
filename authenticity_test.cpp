@@ -1,6 +1,6 @@
 // Data-file and date validation--unit test.
 //
-// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -266,7 +266,7 @@ void PasskeyTest::CheckNominal(char const* file, int line) const
 /// By default, lmi authenticates itself at startup. Its executable
 /// and data files shouldn't need to be in any particular directory;
 /// an invocation like this:
-///   wine /opt/lmi/bin/lmi_wx_shared --data_path=/opt/lmi/data
+///   /opt/lmi/bin/lmi_wx_shared --data_path=/opt/lmi/data
 /// should just work. This test checks that invariant, as follows.
 ///
 /// First, change ${PWD}; authenticate; and restore ${PWD}, verifying

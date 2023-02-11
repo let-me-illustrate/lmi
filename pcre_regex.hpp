@@ -1,6 +1,6 @@
 // C++ wrapper for PCRE2 C API.
 //
-// Copyright (C) 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -27,6 +27,15 @@
 // The PCRE library is readily available for any realistic POSIX
 // system, but not necessarily otherwise.
 #if defined LMI_POSIX
+
+// Avoid spurious warnings about "recursive" expansion of PCRE2_SPTR (which
+// isn't really recursive at all). See:
+//   https://lists.nongnu.org/archive/html/lmi/2022-07/msg00019.html
+//   https://www.open-std.org/jtc1/sc22/wg21/docs/cwg_active.html#268
+#if defined LMI_CLANG
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wdisabled-macro-expansion"
+#endif // defined LMI_CLANG
 
 // UTF-8 everywhere; UTF-[^8] nowhere.
 #define PCRE2_CODE_UNIT_WIDTH 8
@@ -574,6 +583,10 @@ search_all(std::string_view const& s, regex const& rx)
 }
 
 } // namespace pcre
+
+#if defined LMI_CLANG
+#   pragma clang diagnostic pop
+#endif // defined LMI_CLANG
 
 #endif // defined LMI_POSIX
 

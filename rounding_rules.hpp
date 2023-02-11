@@ -1,6 +1,6 @@
 // Rounding rules.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -35,8 +35,6 @@
 #include <string>
 
 /// Parameters of a rounding rule.
-///
-/// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO rounding_parameters final
 {
@@ -48,7 +46,6 @@ class LMI_SO rounding_parameters final
         ,rounding_style     style
         ,std::string const& gloss = std::string()
         );
-    ~rounding_parameters() = default;
 
     bool operator==(rounding_parameters const&) const;
 
@@ -76,7 +73,8 @@ class LMI_SO rounding_parameters final
 /// rounding is a property of the transaction, and not of the variable
 /// it ultimately affects.
 ///
-/// Implicitly-declared special member functions do the right thing.
+/// Implicitly-declared special member functions do the right thing,
+/// except that there are none, only because they aren't needed.
 ///
 /// Notes on particular rounding functors.
 ///

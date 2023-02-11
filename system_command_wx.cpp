@@ -1,6 +1,6 @@
 // Instruct the operating system to execute a command--wx interface.
 //
-// Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -84,10 +84,10 @@ void concrete_system_command(std::string const& cmd_line)
     wxFrame const* f =
                                  wxTheApp
         ? dynamic_cast<wxFrame*>(wxTheApp->GetTopWindow())
-        : nullptr;
+        : nullptr
         ;
     bool const b = f && f->GetStatusBar();
-    std::ostream null_output(0);
+    std::ostream null_output {nullptr};
     std::ostream& statusbar_if_available = b ? status() : null_output;
 
     statusbar_if_available << "Running..." << std::flush;

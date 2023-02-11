@@ -1,6 +1,6 @@
 // MVC Model for life-insurance illustrations: xml I/O.
 //
-// Copyright (C) 1998, 2001, 2002, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -197,9 +197,13 @@ void Input::redintegrate_ex_ante
     if(class_version() == file_version)
         {
         // INPUT !! Next time the class version is updated,
-        // remove this 'goto' and its label.
+        // remove this 'goto' and its label, and restore the
+        // 'return' statement.
+#if 1
         goto jumper;
+#else // 0
         return;
+#endif // 0
         }
 
     // Prior to version 3, 'SolveType' distinguished:

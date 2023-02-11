@@ -2,7 +2,7 @@
 
 # Destroy any existing centos chroot for lmi.
 #
-# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -58,4 +58,4 @@ if [ -e "${loc0}" ] || [ -e "${loc1}" ] ; then echo "Oops."; exit 9; fi
 rm --force /etc/schroot/chroot.d/centos7lmi.conf
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Removed old centos chroot."  | tee /dev/tty
+echo "$stamp $0: Removed old centos chroot." | tee /dev/tty || true

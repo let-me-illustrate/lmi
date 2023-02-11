@@ -5,7 +5,7 @@
 <!--
     Life insurance illustrations: wxWindows xml resources.
 
-    Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+    Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -48,11 +48,13 @@
         <bitmap stock_id="wxART_PRINT"/>
         <longhelp>Print this document</longhelp>
     </object>
+<!--
     <object class="tool" name="wxID_PREVIEW">
         <tooltip>Print preview</tooltip>
         <bitmap stock_id="print-preview"/>
         <longhelp>See what this document will look like when printed</longhelp>
     </object>
+-->
     <object class="tool" name="print_pdf">
         <tooltip>Print to PDF</tooltip>
         <bitmap stock_id="save-pdf"/>

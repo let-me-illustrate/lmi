@@ -1,6 +1,6 @@
 // Overloaded operator new--unit test.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -31,6 +31,9 @@
 // resulting in an object that wouldn't necessarily work here because
 // of unwanted shared-library attributes.
 #include "wx_new.cpp"
+#if defined UNIT_TESTING_WX_NEW
+// This meaningless test avoids a clang '-Wunused-macros' warning.
+#endif // defined UNIT_TESTING_WX_NEW
 
 #include "test_tools.hpp"
 

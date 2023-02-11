@@ -2,7 +2,7 @@
 
 # Create a chroot for cross-building "Let me illustrate...".
 #
-# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -50,4 +50,4 @@ mkdir -p "${logdir}"
 # wine ./lmi_wx_shared.exe --ash_nazg --data_path=../data
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Installed lmi for '$NORMAL_USER'."  | tee /dev/tty
+echo "$stamp $0: Installed lmi for '$NORMAL_USER'." | tee /dev/tty || true

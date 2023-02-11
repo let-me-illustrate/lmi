@@ -1,6 +1,6 @@
 // Generate group premium quote PDF file.
 //
-// Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -669,11 +669,11 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
             case e_col_supplemental_face_amount:
             case e_col_total_face_amount:
                 if(!has_suppl_amount) {visibility = oe_hidden;}
-                // Fall through
-            case e_col_number:
-            case e_col_name:
-            case e_col_age:
-            case e_col_dob:
+                [[fallthrough]];
+            case e_col_number: [[fallthrough]];
+            case e_col_name:   [[fallthrough]];
+            case e_col_age:    [[fallthrough]];
+            case e_col_dob:    [[fallthrough]];
             case e_col_basic_face_amount:
                 // Labels of these columns are simple literals.
                 header = cd.header_;
@@ -681,7 +681,7 @@ void group_quote_pdf_generator_wx::save(std::string const& output_filename)
             case e_col_additional_premium:
             case e_col_total_premium:
                 if(!has_addl_premium) {visibility = oe_hidden;}
-                // Fall through
+                [[fallthrough]];
             case e_col_basic_premium:
                 {
                 // Labels of these columns are format strings as they need to
@@ -1151,11 +1151,12 @@ void group_quote_pdf_generator_wx::output_aggregate_values
                 // Do nothing: leave 'average_text' empty.
                 }
                 break;
-            case e_col_number: // fall through--should be unreachable
-            case e_col_name:   // fall through--should be unreachable
-            case e_col_age:    // fall through--should be unreachable
-            case e_col_dob:    // fall through--should be unreachable
-            case e_col_max:    // fall through--should be unreachable
+            // These cases should all be unreachable.
+            case e_col_number: [[fallthrough]];
+            case e_col_name:   [[fallthrough]];
+            case e_col_age:    [[fallthrough]];
+            case e_col_dob:    [[fallthrough]];
+            case e_col_max:    [[fallthrough]];
             default:
                 {
                 alarum() << "Case " << i << " not found." << LMI_FLUSH;

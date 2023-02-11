@@ -2,7 +2,7 @@
 
 # Create a chroot for cross-building "Let me illustrate...".
 #
-# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -30,8 +30,13 @@ set -evx
 assert_not_su
 assert_chrooted
 
+# Suppress unwanted "wine32 is missing" messages--see:
+#   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00016.html
+export WINEDEBUG=-all,err+all,fixme+all,fixme-hid,fixme-ntdll,fixme-win
+
 # Initialize wine. See:
 #   https://lists.nongnu.org/archive/html/lmi/2016-10/msg00002.html
+#   (even with wine-7.0, no ".exe" suffix is required here)
 WINEDLLOVERRIDES=mscoree=d wine wineboot
 #
 # Don't worry about this:
@@ -70,8 +75,10 @@ winecfg
 #   HKCU\Control Panel\International:
 #     set sShortDate and sLongDate to "yyyy-MM-dd"
 # using either the 'regedit' GUI:
+#   (even with wine-7.0, no ".exe" suffix is required here)
 wine regedit
 # or the command-line registry editor:
+#   (even with wine-7.0, no ".exe" suffix is required here)
 #   wine reg add "HKCU\Control Panel\International" /v "sLongDate"  /d "yyyy-MM-dd" /f
 #   wine reg add "HKCU\Control Panel\International" /v "sShortDate" /d "yyyy-MM-dd" /f
 
@@ -111,5 +118,29 @@ mkdir -p ~/.wine/drive_c/users/"${user}"/var/opt/
 cd ~/.wine/drive_c/users/"${user}"/var/opt/ || { printf 'failed: cd\n'; exit 3; }
 ln --symbolic --relative --force --no-dereference /var/opt/lmi/ ./lmi
 
+# Custom shell scripts to be run for each user, e.g.:
+#
+#   #!/bin/sh
+#   set -evx
+#   # Write personalization commands here.
+#   git config --global user.email me@example.com
+#   git config --global user.name "My Full Name"
+#   git config --global --add safe.directory /opt/lmi/src/lmi
+#   git config --global --add safe.directory /opt/lmi/proprietary
+#   git config --global --add safe.directory /srv/cache_for_lmi/blessed/proprietary
+#
+# This commit message:
+#   https://github.com/git/git/commit/8959555cee7ec045958f9b6dd62e541affb7e7d9
+# | add an owner check for the top-level directory
+# explains:
+# | This new default behavior is obviously incompatible with the concept of
+# | shared repositories
+# so lmi's shared repositories require 'safe.directory'.
+
+personalize="/srv/cache_for_lmi/$(whoami)/personalize.sh"
+if [ -f "$personalize" ] && [ -x "$personalize" ]; then
+  "$personalize"
+fi
+
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Configured 'wine' for user '$user'."  | tee /dev/tty
+echo "$stamp $0: Configured 'wine' for user '$user'." | tee /dev/tty || true

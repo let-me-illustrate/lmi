@@ -1,6 +1,6 @@
 // Manage floating-point environment--unit test.
 //
-// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -21,17 +21,14 @@
 
 #include "pchfile.hpp"
 
-// Include this first, in order to get the prototype for nonstandard
-// _control87() before any other header can include <float.h>.
-// Historically, for cygwin with '-mno-cygwin', that didn't work quite
-// the same way as it does for MinGW:
-//   http://cygwin.com/ml/cygwin/2005-03/msg00752.html
-//   http://cygwin.com/ml/cygwin/2006-08/msg00521.html
-// but that deficiency is easily worked around below, and no lmi code
-// except this unit test uses that nonstandard function.
 #if defined __MINGW32__
-#   undef __STRICT_ANSI__
-#   include <float.h>
+// No lmi code except this unit test uses this nonstandard function.
+// MinGW declares it in <float.h> iff __STRICT_ANSI__ is not defined,
+// but in practice that macro is always defined, and #undef'ing it
+// is forbidden with gcc-12. The MinGW prototype is decorated with
+// various macros, but those are liable to change over time, and they
+// do not seem to be necessary.
+unsigned int _control87(unsigned int newcw, unsigned int mask);
 #endif // defined __MINGW32__
 
 #include "fenv_guard.hpp"

@@ -2,7 +2,7 @@
 
 # Create a chroot for cross-building "Let me illustrate..." on centos-7.
 #
-# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -116,4 +116,4 @@ cp -a install_msw.sh   /srv/chroot/centos7lmi/tmp
 schroot --chroot=centos7lmi --user=root --directory=/tmp ./lmi_setup_01c.sh
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0 Installed in centos chroot."  | tee /dev/tty
+echo "$stamp $0 Installed in centos chroot." | tee /dev/tty || true

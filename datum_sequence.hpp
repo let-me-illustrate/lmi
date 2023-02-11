@@ -1,6 +1,6 @@
 // Input-sequence class for wx data-transfer framework.
 //
-// Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -37,9 +37,7 @@
 /// be specified by numbers, keywords, or a combination of both. Each
 /// sequence's semantics determines whether its allowable values may
 /// be numbers, or keywords, or both; that's a fixed property of each
-/// derived class. Keyword values may be blocked in context even if
-/// they would be allowed in general; that's a runtime property of
-/// each derived-class instance.
+/// derived class.
 ///
 /// For some sequences, no keywords are defined, and therefore none
 /// are ever permitted. It is difficult, e.g., to conceive of a
@@ -54,75 +52,60 @@
 ///
 /// Still others permit both numbers and keywords. Specified amount,
 /// e.g., must accommodate numeric entry.
-///
-/// The dtor is pure because this class should not be instantiated.
-/// Most of the other virtuals would normally be overridden in any
-/// derived class, but aren't pure because that requirement is obvious
-/// and it's convenient to invoke them in assert_sanity() to validate
-/// ctor postconditions.
-///
-/// Implicitly-declared special member functions do the right thing.
 
-class datum_sequence
-    :public datum_string
+class sequence_base
+    :public datum_string_base
 {
   public:
-    datum_sequence();
-    datum_sequence(datum_sequence const&) = default;
-    explicit datum_sequence(std::string const&);
-    ~datum_sequence() override = 0;
+    bool equals(sequence_base const&) const;
 
-    datum_sequence& operator=(datum_sequence const&) = default;
-    datum_sequence& operator=(std::string const&);
-
-    void block_keyword_values(bool);
-
-    virtual bool numeric_values_are_allowable() const;
-    virtual bool keyword_values_are_allowable() const;
+    virtual bool numeric_values_are_allowable() const = 0;
+    virtual bool keyword_values_are_allowable() const = 0;
     virtual std::string const default_keyword() const;
     virtual std::map<std::string,std::string> const allowed_keywords() const;
 
-    bool equals(datum_sequence const&) const;
-
   protected:
-    bool keyword_values_are_blocked() const;
+    sequence_base() = default;
+    explicit sequence_base(std::string const&);
 
-  private:
+    sequence_base& operator=(std::string const&);
+
     void assert_sanity() const;
-
-    bool keyword_values_are_blocked_;
 };
 
-bool operator==(datum_sequence const&, datum_sequence const&);
+bool operator==(sequence_base const&, sequence_base const&);
 
 // Specialize value_cast<> for each derived class, e.g., as follows:
 //
-// template<> inline datum_sequence value_cast<datum_sequence,std::string>
+// template<> inline leaf_class value_cast<leaf_class,std::string>
 //     (std::string const& from)
 // {
-//     return datum_sequence(from);
+//     return leaf_class(from);
 // }
 //
-// template<> inline std::string value_cast<std::string,datum_sequence>
-//     (datum_sequence const& from)
+// template<> inline std::string value_cast<std::string,leaf_class>
+//     (leaf_class const& from)
 // {
 //     return from.value();
 // }
 
 /// Numeric MVC input sequence.
 
-class numeric_sequence
-    :public datum_sequence
+class numeric_sequence final
+    :public sequence_base
 {
   public:
-    numeric_sequence() = default;
-    explicit numeric_sequence(std::string const& s) : datum_sequence(s) {}
+    numeric_sequence();
+    explicit numeric_sequence(std::string const&);
 
     numeric_sequence& operator=(std::string const&);
 
     bool numeric_values_are_allowable() const override {return true;}
     bool keyword_values_are_allowable() const override {return false;}
     std::map<std::string,std::string> const allowed_keywords() const override;
+
+  private:
+    void concrete_if_not_pure() override {}
 };
 
 bool operator==(numeric_sequence const&, numeric_sequence const&);
@@ -141,18 +124,21 @@ template<> inline std::string value_cast<std::string,numeric_sequence>
 
 /// MVC input sequence for payments.
 
-class payment_sequence
-    :public datum_sequence
+class payment_sequence final
+    :public sequence_base
 {
   public:
-    payment_sequence() = default;
-    explicit payment_sequence(std::string const& s) : datum_sequence(s) {}
+    payment_sequence();
+    explicit payment_sequence(std::string const&);
 
     payment_sequence& operator=(std::string const&);
 
     bool numeric_values_are_allowable() const override {return true;}
     bool keyword_values_are_allowable() const override {return true;}
     std::map<std::string,std::string> const allowed_keywords() const override;
+
+  private:
+    void concrete_if_not_pure() override {}
 };
 
 bool operator==(payment_sequence const&, payment_sequence const&);
@@ -171,12 +157,12 @@ template<> inline std::string value_cast<std::string,payment_sequence>
 
 /// MVC input sequence for payment mode.
 
-class mode_sequence
-    :public datum_sequence
+class mode_sequence final
+    :public sequence_base
 {
   public:
-    mode_sequence() = default;
-    explicit mode_sequence(std::string const& s) : datum_sequence(s) {}
+    mode_sequence();
+    explicit mode_sequence(std::string const&);
 
     mode_sequence& operator=(std::string const&);
 
@@ -184,6 +170,9 @@ class mode_sequence
     bool keyword_values_are_allowable() const override {return true;}
     std::string const default_keyword() const override;
     std::map<std::string,std::string> const allowed_keywords() const override;
+
+  private:
+    void concrete_if_not_pure() override {}
 };
 
 bool operator==(mode_sequence const&, mode_sequence const&);
@@ -202,18 +191,21 @@ template<> inline std::string value_cast<std::string,mode_sequence>
 
 /// MVC input sequence for specified amount.
 
-class specamt_sequence
-    :public datum_sequence
+class specamt_sequence final
+    :public sequence_base
 {
   public:
-    specamt_sequence() = default;
-    explicit specamt_sequence(std::string const& s) : datum_sequence(s) {}
+    specamt_sequence();
+    explicit specamt_sequence(std::string const&);
 
     specamt_sequence& operator=(std::string const&);
 
     bool numeric_values_are_allowable() const override {return true;}
     bool keyword_values_are_allowable() const override {return true;}
     std::map<std::string,std::string> const allowed_keywords() const override;
+
+  private:
+    void concrete_if_not_pure() override {}
 };
 
 bool operator==(specamt_sequence const&, specamt_sequence const&);
@@ -232,12 +224,12 @@ template<> inline std::string value_cast<std::string,specamt_sequence>
 
 /// MVC input sequence for death benefit option.
 
-class dbo_sequence
-    :public datum_sequence
+class dbo_sequence final
+    :public sequence_base
 {
   public:
-    dbo_sequence() = default;
-    explicit dbo_sequence(std::string const& s) : datum_sequence(s) {}
+    dbo_sequence();
+    explicit dbo_sequence(std::string const&);
 
     dbo_sequence& operator=(std::string const&);
 
@@ -245,6 +237,9 @@ class dbo_sequence
     bool keyword_values_are_allowable() const override {return true;}
     std::string const default_keyword() const override;
     std::map<std::string,std::string> const allowed_keywords() const override;
+
+  private:
+    void concrete_if_not_pure() override {}
 };
 
 bool operator==(dbo_sequence const&, dbo_sequence const&);

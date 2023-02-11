@@ -25,7 +25,7 @@
 /* 2003-02 GWC got this code from
  *   http://www.nondot.org/gcc/md5_8c-source.html
  * and modified it as indicated below by initials 'GWC'. Modifications are
- *   Copyright (C) 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares
+ *   Copyright (C) 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares
  * and licensed under the same terms as the original, as given above.
  * This is a derived work. Any defect in it should not reflect on
  * Ulrich Drepper's reputation.
@@ -84,11 +84,13 @@
 # define SWAP(n) (n)
 #endif // !defined WORDS_BIGENDIAN
 
-#if defined LMI_GCC
+#if defined LMI_GCC || defined LMI_CLANG
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wold-style-cast"
-#   pragma GCC diagnostic ignored "-Wuseless-cast"
-#endif // defined LMI_GCC
+#   if defined LMI_GCC
+#       pragma GCC diagnostic ignored "-Wuseless-cast"
+#   endif // defined LMI_GCC
+#endif // defined LMI_GCC || defined LMI_CLANG
 
 /* This array contains the bytes used to pad the buffer to the next
  * 64-byte boundary. (RFC 1321, 3.1: Step 1)
@@ -504,6 +506,6 @@ md5_process_block (void const* buffer, std::size_t a_len, md5_ctx* ctx)
   ctx->D = D;
 }
 
-#if defined LMI_GCC
+#if defined LMI_GCC || defined LMI_CLANG
 #   pragma GCC diagnostic pop
-#endif // defined LMI_GCC
+#endif // defined LMI_GCC || defined LMI_CLANG

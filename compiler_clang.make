@@ -1,6 +1,6 @@
 # Compiler-specific makefile: clang.
 #
-# Copyright (C) 2022 Gregory W. Chicares.
+# Copyright (C) 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -118,7 +118,11 @@ endif
 # The gprof '-pg' flag is one example. Another is '-fPIC', which
 # pc-linux-gnu requires for '-shared':
 #   https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html#DOCF1
-# Yet another is 'debug_flag': the GNU Coding Standards
+# Yet another is 'debug_flag': including it in $(LDFLAGS) seems
+# to be historical practice, as seen in the GNU 'make' manual:
+#   https://www.gnu.org/software/make/manual/make.html#Complex-Makefile
+# | LDFLAGS = -g
+# even though GNU 'ld' ignores '-g'; and the GNU Coding Standards
 #   https://www.gnu.org/prep/standards/html_node/Command-Variables.html
 # suggest including flags such as '-g' in $(CFLAGS) because they
 # are "not required for proper compilation", but lmi deliberately
@@ -159,11 +163,15 @@ CFLAGS =
 
 # C++ compiler flags.
 
-REQUIRED_CXXFLAGS = -std=c++20 $(CXX_WARNINGS) $(REQUIRED_COMPILER_FLAGS)
+REQUIRED_CXXFLAGS = -std=c++20 -stdlib=libc++ $(CXX_WARNINGS) $(REQUIRED_COMPILER_FLAGS)
 
 CXXFLAGS =
 
 # Linker flags.
+
+# Prefer to invoke the linker through compiler frontends, because
+# that takes care of linking each language's required libraries.
+# Accordingly, pass linker options with '-Wl,'.
 
 # Directories set in $(overriding_library_directories) are searched
 # before any others except the current build directory. There seems
@@ -203,16 +211,19 @@ all_library_directories := \
 EXTRA_LDFLAGS :=
 
 REQUIRED_LDFLAGS = \
+  -fuse-ld=lld \
+  -Wl,-Map,$@.map \
+  -stdlib=libc++ \
   $(c_l_flags) \
   $(addprefix -L , $(all_library_directories)) \
   $(EXTRA_LDFLAGS) \
   $(EXTRA_LIBS) \
 
-LDFLAGS = -Wl,-Map,$@.map \
-
 ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
-  LDFLAGS += -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -Wl,-z,separate-code
+  REQUIRED_LDFLAGS += -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -Wl,-z,separate-code
 endif
+
+LDFLAGS =
 
 # Archiver flags.
 

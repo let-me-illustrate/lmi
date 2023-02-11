@@ -1,6 +1,6 @@
 // Internal Revenue Code section 7702A (MEC testing).
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -38,8 +38,6 @@ LMI_SO void TestIrc7702A();
 //   7-pay premium strategy changes premium when spec amt changes;
 //   should optionally calculate factors e.g. 7pp, NSP from first principles.
 
-// Implicitly-declared special member functions do the right thing.
-
 class Irc7702A final
 {
   public:
@@ -66,6 +64,9 @@ class Irc7702A final
 //      ,std::vector<double> const&  a_PolFee
 // TAXATION !! probably other arguments are needed for reproposals
         );
+
+    Irc7702A(Irc7702A const&) = default;
+    Irc7702A& operator=(Irc7702A const&) = delete; // const data members
     ~Irc7702A() = default;
 
     void Initialize7702A

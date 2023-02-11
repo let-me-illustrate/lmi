@@ -2,7 +2,7 @@
 
 # Create a chroot for cross-building "Let me illustrate...".
 #
-# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -30,16 +30,14 @@ set -evx
 assert_not_su
 assert_chrooted
 
+# Suppress unwanted "wine32 is missing" messages--see:
+#   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00016.html
+export WINEDEBUG=-all,err+all,fixme+all,fixme-hid,fixme-ntdll,fixme-win
+
 # Symlink the repository's hooks/ directory:
 cd /opt/lmi/src/lmi || { printf 'failed: cd\n'; exit 3; }
 mv .git/hooks .git/hooks-orig
 ln --symbolic --force --no-dereference ../hooks .git
-
-# Iff this chroot needs write access to savannah, then reconfigure
-# the URL, using your savannah ID instead of mine:
-if [ "greg" = "$(whoami)" ]; then
-  git remote set-url --push origin chicares@git.sv.gnu.org:/srv/git/lmi.git
-fi
 
 # Clone the bare proprietary repository to create a working copy.
 #
@@ -89,7 +87,7 @@ rm /opt/lmi/"${LMI_COMPILER}_${LMI_TRIPLET}"/build/ship/my*
 # the first time, because there are no old files to remove):
 cd /opt/lmi/data || { printf 'failed: cd\n'; exit 3; }
 rm --force proprietary.dat proprietary.ndx
-wine /opt/lmi/bin/rate_table_tool --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
+wine /opt/lmi/bin/rate_table_tool.exe --accept --file=proprietary --merge=/opt/lmi/proprietary/tables
 
 coefficiency="--jobs=$(nproc)"
 
@@ -123,15 +121,20 @@ cd free/src || { printf 'failed: cd\n'; exit 3; }
 git clone git://git.savannah.nongnu.org/lmi.git \
   || git clone https://git.savannah.nongnu.org/r/lmi.git \
   || git clone https://github.com/let-me-illustrate/lmi.git
+cd lmi || { printf 'failed: cd\n'; exit 3; }
 
 if [ "greg" = "$(whoami)" ]; then
-git remote add xanadu     https://github.com/vadz/lmi.git   || echo "Oops."
-git remote add shangri-la https://github.com/thesiv/lmi.git || echo "Oops."
+  git config --global user.email gchicares@sbcglobal.net
+  git config --global user.name "Gregory W. Chicares"
+  # Iff this chroot needs write access to savannah, then reconfigure
+  # the URL, using your savannah ID instead of mine:
+  git remote set-url --push origin chicares@git.sv.gnu.org:/srv/git/lmi.git
+  git remote add xanadu     https://github.com/vadz/lmi.git   || echo "Oops."
+  git remote add shangri-la https://github.com/thesiv/lmi.git || echo "Oops."
 fi
 
-cd lmi || { printf 'failed: cd\n'; exit 3; }
 find . -path ./.git -prune -o -type f -print0 \
   | xargs --null --max-procs="$(nproc)" --replace='{}' touch '--reference=/opt/lmi/src/lmi/{}' '{}'
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Ran system test for '$(whoami)'."  | tee /dev/tty
+echo "$stamp $0: Ran system test for '$(whoami)'." | tee /dev/tty || true

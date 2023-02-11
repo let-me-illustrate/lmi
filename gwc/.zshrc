@@ -52,7 +52,7 @@ export LESSCHARSET=utf-8
 
 # Avoid "it looks like wine32 is missing, you should install it": see
 #   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00016.html
-export WINEDEBUG=-all,err+all,fixme+all
+export WINEDEBUG=-all,err+all,fixme+all,fixme-hid,fixme-ntdll,fixme-win
 
 # This UBSan option is generally useful.
 export UBSAN_OPTIONS=print_stacktrace=1

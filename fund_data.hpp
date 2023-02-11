@@ -1,6 +1,6 @@
 // Fund names and investment-management fees.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -31,9 +31,7 @@
 #include <string>
 #include <vector>
 
-// Separate account funds: their names and investment mgmt fees
-
-// Implicitly-declared special member functions do the right thing.
+/// Separate account funds: names and investment management fees
 
 class LMI_SO FundInfo final
 {
@@ -47,7 +45,6 @@ class LMI_SO FundInfo final
         ,std::string const& LongName
         ,std::string const& gloss = std::string()
         );
-    ~FundInfo() = default;
 
     double ScalarIMF() const;
     std::string const& ShortName() const;
@@ -66,7 +63,6 @@ class LMI_SO FundData final
 {
   public:
     explicit FundData(fs::path const& a_Filename);
-    ~FundData() = default;
 
     static void write_funds_files();
     static void write_proprietary_funds_files();

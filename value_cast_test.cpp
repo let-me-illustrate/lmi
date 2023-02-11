@@ -1,6 +1,6 @@
 // General conversion between types--unit test.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -35,12 +35,14 @@
 #include <istream>
 #include <limits>
 #include <ostream>
+#include <type_traits>
 
 class NotDefaultConstructible
 {
   public:
     NotDefaultConstructible(std::istream const&) {}
 };
+static_assert(!std::is_default_constructible_v<NotDefaultConstructible>);
 
 struct X {std::string s;};
 std::istream& operator>>(std::istream& is, X&       x) {is >> x.s; return is;}

@@ -1,6 +1,6 @@
 // Ledger data.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -108,8 +108,8 @@ void Ledger::SetRunBases(int length)
             l_map_rep[mce_run_gen_mdpt_sep_full] = LedgerVariant(length);
             }
             break;
-        case mce_group_private_placement:      // Deliberately fall through.
-        case mce_individual_private_placement: // Deliberately fall through.
+        case mce_group_private_placement:      [[fallthrough]];
+        case mce_individual_private_placement: [[fallthrough]];
         case mce_finra:
             {
             l_map_rep[mce_run_gen_curr_sep_full] = LedgerVariant(length);
@@ -134,8 +134,8 @@ void Ledger::SetRunBases(int length)
             l_map_rep[mce_run_gen_guar_sep_half] = LedgerVariant(length);
             }
             break;
-        case mce_offshore_private_placement_obsolete: // fall through
-        case mce_ill_reg_private_placement_obsolete:  // fall through
+        case mce_offshore_private_placement_obsolete: [[fallthrough]];
+        case mce_ill_reg_private_placement_obsolete:  [[fallthrough]];
         case mce_variable_annuity_obsolete:
             {
             alarum() << "Unsupported ledger type '" << ledger_type_ << "'." << LMI_FLUSH;
@@ -239,7 +239,8 @@ Ledger& Ledger::PlusEq(Ledger const& a_Addend)
             ((*this_i).second.LapseYear
             ,(*addend_i).second.LapseYear
             );
-        ++this_i, ++addend_i;
+        ++this_i;
+        ++addend_i;
         }
 
     LMI_ASSERT(this_i == l_map_rep.end() && addend_i == lm_addend.end());

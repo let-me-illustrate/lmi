@@ -1,6 +1,6 @@
 // Rates that depend on the amount they're muliplied by.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -418,7 +418,12 @@ double stratified_charges::minimum_tiered_sepacct_load_for_7702() const
 {
     stratified_entity const& z = datum("CurrSepAcctLoadTieredByAssets");
     LMI_ASSERT(!z.values().empty());
+    // Return here, but retain alternative below.
+volatile bool avoid_warning {true};
+if(avoid_warning)
+    {
     return *std::min_element(z.values().begin(), z.values().end());
+    }
 
     stratified_entity const& z0 = datum("CurrSepAcctLoadBandedByAssets");
     stratified_entity const& z1 = datum("CurrSepAcctLoadBandedByPrem");

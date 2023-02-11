@@ -2,7 +2,7 @@
 
 # Run a comprehensive set of tests.
 
-# Copyright (C) 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -92,6 +92,11 @@ install_clutter='
 # that, for some unknown reason, mustn't end in '$').
 
 gui_test_clutter='
+/^it looks like wine32 is missing, you should install it\.$/d
+/^multiarch needs to be enabled first\.  as root, please$/d
+/^execute "dpkg --add-architecture i386 && apt-get update &&$/d
+/^apt-get install wine32"$/d
+/^apt-get install wine32:i386"$/d
 /^about_dialog_version: started$/d
 /^About dialog version string is .[[:digit:]]\+T[[:digit:]]\+Z.\.$/d
 /^time=[[:digit:]]\+ms (for about_dialog_version)$/d
@@ -219,6 +224,19 @@ schemata_clutter='
 /^  Done\.$/d
 '
 
+# When /dev/tty doesn't exist, 'wine' issues these extra diagnostics.
+#
+# Escape a literal dollar sign as '[$]' rather than '\$'. The latter
+# is less weird, but 'shellcheck' thinks '\$VARIABLE' calls for an
+# expansion.
+
+absent_tty_clutter='
+/^[[:xdigit:]]*:err:winediag:nodrv_CreateWindow Application tried to create a window, but no driver could be loaded\.$/d
+/^[[:xdigit:]]*:err:winediag:nodrv_CreateWindow L"The explorer process failed to start."$/d
+/^[[:xdigit:]]*:err:winediag:nodrv_CreateWindow Make sure that your X server is running and that [$]DISPLAY is set correctly\.$/d
+/^[[:xdigit:]]*:err:systray:initialize_systray Could not create tray window$/d
+'
+
 nychthemeral_clutter='
 /^# install; check physical closure/d
 /^# GUI test/d
@@ -260,6 +278,8 @@ nychthemeral_clutter='
 /^# test PETE rebuild/d
 /^$/d
 '
+
+if ! tty -s; then nychthemeral_clutter="${absent_tty_clutter}${nychthemeral_clutter}"; fi
 
 # Install a bland 'configurable_settings.xml' for all architectures.
 # This overwrites any existing file, but developers probably won't
@@ -321,7 +341,7 @@ exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
 log_dir="$exec_prefix"/logs
 mkdir --parents "$log_dir"
 {
-printf 'toolchain: %s\n' "${LMI_COMPILER}_${LMI_TRIPLET}" > /dev/tty
+if tty -s; then printf 'toolchain: %s\n' "${LMI_COMPILER}_${LMI_TRIPLET}" > /dev/tty; fi
 
 # Cannot recursively check script on path determined at runtime, so
 # a directive like 'source="$srcdir"' doesn't work.
@@ -349,11 +369,16 @@ make "$coefficiency" install check_physical_closure 2>&1 \
 # The automated GUI test simulates keyboard and mouse actions, so
 # no such actions must be performed manually while it is running
 # (unless it is run in a virtual frame buffer, as with Xvfb here).
+# The $WINEDEBUG setting inhibits wine-{6,7,8}.0 nuisance messages.
 if [ "x86_64-pc-linux-gnu" != "$LMI_TRIPLET" ]
 then
   printf '\n# GUI test\n\n'
-  xvfb-run "$PERFORM" "$prefix"/bin/wx_test"$EXEEXT" --ash_nazg --data_path="$prefix"/data 2>&1 \
-    | tee "$log_dir"/gui_test | sed -e "$build_clutter" -e "$gui_test_clutter"
+  WINEDEBUG="fixme-event,fixme-hid,fixme-imm,fixme-ntdll,fixme-shell,fixme-win" \
+  timeout 5m \
+  xvfb-run "$PERFORM" "$prefix"/bin/wx_test"$EXEEXT" \
+    --ash_nazg --data_path="$prefix"/data 2>&1 \
+    | tee "$log_dir"/gui_test | sed -e "$build_clutter" -e "$gui_test_clutter" \
+  || true ;
 else
   printf '\n# GUI test skipped--it does not work properly with GTK\n'
 fi

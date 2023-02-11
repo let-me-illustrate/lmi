@@ -195,7 +195,7 @@ mkdir -p /tmp/web-cvs
 pushd /tmp/web-cvs
 cvs -z3 -d "chicares@cvs.sv.gnu.org:/web/lmi" checkout lmi
 cd lmi
-cp -aiv /opt/lmi/src/lmi/toms_748.html .
+for z in $(grep -l -dskip Copyright *); do sed -i $z -e'/Copyright/s/2022/2022, 2023/'; done
 cvs -z3 -d "chicares@cvs.sv.gnu.org:/web/lmi" commit -m'Refresh from git' toms_748.html
 popd
 

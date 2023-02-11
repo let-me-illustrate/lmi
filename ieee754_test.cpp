@@ -1,6 +1,6 @@
 // IEEE 754 esoterica--unit test.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -45,16 +45,23 @@ int test_main(int, char*[])
     LMI_TEST(is_infinite<long double>(-infinity<long double>()));
 
     // Narrowing conversions tested here:
-#if defined __GNUC__
+#if defined LMI_GCC
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wfloat-conversion"
-#endif // defined __GNUC__
+#endif // defined LMI_GCC
+#if defined LMI_CLANG
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wimplicit-float-conversion"
+#endif // defined LMI_CLANG
     LMI_TEST(is_infinite<float      >(-infinity<double     >()));
     LMI_TEST(is_infinite<float      >(-infinity<long double>()));
     LMI_TEST(is_infinite<double     >(-infinity<long double>()));
-#if defined __GNUC__
+#if defined LMI_CLANG
+#   pragma clang diagnostic pop
+#endif // defined LMI_CLANG
+#if defined LMI_GCC
 #   pragma GCC diagnostic pop
-#endif // defined __GNUC__
+#endif // defined LMI_GCC
 
     LMI_TEST(!is_infinite(0.0));
     LMI_TEST(!is_infinite( std::numeric_limits<double>::max()));

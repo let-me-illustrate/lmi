@@ -1,6 +1,6 @@
 // FDLIBM expm1().
 //
-// Copyright (C) 2022 Gregory W. Chicares.
+// Copyright (C) 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -203,7 +203,7 @@ double fdlibm_expm1(double x)
             else
                 {hi = x + ln2_hi; lo = -ln2_lo;  k = -1;}
         } else {
-        k  = invln2*x+((xsb==0)?0.5:-0.5);
+        k  = (int32_t)(invln2*x+((xsb==0)?0.5:-0.5));
         t  = k;
         hi = x - t*ln2_hi;      // t*ln2_hi is exact here
         lo = t*ln2_lo;

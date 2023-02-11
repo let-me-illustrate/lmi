@@ -1,6 +1,6 @@
 // Boolean input class for wx data-transfer framework.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -26,14 +26,11 @@
 
 #include "datum_base.hpp"
 
-// Implicitly-declared special member functions do the right thing.
-
-class datum_boolean
+class datum_boolean final
     :public datum_base
 {
   public:
     explicit datum_boolean(bool = true);
-    ~datum_boolean() override = default;
 
     datum_boolean& operator=(bool);
 
@@ -44,6 +41,8 @@ class datum_boolean
     std::ostream& write(std::ostream&) const override;
 
   private:
+    void concrete_if_not_pure() override {}
+
     bool value_;
 };
 

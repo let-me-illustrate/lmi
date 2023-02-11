@@ -2,7 +2,7 @@
 
 # git pre-commit hook
 
-# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -25,13 +25,16 @@ set -e
 
 check_concinnity()
 {
+    coefficiency=${coefficiency:-"--jobs=$(nproc)"}
     make \
+      "$coefficiency" \
       LMI_COMPILER=gcc \
       LMI_TRIPLET=x86_64-pc-linux-gnu \
       custom_tools \
       --directory=/opt/lmi/src/lmi >/dev/null 2>&1
     output=$( \
         make \
+          "$coefficiency" \
           LMI_COMPILER=gcc \
           LMI_TRIPLET=x86_64-pc-linux-gnu \
           prefascicle_dir="$1" \

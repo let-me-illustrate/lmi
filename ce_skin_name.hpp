@@ -1,6 +1,6 @@
 // A value-Constrained Enumeration for skin names.
 //
-// Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -42,7 +42,7 @@
 /// to end users, but skin names are more esoteric and it is less
 /// confusing to show them as file names rather than apparent phrases.
 
-class ce_skin_name
+class ce_skin_name final
     :public mc_enum_base
 {
   public:
@@ -67,6 +67,8 @@ class ce_skin_name
     std::string value() const;
 
   private:
+    void concrete_if_not_pure() override {}
+
     // datum_base required implementation.
     std::istream& read (std::istream&) override;
     std::ostream& write(std::ostream&) const override;

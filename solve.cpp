@@ -1,6 +1,6 @@
 // Solves.
 //
-// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 1998, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -118,8 +118,8 @@ currency SolveTest()
                     y = ConstThat->base_specamt(ThatSolveTgtYear - 1);
                     }
                     break;
-                case mce_rop: // fall through
-                case mce_mdb: // fall through
+                case mce_rop: [[fallthrough]];
+                case mce_mdb: [[fallthrough]];
                 default:
                     {
                     alarum()
@@ -137,14 +137,13 @@ currency SolveTest()
             y = round_to_cents.c(ThatSolveTargetValue);
             }
             break;
-        case mce_solve_for_target_naar: // Fall through.
-        case mce_solve_for_tax_basis:   // Fall through.
+        case mce_solve_for_target_naar: [[fallthrough]];
+        case mce_solve_for_tax_basis:   [[fallthrough]];
         case mce_solve_for_non_mec:
             {
             alarum() << "Not implemented.";
             }
             break;
-        throw "Unreachable--silences a compiler diagnostic.";
         }
 
     return z - y;
@@ -182,41 +181,41 @@ inline static double SolveWD(double CandidateValue)
 //============================================================================
 void AccountValue::SolveSetPmts
     (currency a_Pmt
-    ,int      ThatSolveBegYear
-    ,int      ThatSolveEndYear
+    ,int      a_ThatSolveBegYear
+    ,int      a_ThatSolveEndYear
     )
 {
-    Outlay_->set_ee_modal_premiums(a_Pmt, ThatSolveBegYear, ThatSolveEndYear);
+    Outlay_->set_ee_modal_premiums(a_Pmt, a_ThatSolveBegYear, a_ThatSolveEndYear);
 }
 
 //============================================================================
 void AccountValue::SolveSetSpecAmt
     (currency a_Bft
-    ,int      ThatSolveBegYear
-    ,int      ThatSolveEndYear
+    ,int      a_ThatSolveBegYear
+    ,int      a_ThatSolveEndYear
     )
 {
-    DeathBfts_->set_specamt(a_Bft, ThatSolveBegYear, ThatSolveEndYear);
+    DeathBfts_->set_specamt(a_Bft, a_ThatSolveBegYear, a_ThatSolveEndYear);
 }
 
 //============================================================================
 void AccountValue::SolveSetLoans
     (currency a_Loan
-    ,int      ThatSolveBegYear
-    ,int      ThatSolveEndYear
+    ,int      a_ThatSolveBegYear
+    ,int      a_ThatSolveEndYear
     )
 {
-    Outlay_->set_new_cash_loans(a_Loan, ThatSolveBegYear, ThatSolveEndYear);
+    Outlay_->set_new_cash_loans(a_Loan, a_ThatSolveBegYear, a_ThatSolveEndYear);
 }
 
 //============================================================================
 void AccountValue::SolveSetWDs
     (currency a_WD
-    ,int      ThatSolveBegYear
-    ,int      ThatSolveEndYear
+    ,int      a_ThatSolveBegYear
+    ,int      a_ThatSolveEndYear
     )
 {
-    Outlay_->set_withdrawals(a_WD, ThatSolveBegYear, ThatSolveEndYear);
+    Outlay_->set_withdrawals(a_WD, a_ThatSolveBegYear, a_ThatSolveEndYear);
 }
 
 //============================================================================
@@ -304,8 +303,8 @@ currency AccountValue::Solve()
             SolveFn    = SolveWD;
             }
             break;
-        case mce_solve_none:    // fall through
-        case mce_solve_er_prem: // fall through
+        case mce_solve_none:    [[fallthrough]];
+        case mce_solve_er_prem: [[fallthrough]];
         default:
             {
             alarum()

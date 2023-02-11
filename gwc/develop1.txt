@@ -29,7 +29,7 @@ git commit one_file another_file -m"One set of changes"
 git commit --all -m"Another set of changes"
 git push
 
-  # ...commit only up to {second-to-last; a specific} commit
+  # ...commit only up through {second-to-last; a specific} commit
 
 git push origin HEAD^1:master
 git push origin SHA1:master
@@ -334,6 +334,10 @@ cd /opt/lmi/src/lmi
 
 /\%>80v.\+
 
+  # Find git conflict markers
+
+/^[<=>]\{7\}\( \|$\)
+
   # Change column 41 to a comma, for non-matching lines in a range
   # ('|41' seems incompatible with '|' separator, so use 'cursor')
 
@@ -369,7 +373,8 @@ git diff --no-index --color=always --color-moved=plain /opt/lmi/logs/log-old /op
 
 mkdir /tmp/q
 pushd /tmp/q
-
-[wine] /opt/lmi/bin/rate_table_tool --accept --file=/opt/lmi/data/some_name --extract-all
-  # for example:
-wine /opt/lmi/bin/rate_table_tool --accept --file=/opt/lmi/data/qx_cso --extract-all
+  # examples using 'qx_cso' database
+  # GNU/linux native:
+     /opt/lmi/bin/rate_table_tool     --accept --file=/opt/lmi/data/qx_cso --extract-all
+  # wine:
+wine /opt/lmi/bin/rate_table_tool.exe --accept --file=/opt/lmi/data/qx_cso --extract-all

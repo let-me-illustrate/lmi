@@ -2,7 +2,7 @@
 
 # Create a chroot for cross-building "Let me illustrate...".
 #
-# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -46,6 +46,15 @@ chmod 755 /usr/sbin/policy-rc.d
 dpkg-divert --divert /usr/bin/ischroot.debianutils --rename /usr/bin/ischroot
 ln -s /bin/true /usr/bin/ischroot
 
+# Prefer google's DNS server in case the host system's changes. See:
+#   https://lists.nongnu.org/archive/html/lmi/2022-08/msg00014.html
+# Prepending a record is brutally simple. A corporate server used
+# for building lmi lists five nameservers in its configuration file,
+# with a comment indicating that the last two might be ignored, so
+# adding a new record at the end might not work.
+
+sed -i /etc/resolv.conf -e'1s/^/nameserver 8.8.8.8\n/'
+
 # For now at least, ignore this warning:
 #   dpkg-divert: warning: diverting file '/usr/bin/ischroot' from an Essential
 #   package with rename is dangerous, use --no-rename
@@ -77,9 +86,14 @@ apt-get update
 apt-get --assume-yes install \
   automake \
   bc \
+  bear \
   bsdmainutils \
   bzip2 \
+  ccache \
   clang \
+  clang-format \
+  clang-tidy \
+  clang-tools \
   curl \
   cvs \
   default-jre \
@@ -90,15 +104,18 @@ apt-get --assume-yes install \
   gnupg \
   jing \
   libarchive-tools \
+  libc++-dev \
+  libc++abi-dev \
   libc6-dbg \
   libdw-dev \
   libgtk-3-dev \
   libpcre2-dev \
   libtool \
   libxml2-utils \
-  libunwind-dev \
   libxslt1-dev \
+  lld \
   make \
+  mold \
   patch \
   pkg-config \
   rsync \
@@ -142,4 +159,4 @@ apt-get --assume-yes install \
 #   Not creating home directory `/run/uuidd'.
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Installed debian packages."  | tee /dev/tty
+echo "$stamp $0: Installed debian packages." | tee /dev/tty || true

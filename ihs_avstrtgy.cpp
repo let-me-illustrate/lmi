@@ -1,6 +1,6 @@
 // Account value: strategy implementation.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -109,16 +109,14 @@ currency AccountValue::CalculateSpecAmtFromStrategy
 
 /// Set specamt according to selected strategy, respecting minimum.
 ///
-/// The actual minimum, set elsewhere, is ascertainable only during
+/// The actual minimum, set dynamically, is ascertainable only during
 /// monthiversary processing because, e.g., it may depend on whether
 /// cash value is sufficient to keep a term rider in force.
 ///
 /// For inforce, warn before increasing specamt to the minimum in the
 /// first inforce year: either an underwriting exception was made, or
 /// input is erroneous; but apply the minimum silently if specamt is
-/// to be calculated from a strategy, or if a lower amount is given in
-/// any other year (which doesn't represent the present state of the
-/// contract, and presumably results from manual editing).
+/// to be calculated from a strategy, or if a solve is in progress.
 
 void AccountValue::PerformSpecAmtStrategy()
 {
@@ -139,7 +137,7 @@ void AccountValue::PerformSpecAmtStrategy()
             (
                 mce_solve_specamt == yare_input_.SolveType
             &&  yare_input_.SolveBeginYear <= j
-            &&  j < std::min(yare_input_.SolveEndYear, BasicValues::Length)
+            &&  j < yare_input_.SolveEndYear
             )
             {
             strategy = mce_sa_input_scalar;

@@ -16,7 +16,7 @@
 // the reputations of Douglas C. Schmidt or Vinicius J. Latorre.
 //
 // GWC modifications are
-//   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares
+//   Copyright (C) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares
 // and released with the same licensing terms as the original, viz.:
 
 // This file is part of the GNU C++ Library.  This library is free
@@ -504,7 +504,15 @@ GetOpt::operator()()
   if
     (   nlongopts
     &&  (
+#if defined LMI_CLANG
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wcomma"
+#endif // defined LMI_CLANG
+            // clang: "possible misuse of comma operator"
             ('-' == nargv[optind][1]) ? (nextchar++, 1) : (0)
+#if defined LMI_CLANG
+#   pragma clang diagnostic pop
+#endif // defined LMI_CLANG
         ||  (
                 nlong_only
             &&  (
@@ -599,11 +607,11 @@ GetOpt::operator()()
                 return '?';
 
               case LIST_ARG:
-                list_option = pfound; // fall through
+                list_option = pfound; [[fallthrough]];
 
-              case REQD_ARG: // fall through
-              case OPT_ARG:  // fall through
-              case ALT_ARG:  // fall through
+              case REQD_ARG: [[fallthrough]];
+              case OPT_ARG:  [[fallthrough]];
+              case ALT_ARG:  [[fallthrough]];
               default:
                 optarg = nameend + 1;
                 break;
@@ -637,8 +645,8 @@ GetOpt::operator()()
                   }
                 break;
 
-              case NO_ARG:  // fall through
-              case OPT_ARG: // fall through
+              case NO_ARG:  [[fallthrough]];
+              case OPT_ARG: [[fallthrough]];
               default:
                 optarg = nullptr;
                 break;

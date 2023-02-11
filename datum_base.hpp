@@ -1,6 +1,6 @@
 // Input data for wx data-transfer demonstration: base class.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -24,18 +24,19 @@
 
 #include "config.hpp"
 
+#include "crtp_base.hpp"                // abstract_base
 #include "so_attributes.hpp"
 
 #include <iosfwd>
 
-// Implicitly-declared special member functions do the right thing.
+/// Base class for GUI input fields.
+///
+/// Special member functions are protected simply because no need has
+/// arisen for them to be public.
 
-class LMI_SO datum_base
+class LMI_SO datum_base : private lmi::abstract_base<datum_base>
 {
   public:
-    datum_base() = default;
-    virtual ~datum_base() = default;
-
     void enable(bool);
     bool is_enabled() const;
 

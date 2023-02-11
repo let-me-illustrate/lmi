@@ -1,6 +1,6 @@
 // Server for guideline premium test.
 //
-// Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -40,14 +40,11 @@ class gpt_input;
 /// a distinct enumeration seems unwarranted, especially because
 /// explaining another one in '--help' would be too complicated.
 /// Enumerators that don't make sense can be reported at run time.
-///
-/// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO gpt_server final
 {
   public:
     explicit gpt_server(mcenum_emission);
-    ~gpt_server() = default;
 
     bool operator()(fs::path const&);
     bool operator()(fs::path const&, gpt_input const&);

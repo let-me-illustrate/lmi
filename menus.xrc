@@ -5,7 +5,7 @@
 <!--
     Life insurance illustrations: wxWindows xml resources.
 
-    Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+    Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License version 2 as
@@ -66,6 +66,7 @@
         <bitmap platform="win" stock_id="wxART_PRINT"/>
         <help>Print this document</help>
     </object>
+<!--
     <object class="wxMenuItem" name="wxID_PAGE_SETUP">
         <label>Page set_up...\tCtrl-U</label>
         <bitmap platform="win" stock_id="print-options"/>
@@ -76,6 +77,7 @@
         <bitmap platform="win" stock_id="print-preview"/>
         <help>See what this document will look like when printed</help>
     </object>
+-->
     <object class="wxMenuItem" name="print_pdf">
         <label>Pr_int to PDF\tCtrl-I</label>
         <bitmap platform="win" stock_id="save-pdf"/>
@@ -388,7 +390,7 @@
         <label>_Add cell\tCtrl-+</label>
         <extra-accels>
             <accel>Shift-Ctrl-+</accel>
-            <accel>Ctrl-Num-+</accel>
+            <accel>Ctrl-Num +</accel>
         </extra-accels>
         <bitmap platform="win" stock_id="insert-rows"/>
         <help>Add a new cell with case default parameters</help>
@@ -397,7 +399,7 @@
         <label>_Delete cell(s)\tCtrl--</label>
         <extra-accels>
             <accel>Shift-Ctrl--</accel>
-            <accel>Ctrl-Num--</accel>
+            <accel>Ctrl-Num -</accel>
         </extra-accels>
         <bitmap platform="win" stock_id="delete-row"/>
         <help>Delete selected cell(s)</help>

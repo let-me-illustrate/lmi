@@ -1,6 +1,6 @@
 // Numeric stinted cast, across whose bourn no value is returned--unit test.
 //
-// Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -631,9 +631,9 @@ void test_boost_anomalies()
     try
         {
         bourn_cast<int>(INT_MIN);
-        bourn_cast<int>((double)INT_MIN);
+        bourn_cast<int>(static_cast<double>(INT_MIN));
         // That worked, so this should too...
-        bourn_cast<int>((float)INT_MIN);
+        bourn_cast<int>(static_cast<float>(INT_MIN));
         // ...because INT_MIN = an exact power of 2.
         LMI_TEST(true);
         }
@@ -641,9 +641,9 @@ void test_boost_anomalies()
 
     try
         {
-        bourn_cast<long long int>((long double)LLONG_MIN);
+        bourn_cast<long long int>(static_cast<long double>(LLONG_MIN));
         // That worked, so this should too...
-        bourn_cast<long long int>((float)LLONG_MIN);
+        bourn_cast<long long int>(static_cast<float>(LLONG_MIN));
         // ...because LLONG_MIN = an exact power of 2.
         LMI_TEST(true);
         }
@@ -651,9 +651,9 @@ void test_boost_anomalies()
 
     try
         {
-        bourn_cast<long long int>((long double)LLONG_MIN);
+        bourn_cast<long long int>(static_cast<long double>(LLONG_MIN));
         // That worked, so this should too...
-        bourn_cast<long long int>((double)LLONG_MIN);
+        bourn_cast<long long int>(static_cast<double>(LLONG_MIN));
         // ...because LLONG_MIN = an exact power of 2.
         LMI_TEST(true);
         }

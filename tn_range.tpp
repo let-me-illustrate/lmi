@@ -1,6 +1,6 @@
 // Trammeled Numeric range type: class template implementation.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -190,7 +190,7 @@ namespace
             {
             constexpr T z0 = bin_exp
                 (static_cast<T>(std::numeric_limits<T>::radix)
-                ,static_cast<T>(std::numeric_limits<T>::digits)
+                ,               std::numeric_limits<T>::digits
                 );
             constexpr auto z1lo = std::numeric_limits<long long int>::lowest();
             constexpr auto z1hi = std::numeric_limits<long long int>::max();
@@ -213,6 +213,12 @@ namespace
 #endif // defined __GNUC__
             }
     };
+
+// clang considers these two templates "unused" in the unit test only
+#if defined LMI_CLANG
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wunused-template"
+#endif // defined LMI_CLANG
 
     template<typename T>
     bool is_exact_integer(T t)
@@ -255,6 +261,10 @@ namespace
             return t;
             }
     }
+
+#if defined LMI_CLANG
+#   pragma clang diagnostic pop
+#endif // defined LMI_CLANG
 
     template<typename T, int>
     struct bound_adjuster

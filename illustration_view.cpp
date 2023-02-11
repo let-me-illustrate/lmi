@@ -1,6 +1,6 @@
 // Document view for illustrations.
 //
-// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -72,8 +72,8 @@ BEGIN_EVENT_TABLE(IllustrationView, ViewEx)
     EVT_UPDATE_UI(wxID_SAVE                     ,IllustrationView::UponUpdateFileSave     )
     EVT_UPDATE_UI(wxID_SAVEAS                   ,IllustrationView::UponUpdateFileSaveAs   )
     EVT_UPDATE_UI(wxID_PRINT                    ,IllustrationView::UponUpdateIllustration )
-    EVT_UPDATE_UI(wxID_PAGE_SETUP               ,IllustrationView::UponUpdateIllustration )
-    EVT_UPDATE_UI(wxID_PREVIEW                  ,IllustrationView::UponUpdateIllustration )
+    EVT_UPDATE_UI(wxID_PAGE_SETUP               ,IllustrationView::UponUpdateInapplicable )
+    EVT_UPDATE_UI(wxID_PREVIEW                  ,IllustrationView::UponUpdateInapplicable )
     EVT_UPDATE_UI(XRCID("print_pdf"            ),IllustrationView::UponUpdateIllustration )
     EVT_UPDATE_UI(XRCID("edit_cell"            ),IllustrationView::UponUpdateProperties   )
     EVT_UPDATE_UI(XRCID("edit_class"           ),IllustrationView::UponUpdateInapplicable )

@@ -2,7 +2,7 @@
 
 # Install libxml2, libxslt and xmlwrapp with options suitable for lmi.
 #
-# Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -68,13 +68,10 @@ export PKG_CONFIG_SYSROOT_DIR=
 # failure. Apparently the problem is colons in header paths, e.g.:
 #   c:/MinGW-20050827/bin/../lib/gcc/mingw32/3.4.4/include/stddef.h:
 # which elicit fatal errors such as this:
-#   .deps/DOCBparser.Plo:1: *** multiple target patterns.  Stop.
+#   .deps/DOCBparser.Plo:1: [*]* multiple target patterns.  Stop.
 
 # We can't have new lines in the CFLAGS, so get rid of them explicitly.
 xmlsoft_common_cflags=$(echo '
-  -fno-ms-extensions
-  -frounding-math
-  -fsignaling-nans
   -Wno-cpp
   -Wno-discarded-qualifiers
   -Wno-format
@@ -206,6 +203,7 @@ export XML_CATALOG_FILES="$throwaway_catalog"
 # Actually build ##############################################################
 
 for lib in libxml2 libxslt; do
+    printf 'Building %s with %s for %s.\n' "$lib" "$LMI_COMPILER" "$LMI_TRIPLET"
     libdir="$srcdir/third_party/$lib"
     cd "$libdir"
     if [ ! -x "configure" ]; then
@@ -219,21 +217,50 @@ for lib in libxml2 libxslt; do
     fi
     mkdir --parents "$build_dir/$lib"
     cd "$build_dir/$lib"
-    # 'configure' options must not be double-quoted
-    # shellcheck disable=SC2046
-    "$libdir/configure" \
-        LDFLAGS="$xmlsoft_common_ldflags" \
-        CPPFLAGS='-w' \
-        CFLAGS="-g -O2 $xmlsoft_common_cflags" \
-        $(eval "echo \$${lib}_options") || err=$?
+
+    case "$LMI_COMPILER" in
+        (gcc)
+            valid_math="-frounding-math -fsignaling-nans"
+            # 'configure' options must not be double-quoted
+            # shellcheck disable=SC2046
+            "$libdir/configure" \
+                CPPFLAGS='-w' \
+                CFLAGS="-g -O2 $xmlsoft_common_cflags -fno-ms-extensions $valid_math" \
+                LDFLAGS="$xmlsoft_common_ldflags" \
+                $(eval "echo \$${lib}_options") || err=$?
+            ;;
+        (clang)
+            valid_math="-Woverriding-t-option -ffp-model=strict -ffp-exception-behavior=ignore -Wno-overriding-t-option"
+            # 'configure' options must not be double-quoted
+            # shellcheck disable=SC2046
+            "$libdir/configure" \
+                CC=clang \
+                CXX=clang++ \
+                CPPFLAGS='-w' \
+                CFLAGS="-g -O2 $xmlsoft_common_cflags -fno-ms-extensions $valid_math" \
+                LDFLAGS="$xmlsoft_common_ldflags -fuse-ld=lld" \
+                $(eval "echo \$${lib}_options") || err=$?
+                ;;
+            (*)
+                printf '%s\n' "Unknown toolchain '$LMI_COMPILER'."
+                return 2;
+            ;;
+    esac
+
     if [ -n "$err" ]; then
-        echo '*** Configuring failed, contents of config.log follows: ***'
-        echo '-----------------------------------------------------------'
+        error_marker='*''*''*'
+        # Use ${error_marker} instead of a literal triple asterisk,
+        # because this script uses 'set -vx' and routinely echoing
+        # a line that contains the error marker's value makes it
+        # harder to find actual errors that use that marker.
+        echo "${error_marker} Configuring failed; 'config.log' contains:"
+        echo "-------------------------------------------------------"
         cat config.log
-        echo '-----------------------------------------------------------'
-        exit $err
+        echo "-------------------------------------------------------"
+        exit "$err"
     fi
     $MAKE install
+    printf 'Built %s with %s for %s.\n' "$lib" "$LMI_COMPILER" "$LMI_TRIPLET"
 done
 
 # Building xmlwrapp is similar, but sufficiently different to not try to fit it
@@ -241,6 +268,7 @@ done
 # the similarity.
 # shellcheck disable=SC2043
 for lib in xmlwrapp; do
+    printf 'Building %s with %s for %s.\n' "$lib" "$LMI_COMPILER" "$LMI_TRIPLET"
     libdir="$srcdir/third_party/$lib"
     # As this library doesn't have any special autogen.sh script, we can just
     # always run autoreconf unconditionally (without "--force").
@@ -248,18 +276,47 @@ for lib in xmlwrapp; do
     autoreconf --install
     mkdir --parents "$build_dir/$lib"
     cd "$build_dir/$lib"
-    # shellcheck disable=SC2086
-    "$libdir/configure" \
-        PKG_CONFIG_LIBDIR="$exec_prefix"/lib/pkgconfig \
-        $xmlwrapp_options || err=$?
+
+    case "$LMI_COMPILER" in
+        (gcc)
+            valid_math="-frounding-math -fsignaling-nans"
+            # 'configure' options must not be double-quoted
+            # shellcheck disable=SC2086
+            "$libdir/configure" \
+                PKG_CONFIG_LIBDIR="$exec_prefix"/lib/pkgconfig \
+                  CFLAGS="-g -O2 -fno-ms-extensions $valid_math" \
+                CXXFLAGS="-g -O2 -fno-ms-extensions $valid_math" \
+                $xmlwrapp_options || err=$?
+            ;;
+        (clang)
+            valid_math="-Woverriding-t-option -ffp-model=strict -ffp-exception-behavior=ignore -Wno-overriding-t-option"
+            # 'configure' options must not be double-quoted
+            # shellcheck disable=SC2086
+            "$libdir/configure" \
+                PKG_CONFIG_LIBDIR="$exec_prefix"/lib/pkgconfig \
+                      CC=clang \
+                     CXX=clang++ \
+                  CFLAGS="-g -O2 -fno-ms-extensions $valid_math" \
+                CXXFLAGS="-g -O2 -fno-ms-extensions $valid_math -stdlib=libc++" \
+                LDFLAGS="-fuse-ld=lld -stdlib=libc++" \
+                $xmlwrapp_options || err=$?
+            ;;
+        (*)
+            printf '%s\n' "Unknown toolchain '$LMI_COMPILER'."
+            return 2;
+            ;;
+    esac
+
     if [ -n "$err" ]; then
-        echo '*** Configuring failed, contents of config.log follows: ***'
-        echo '-----------------------------------------------------------'
+        error_marker='*''*''*'
+        echo "${error_marker} Configuring failed; 'config.log' contains:"
+        echo "-------------------------------------------------------"
         cat config.log
-        echo '-----------------------------------------------------------'
-        exit $err
+        echo "-------------------------------------------------------"
+        exit "$err"
     fi
     $MAKE install
+    printf 'Built %s with %s for %s.\n' "$lib" "$LMI_COMPILER" "$LMI_TRIPLET"
 done
 
 # Expunge the throwaway XML catalog.

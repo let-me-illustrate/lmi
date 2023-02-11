@@ -1,6 +1,6 @@
 # Main lmi makefile, invoked by 'GNUmakefile'.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -82,7 +82,7 @@ $(srcdir)/objects.make:: ;
 # Include this after 'objects.make', so compiler-specific makefiles
 # can specify target-specific variables for simply-expanded lists of
 # object files defined in 'objects.make', e.g.:
-#   cgi_objects := ... [objects.make]
+#   cgicc_objects := ... [objects.make]
 #   $(cgicc_objects): gcc_warnings += ... [compiler_gcc.make]
 
 include $(srcdir)/compiler.make
@@ -343,6 +343,7 @@ sys_include_directories := \
   $(compiler_include_directory) \
   $(wx_include_paths) \
   /opt/lmi/third_party/include \
+  /usr/include/libunwind \
   $(localincludedir) \
   $(localincludedir)/libxml2 \
 
@@ -522,8 +523,17 @@ lmi_msw_res.o: lmi.ico
 # Of course, '-c' is ignored; it flags situations where '-C'
 # might be useful.
 
+# Override this variable to exclude files that are inappropriate in
+# context--e.g., when building a fardel for distribution to field
+# users whose 'skin*.xrc' should exclude skins with inforce data
+# that are unavailable to them.
+excluded_data_files :=
+
 data_files := \
-  $(wildcard $(addprefix $(srcdir)/,*.ico *.png *.xml *.xrc *.xsd *.xsl)) \
+  $(filter-out \
+               $(addprefix $(srcdir)/,$(excluded_data_files)), \
+    $(wildcard $(addprefix $(srcdir)/,*.ico *.png *.xml *.xrc *.xsd *.xsl)) \
+   )
 
 help_files := \
   $(wildcard $(addprefix $(srcdir)/,*.html)) \
@@ -681,9 +691,13 @@ fardel_checksummed_files = \
 
 .PHONY: fardel
 fardel: install
+	@[ "$$LMI_TRIPLET" = "x86_64-w64-mingw32" ] \
+	  || ($(ECHO) "Fardels are useful only for msw." && false)
 	+@[ -d $(fardel_dir) ] || $(MKDIR) --parents $(fardel_dir)
 	@$(MAKE) --file=$(this_makefile) --directory=$(fardel_dir) wrap_fardel
 	@$(ECHO) "Created '$(fardel_name)' archive in '$(fardel_root)'."
+	@$(ECHO) "To upload this fardel to savannah, run this command:"
+	@$(ECHO) "  $(srcdir)/publish.sh $(fardel_root)/$(fardel_name).zip"
 
 .PHONY: wrap_fardel
 wrap_fardel:
@@ -692,11 +706,11 @@ wrap_fardel:
 	@$(INSTALL) -m 0664 $(datadir)/group_quote_banner.png .
 	@$(INSTALL) -m 0775 $(fardel_binaries) .
 	@$(INSTALL) -m 0664 $(fardel_files) .
-	printf "$(j1) $(j2)" >expiry
+	@printf "$(j1) $(j2)" >expiry
 	@$(MD5SUM) --binary $(fardel_checksummed_files) >validated.md5
 	@$(PERFORM) $(bindir)/generate_passkey$(EXEEXT) > passkey
 	@$(TAR) \
-	  --bzip2 \
+	  --auto-compress \
 	  --create \
 	  --directory=$(fardel_root) \
 	  --file=$(fardel_root)/$(fardel_name).tar.bz2 \
@@ -707,7 +721,6 @@ wrap_fardel:
 	  --directory=$(fardel_root) \
 	  --file=$(fardel_root)/$(fardel_name).zip \
 	  $(fardel_name)
-	@-$(srcdir)/publish.sh $(fardel_root)/$(fardel_name).zip
 
 ################################################################################
 

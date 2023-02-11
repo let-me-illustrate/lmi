@@ -31,7 +31,7 @@ exec_prefix="$prefix/${LMI_COMPILER}_${LMI_TRIPLET}"
 log_dir="$exec_prefix"/logs
 mkdir --parents "$log_dir"
 {
-printf 'toolchain: %s\n' "${LMI_COMPILER}_${LMI_TRIPLET}" > /dev/tty
+printf 'toolchain: %s\n' "${LMI_COMPILER}_${LMI_TRIPLET}" > /dev/tty || true
 # shellcheck disable=SC2039,SC2154,SC3001
   make "$coefficiency" --output-sync=recurse unit_tests 2>&1 \
     | tee \

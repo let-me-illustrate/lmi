@@ -1,7 +1,7 @@
 # Master automake makefile, run automake to generate Makefile.am from it (this
 # is also done by autogen.sh script)
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Vadim Zeitlin.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Vadim Zeitlin.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -100,6 +100,7 @@ TESTS = \
     actuarial_table_test \
     alert_test \
     any_member_test \
+    archetype_test \
     assert_lmi_test \
     authenticity_test \
     bin_exp_test \
@@ -112,6 +113,7 @@ TESTS = \
     configurable_settings_test \
     contains_test \
     crc32_test \
+    crtp_base_test \
     currency_test \
     dbo_rules_test \
     duff_fmt_test \
@@ -159,6 +161,7 @@ TESTS = \
     rtti_lmi_test \
     safely_dereference_as_test \
     sandbox_test \
+    smf_test \
     snprintf_test \
     ssize_lmi_test \
     stratified_algorithms_test \
@@ -622,6 +625,13 @@ alert_test_LDADD = \
 any_member_test_LDADD = \
   libtest_common.la
 
+archetype_test_SOURCES = \
+  archetype.cpp \
+  archetype_test.cpp
+archetype_test_CXXFLAGS = $(AM_CXXFLAGS)
+archetype_test_LDADD = \
+  libtest_common.la
+
 assert_lmi_test_LDADD = \
   libtest_common.la
 
@@ -690,6 +700,12 @@ crc32_test_SOURCES = \
   crc32_test.cpp
 crc32_test_CXXFLAGS = $(AM_CXXFLAGS)
 crc32_test_LDADD = \
+  libtest_common.la
+
+crtp_base_test_SOURCES = \
+  crtp_base_test.cpp
+crtp_base_test_CXXFLAGS = $(AM_CXXFLAGS)
+crtp_base_test_LDADD = \
   libtest_common.la
 
 currency_test_LDADD = \
@@ -1070,6 +1086,12 @@ safely_dereference_as_test_LDADD = \
 sandbox_test_LDADD = \
   libtest_common.la
 
+smf_test_SOURCES = \
+  smf_test.cpp
+smf_test_CXXFLAGS = $(AM_CXXFLAGS)
+smf_test_LDADD = \
+  libtest_common.la
+
 snprintf_test_LDADD =\
   libtest_common.la
 
@@ -1143,6 +1165,7 @@ noinst_HEADERS = \
     alert.hpp \
     any_entity.hpp \
     any_member.hpp \
+    archetype.hpp \
     assert_lmi.hpp \
     authenticity.hpp \
     basic_tables.hpp \
@@ -1166,6 +1189,7 @@ noinst_HEADERS = \
     configurable_settings.hpp \
     contains.hpp \
     crc32.hpp \
+    crtp_base.hpp \
     cso_table.hpp \
     currency.hpp \
     custom_io_0.hpp \
@@ -1318,6 +1342,7 @@ noinst_HEADERS = \
     single_cell_document.hpp \
     single_choice_popup_menu.hpp \
     skeleton.hpp \
+    smf.hpp \
     so_attributes.hpp \
     ssize_lmi.hpp \
     stratified_algorithms.hpp \

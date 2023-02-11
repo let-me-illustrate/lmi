@@ -1,6 +1,6 @@
 // Server for guideline premium test.
 //
-// Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -77,7 +77,12 @@ gpt_state test_one_days_gpt_transactions
     s["X5_gsp_b"] = value_cast<std::string>(o.GuidelineSinglePremiumPolicyB);
     s["X6_glp_c"] = value_cast<std::string>(o.GuidelineLevelPremiumPolicyC );
     s["X7_gsp_c"] = value_cast<std::string>(o.GuidelineSinglePremiumPolicyC);
+    // Return here, but retain alternative below.
+volatile bool avoid_warning {true};
+if(avoid_warning)
+    {
     return s;
+    }
 
     bool                        Use7702ATables               = exact_cast<mce_yes_or_no           >(input["Use7702ATables"              ])->value();
 //  int                         IssueAge                     = exact_cast<tnr_age                 >(input["IssueAge"                    ])->value();

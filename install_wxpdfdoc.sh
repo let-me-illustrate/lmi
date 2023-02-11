@@ -2,7 +2,7 @@
 
 # Installer for wxPdfDocument library.
 #
-# Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -54,8 +54,8 @@ case "$build_type" in
         ;;
 esac
 
-wxpdfdoc_cc_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math -fsignaling-nans'
-wxpdfdoc_cxx_flags='-fno-ms-extensions -fno-omit-frame-pointer -frounding-math -fsignaling-nans'
+ wxpdfdoc_cc_flags='-fno-ms-extensions -fno-omit-frame-pointer'
+wxpdfdoc_cxx_flags='-fno-ms-extensions -fno-omit-frame-pointer'
 
 config_options="
   --prefix=$prefix
@@ -100,11 +100,53 @@ fi
 mkdir --parents "$build_dir"
 
 cd "$build_dir"
-# 'configure' options must not be double-quoted
-# shellcheck disable=SC2086
-"$wxpdfdoc_dir"/configure $config_options CFLAGS="$wxpdfdoc_cc_flags" CXXFLAGS="$wxpdfdoc_cxx_flags"
+printf 'Building %s with %s for %s.\n' "wxpdfdoc" "$LMI_COMPILER" "$LMI_TRIPLET"
+
+case "$LMI_COMPILER" in
+    (gcc)
+        valid_math="-frounding-math -fsignaling-nans"
+        # 'config_options' must not be double-quoted
+        # shellcheck disable=SC2086
+        "$wxpdfdoc_dir"/configure $config_options \
+            CFLAGS="$wxpdfdoc_cc_flags  $valid_math" \
+          CXXFLAGS="$wxpdfdoc_cxx_flags $valid_math" \
+
+        ;;
+    (clang)
+        # To use the LLVM linker, it seems necessary to specify it
+        # in $CXX (and ignore the resulting
+        #   argument unused during compilation: '-fuse-ld=lld'
+        # warning). Otherwise, a command such as
+        #   readelf --string-dump .comment /opt/lmi/local/clang_x86_64-pc-linux-gnu/lib/libwxcode_gtk3u_pdfdoc-3.2.so
+        # will lack the expected
+        #   Linker: Debian LLD
+        # comment, even though it is specified in $LDFLAGS, and
+        # even if LD is specified in any of the following ways:
+        #   LD=clang++
+        #   LD=ld.lld
+        #   LD="clang++ -fuse-ld=lld -stdlib=libc++"
+
+        valid_math="-Woverriding-t-option -ffp-model=strict -ffp-exception-behavior=ignore -Wno-overriding-t-option"
+        # 'config_options' must not be double-quoted
+        # shellcheck disable=SC2086
+        "$wxpdfdoc_dir"/configure $config_options \
+                CC=clang \
+               CXX="clang++ -fuse-ld=lld -stdlib=libc++" \
+            CFLAGS="$wxpdfdoc_cc_flags  $valid_math" \
+          CXXFLAGS="$wxpdfdoc_cxx_flags $valid_math -stdlib=libc++" \
+           LDFLAGS="-fuse-ld=lld -stdlib=libc++" \
+
+        ;;
+    (*)
+        printf '%s\n' "Unknown toolchain '$LMI_COMPILER'."
+        return 2;
+        ;;
+esac
+
 $MAKE
 $MAKE install
+printf 'Built %s with %s for %s.\n' "wxpdfdoc" "$LMI_COMPILER" "$LMI_TRIPLET"
+
 # autotools: 'make install' doesn't respect group permissions--see:
 #   https://lists.gnu.org/archive/html/automake/2019-01/msg00000.html
 chmod -R g=u "$prefix"/include/wx*

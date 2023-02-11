@@ -1,6 +1,6 @@
 # Makefile: object lists.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -373,6 +373,7 @@ unit_test_targets := \
   actuarial_table_test \
   alert_test \
   any_member_test \
+  archetype_test \
   assert_lmi_test \
   authenticity_test \
   bin_exp_test \
@@ -385,6 +386,7 @@ unit_test_targets := \
   configurable_settings_test \
   contains_test \
   crc32_test \
+  crtp_base_test \
   currency_test \
   dbo_rules_test \
   duff_fmt_test \
@@ -432,6 +434,7 @@ unit_test_targets := \
   rtti_lmi_test \
   safely_dereference_as_test \
   sandbox_test \
+  smf_test \
   snprintf_test \
   ssize_lmi_test \
   stratified_algorithms_test \
@@ -495,6 +498,11 @@ any_member_test$(EXEEXT): \
   miscellany.o \
   null_stream.o \
   path_utility.o \
+
+archetype_test$(EXEEXT): \
+  $(common_test_objects) \
+  archetype.o \
+  archetype_test.o \
 
 assert_lmi_test$(EXEEXT): \
   $(common_test_objects) \
@@ -582,6 +590,10 @@ crc32_test$(EXEEXT): \
   $(common_test_objects) \
   crc32.o \
   crc32_test.o \
+
+crtp_base_test$(EXEEXT): \
+  $(common_test_objects) \
+  crtp_base_test.o \
 
 currency_test$(EXEEXT): \
   $(common_test_objects) \
@@ -1023,6 +1035,10 @@ safely_dereference_as_test$(EXEEXT): \
 sandbox_test$(EXEEXT): \
   $(common_test_objects) \
   sandbox_test.o \
+
+smf_test$(EXEEXT): \
+  $(common_test_objects) \
+  smf_test.o \
 
 snprintf_test$(EXEEXT): \
   $(common_test_objects) \

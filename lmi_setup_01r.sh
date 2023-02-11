@@ -2,7 +2,7 @@
 
 # Create a chroot for cross-building "Let me illustrate...".
 #
-# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -72,4 +72,4 @@ schroot --chroot="${CHRTNAME}" --user="${NORMAL_USER}" --directory=/tmp ./lmi_se
 schroot --chroot="${CHRTNAME}" --user="${NORMAL_USER}" --directory=/tmp ./lmi_setup_44.sh
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0 [redhat host]"  | tee /dev/tty
+echo "$stamp $0 [redhat host]" | tee /dev/tty || true

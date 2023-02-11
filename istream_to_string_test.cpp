@@ -1,6 +1,6 @@
 // Read stream into a string: unit test.
 //
-// Copyright (C) 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -40,7 +40,15 @@ void istream_to_string_1
 {
     typedef std::basic_string<Char_t,Traits,Allocator> string_type;
     typedef std::istreambuf_iterator<Char_t,Traits> bisbi;
+    // https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105580
+#if defined LMI_GCC
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wnull-dereference"
+#endif // defined LMI_GCC
     string_type((bisbi(is)), bisbi()).swap(s);
+#if defined LMI_GCC
+#   pragma GCC diagnostic pop
+#endif // defined LMI_GCC
     if(!is)
         {
         throw std::runtime_error("Unable to read stream into string.");

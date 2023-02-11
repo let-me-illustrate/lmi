@@ -1,6 +1,6 @@
 // Input-sequence class for wx data-transfer framework.
 //
-// Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -25,66 +25,29 @@
 
 #include "assert_lmi.hpp"
 
-/// Default constructor.
-///
-/// Throws if insane.
-
-datum_sequence::datum_sequence()
-    :keyword_values_are_blocked_ {false}
-{
-    assert_sanity();
-}
-
 /// Construct from string.
-///
-/// Throws if insane.
 
-datum_sequence::datum_sequence(std::string const& s)
-    :datum_string                {s}
-    ,keyword_values_are_blocked_ {false}
+sequence_base::sequence_base(std::string const& s)
+    :datum_string_base{s}
 {
-    assert_sanity();
 }
 
-/// Implementation of pure virtual destructor.
-///
-/// Neither this explicitly-defaulted implementation nor any other can
-/// be written inside the class definition because C++11 [10.4/3] says
-/// "a function declaration cannot provide both a pure-specifier and a
-/// definition".
-
-datum_sequence::~datum_sequence() = default;
-
-datum_sequence& datum_sequence::operator=(std::string const& s)
+sequence_base& sequence_base::operator=(std::string const& s)
 {
-    datum_string::operator=(s);
+    datum_string_base::operator=(s);
     return *this;
-}
-
-/// Block or unblock keyword values.
-///
-/// This has no practical effect if keyword values are not allowable.
-///
-/// Throws if insane.
-
-void datum_sequence::block_keyword_values(bool z)
-{
-    keyword_values_are_blocked_ = z;
-    assert_sanity();
 }
 
 /// Declare whether numeric values are allowable.
 
-bool datum_sequence::numeric_values_are_allowable() const
+bool sequence_base::numeric_values_are_allowable() const
 {
     return true;
 }
 
 /// Declare whether keyword values are allowable.
-///
-/// Even if they are allowable, they may be blocked.
 
-bool datum_sequence::keyword_values_are_allowable() const
+bool sequence_base::keyword_values_are_allowable() const
 {
     return false;
 }
@@ -93,7 +56,7 @@ bool datum_sequence::keyword_values_are_allowable() const
 ///
 /// Return empty string if there's no default keyword.
 
-std::string const datum_sequence::default_keyword() const
+std::string const sequence_base::default_keyword() const
 {
     return std::string();
 }
@@ -113,7 +76,7 @@ std::string const datum_sequence::default_keyword() const
 /// map makes it possible to change internal names without affecting
 /// the user interface.
 
-std::map<std::string,std::string> const datum_sequence::allowed_keywords() const
+std::map<std::string,std::string> const sequence_base::allowed_keywords() const
 {
     return std::map<std::string,std::string>();
 }
@@ -126,60 +89,52 @@ std::map<std::string,std::string> const datum_sequence::allowed_keywords() const
 /// datum, but maintaining strong encapsulation reduces the temptation
 /// for one component of MVC to inspect another's internals.
 
-bool datum_sequence::equals(datum_sequence const& z) const
+bool sequence_base::equals(sequence_base const& z) const
 {
-    return
-           z.value()                     == value()
-        && z.keyword_values_are_blocked_ == keyword_values_are_blocked_
-        ;
-}
-
-/// Determine whether keywords are blocked.
-///
-/// Rationale: to support allowed_keywords() in derived classes.
-///
-/// It would be simple to provide a public accessor for the member
-/// datum, but maintaining strong encapsulation reduces the temptation
-/// for one component of MVC to inspect another's internals.
-
-bool datum_sequence::keyword_values_are_blocked() const
-{
-    return keyword_values_are_blocked_;
+    return z.value() == value();
 }
 
 /// Ensure that input is possible; throw otherwise.
 ///
 /// Input is possible iff either
-///   - keyword values are allowable and not blocked; or
+///   - keyword values are allowable, and at least one is allowed, or
 ///   - numeric values are allowable.
-/// For the nonce at least, the first condition doesn't require
-/// allowed_keywords() to return a non-empty map; that can be
-/// considered as experience emerges with derived classes.
 
-void datum_sequence::assert_sanity() const
+void sequence_base::assert_sanity() const
 {
     LMI_ASSERT
-        (  (keyword_values_are_allowable() && !keyword_values_are_blocked_)
-        ||  numeric_values_are_allowable()
+        (  keyword_values_are_allowable() && !allowed_keywords().empty()
+        || numeric_values_are_allowable()
         );
 }
 
-bool operator==(datum_sequence const& lhs, datum_sequence const& rhs)
+bool operator==(sequence_base const& lhs, sequence_base const& rhs)
 {
     return lhs.equals(rhs);
 }
 
 // Numeric MVC input sequence.
 
+numeric_sequence::numeric_sequence()
+{
+    assert_sanity();
+}
+
+numeric_sequence::numeric_sequence(std::string const& s)
+    :sequence_base{s}
+{
+    assert_sanity();
+}
+
 numeric_sequence& numeric_sequence::operator=(std::string const& s)
 {
-    datum_sequence::operator=(s);
+    sequence_base::operator=(s);
     return *this;
 }
 
 std::map<std::string,std::string> const numeric_sequence::allowed_keywords() const
 {
-    return datum_sequence::allowed_keywords();
+    return sequence_base::allowed_keywords();
 }
 
 bool operator==(numeric_sequence const& lhs, numeric_sequence const& rhs)
@@ -189,19 +144,25 @@ bool operator==(numeric_sequence const& lhs, numeric_sequence const& rhs)
 
 // MVC input sequence for payments.
 
+payment_sequence::payment_sequence()
+{
+    assert_sanity();
+}
+
+payment_sequence::payment_sequence(std::string const& s)
+    :sequence_base{s}
+{
+    assert_sanity();
+}
+
 payment_sequence& payment_sequence::operator=(std::string const& s)
 {
-    datum_sequence::operator=(s);
+    sequence_base::operator=(s);
     return *this;
 }
 
 std::map<std::string,std::string> const payment_sequence::allowed_keywords() const
 {
-    if(keyword_values_are_blocked())
-        {
-        return std::map<std::string,std::string>();
-        }
-
     static std::map<std::string,std::string> all_keywords;
     if(all_keywords.empty())
         {
@@ -225,9 +186,20 @@ bool operator==(payment_sequence const& lhs, payment_sequence const& rhs)
 
 // MVC input sequence for payment mode.
 
+mode_sequence::mode_sequence()
+{
+    assert_sanity();
+}
+
+mode_sequence::mode_sequence(std::string const& s)
+    :sequence_base{s}
+{
+    assert_sanity();
+}
+
 mode_sequence& mode_sequence::operator=(std::string const& s)
 {
-    datum_sequence::operator=(s);
+    sequence_base::operator=(s);
     return *this;
 }
 
@@ -238,7 +210,6 @@ std::string const mode_sequence::default_keyword() const
 
 std::map<std::string,std::string> const mode_sequence::allowed_keywords() const
 {
-    LMI_ASSERT(!keyword_values_are_blocked());
     static std::map<std::string,std::string> all_keywords;
     if(all_keywords.empty())
         {
@@ -258,9 +229,20 @@ bool operator==(mode_sequence const& lhs, mode_sequence const& rhs)
 
 // MVC input sequence for specified amount.
 
+specamt_sequence::specamt_sequence()
+{
+    assert_sanity();
+}
+
+specamt_sequence::specamt_sequence(std::string const& s)
+    :sequence_base{s}
+{
+    assert_sanity();
+}
+
 specamt_sequence& specamt_sequence::operator=(std::string const& s)
 {
-    datum_sequence::operator=(s);
+    sequence_base::operator=(s);
     return *this;
 }
 
@@ -271,11 +253,6 @@ specamt_sequence& specamt_sequence::operator=(std::string const& s)
 
 std::map<std::string,std::string> const specamt_sequence::allowed_keywords() const
 {
-    if(keyword_values_are_blocked())
-        {
-        return std::map<std::string,std::string>();
-        }
-
     static std::map<std::string,std::string> all_keywords;
     if(all_keywords.empty())
         {
@@ -299,9 +276,20 @@ bool operator==(specamt_sequence const& lhs, specamt_sequence const& rhs)
 
 // MVC input sequence for death benefit option.
 
+dbo_sequence::dbo_sequence()
+{
+    assert_sanity();
+}
+
+dbo_sequence::dbo_sequence(std::string const& s)
+    :sequence_base{s}
+{
+    assert_sanity();
+}
+
 dbo_sequence& dbo_sequence::operator=(std::string const& s)
 {
-    datum_sequence::operator=(s);
+    sequence_base::operator=(s);
     return *this;
 }
 
@@ -312,7 +300,6 @@ std::string const dbo_sequence::default_keyword() const
 
 std::map<std::string,std::string> const dbo_sequence::allowed_keywords() const
 {
-    LMI_ASSERT(!keyword_values_are_blocked());
     static std::map<std::string,std::string> all_keywords;
     if(all_keywords.empty())
         {

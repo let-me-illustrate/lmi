@@ -2,7 +2,7 @@
 
 # For msw, download and build lmi and required libraries.
 
-# Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -249,7 +249,7 @@ then
     restore_cache_mount=$(mount --mount-entries | grep '/srv/cache_for_lmi ')
     [ -z "$restore_cache_mount" ] \
       || printf '%s\n' "$restore_cache_mount" | grep --silent 'C:/srv/cache_for_lmi' \
-      || printf 'Replacing former cache mount:\n  %s\n' "$restore_cache_mount" >/dev/tty
+      || printf 'Replacing former cache mount:\n  %s\n' "$restore_cache_mount"
     mount --force "C:/srv/cache_for_lmi" "/srv/cache_for_lmi"
 fi
 
@@ -270,16 +270,36 @@ make "$coefficiency" --output-sync=recurse -f install_miscellanea.make
 # This for-loop can iterate over as many toolchains as desired.
 # Make sure the current production architecture is built last, so that
 # it's the one installed to /opt/lmi/bin/ when this script ends.
-triplets="x86_64-w64-mingw32"
+lmi_toolchains="gcc_msw64"
 if [ "Cygwin" != "$platform" ] && [ "WSL" != "$platform" ]
 then
-    triplets="x86_64-pc-linux-gnu x86_64-w64-mingw32"
+  lmi_toolchains="clang_gnu64 gcc_gnu64 gcc_msw64"
 fi
-export LMI_COMPILER=gcc
+export LMI_COMPILER
 export LMI_TRIPLET
-# shellcheck disable=SC2043
-for LMI_TRIPLET in ${triplets} ;
+for toolchain in ${lmi_toolchains} ;
 do
+    case "$toolchain" in
+        (clang_gnu64)
+            LMI_COMPILER="clang"
+            LMI_TRIPLET="x86_64-pc-linux-gnu"
+            ;;
+        (gcc_gnu64)
+            LMI_COMPILER="gcc"
+            LMI_TRIPLET="x86_64-pc-linux-gnu"
+            ;;
+        (gcc_msw64)
+            LMI_COMPILER="gcc"
+            LMI_TRIPLET="x86_64-w64-mingw32"
+            ;;
+        (*)
+            printf 'Unknown toolchain "%s".\n' "$toolchain"
+            return 1;
+            ;;
+    esac
+
+    printf 'Building %s with %s for %s.\n' "lmi" "$LMI_COMPILER" "$LMI_TRIPLET"
+
     # Set a minimal path for makefiles and scripts that are
     # designed to be independent of lmi's runtime path.
     export PATH="$minimal_path"
@@ -308,6 +328,7 @@ do
             && printf '\ncygcheck %s\n' "$z" && cmd /c "$CYGCHECK $z" ;
           done
     fi
+    printf 'Built %s with %s for %s.\n' "lmi" "$LMI_COMPILER" "$LMI_TRIPLET"
 done
 
 # GID should be the same for all files.
@@ -353,9 +374,11 @@ mkdir --parents /opt/lmi/data
 
 # To regenerate authentication files for production distributions:
 # cd /opt/lmi/data
-# printf '2450449 2472011'             >expiry
-# printf '%s\n' "$(md5sum expiry)"     >validated.md5
-# [wine] /opt/lmi/bin/generate_passkey >passkey
+# printf '2450449 2472011'         >expiry
+# printf '%s\n' "$(md5sum expiry)" >validated.md5
+# /opt/lmi/bin/generate_passkey    >passkey
+#   alternatively, for 'wine':
+# wine /opt/lmi/bin/generate_passkey.exe >passkey
 printf '2450449 2472011'                            >/opt/lmi/data/expiry
 printf '5fc68a795c9c60da1b32be989efc299a  expiry\n' >/opt/lmi/data/validated.md5
 printf '391daa5cbc54e118c4737446bcb84eea'           >/opt/lmi/data/passkey
@@ -416,4 +439,4 @@ seconds=$(($(date '+%s' -d "$stamp1") - $(date '+%s' -d "$stamp0")))
 elapsed=$(date -u -d @"$seconds" +'%H:%M:%S')
 echo "Elapsed: $elapsed"
 
-echo Finished building lmi. >/dev/tty
+echo Finished building lmi. >/dev/tty || true

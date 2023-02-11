@@ -1,6 +1,6 @@
 // Pop-up input-sequence editor.
 //
-// Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -1581,7 +1581,7 @@ void InputSequenceEntry::DoOpenEditor()
     InputSequenceEditor editor(button_, title_, in);
 
     std::string sequence_string = text_->GetValue().ToStdString(wxConvUTF8);
-    datum_sequence const& ds = *member_cast<datum_sequence>(in[field_name()]);
+    sequence_base const& ds = *member_cast<sequence_base>(in[field_name()]);
 
     std::map<std::string,std::string> const kwmap = ds.allowed_keywords();
     std::vector<std::string> const keywords =

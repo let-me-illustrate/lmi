@@ -1,6 +1,6 @@
 // Symbolic member names--unit test.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -23,6 +23,7 @@
 
 #include "any_member.hpp"
 
+#include "crtp_base.hpp"                // abstract_base
 #include "test_tools.hpp"
 
 #include <cmath>                        // exp()
@@ -32,16 +33,17 @@
 #include <ostream>
 #include <sstream>
 
-struct base_datum
+struct base_datum : private lmi::abstract_base<base_datum>
 {
     base_datum() :sane(7) {}
-    virtual ~base_datum() = default;    // Just to make it polymorphic.
-    virtual int virtual_function() = 0; // Just to make it abstract.
+
+    virtual int virtual_function() = 0;
     bool base_function()
         {
         std::cout << "base_datum::base_function() called " << sane << std::endl;
         return true;
         }
+
     int sane;
 };
 
@@ -56,12 +58,15 @@ std::ostream& operator<<(std::ostream& os, base_datum const& z)
     return os << z.sane << '\n';
 }
 
-struct derived_datum
+struct derived_datum final
     :public base_datum
 {
     bool operator==(derived_datum const& z) const
         {return 7 == sane && 7 == z.sane;}
     int virtual_function() override {return 1729;}
+
+  private:
+    void concrete_if_not_pure() override {}
 };
 
 // Unused stub.

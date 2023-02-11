@@ -1,6 +1,6 @@
 // Create a PDF file from a ledger--wx interface.
 //
-// Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -360,7 +360,7 @@ class table_mixin
     {
     }
 
-    ~table_mixin() = default;
+    virtual ~table_mixin() = default;
 
     // Description of a single table column.
     struct illustration_table_column
@@ -402,7 +402,7 @@ class table_mixin
                 std::string output_value;
                 if(columns[j].variable_name.empty())
                     {
-                    ; // Separator column: use empty string.
+                    // Separator column: use empty string.
                     }
                 else
                     {
@@ -3245,7 +3245,7 @@ void concrete_pdf_command(Ledger const& ledger, fs::path const& pdf_out_file)
         case mce_ill_reg:
             pdf_illustration_naic        (ledger, pdf_out_file).render_all();
             break;
-        case mce_prospectus_abeyed: // fall through
+        case mce_prospectus_abeyed: [[fallthrough]];
         case mce_finra:
             pdf_illustration_finra       (ledger, pdf_out_file).render_all();
             break;
@@ -3255,8 +3255,8 @@ void concrete_pdf_command(Ledger const& ledger, fs::path const& pdf_out_file)
         case mce_individual_private_placement:
             pdf_illustration_reg_d_indiv (ledger, pdf_out_file).render_all();
             break;
-        case mce_offshore_private_placement_obsolete: // fall through
-        case mce_ill_reg_private_placement_obsolete:  // fall through
+        case mce_offshore_private_placement_obsolete: [[fallthrough]];
+        case mce_ill_reg_private_placement_obsolete:  [[fallthrough]];
         case mce_variable_annuity_obsolete:
             alarum() << "Unsupported ledger type." << LMI_FLUSH;
         }

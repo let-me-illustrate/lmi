@@ -1,6 +1,6 @@
 // Symbolic member names: base class.
 //
-// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -24,6 +24,8 @@
 
 #include "config.hpp"
 
+#include "crtp_base.hpp"                // abstract_base
+
 #include <ostream>
 #include <string>
 #include <typeinfo>
@@ -31,14 +33,10 @@
 /// Abstract class any_entity specifies the interface required for
 /// entities in the MVC Model. Class any_member is derived from this
 /// class, but other implementations may be substituted.
-///
-/// Implicitly-declared special member functions do the right thing.
 
-class any_entity
+class any_entity : private lmi::abstract_base<any_entity>
 {
   public:
-    virtual ~any_entity() = default;
-
     any_entity& operator=(std::string const& s) {return assign(s);}
 
     virtual std::string str() const = 0;

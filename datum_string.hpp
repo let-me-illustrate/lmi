@@ -1,6 +1,6 @@
 // String input class for wx data-transfer framework.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -30,17 +30,14 @@
 
 #include <string>
 
-// Implicitly-declared special member functions do the right thing.
-
-class datum_string
+class datum_string_base
     :public datum_base
 {
   public:
-    datum_string() = default;
-    explicit datum_string(std::string const&);
-    ~datum_string() override = default;
+    datum_string_base() = default;
+    explicit datum_string_base(std::string const&);
 
-    datum_string& operator=(std::string const&);
+    datum_string_base& operator=(std::string const&);
 
     std::string const& value() const;
 
@@ -52,17 +49,30 @@ class datum_string
     std::string value_;
 };
 
+bool operator==(datum_string_base const&, datum_string_base const&);
+
+class datum_string final
+    :public datum_string_base
+{
+  public:
+    datum_string() = default;
+    explicit datum_string(std::string const& s) : datum_string_base{s} {}
+
+    datum_string& operator=(std::string const&);
+
+  private:
+    void concrete_if_not_pure() override {}
+};
+
 bool operator==(datum_string const&, datum_string const&);
 
-template<>
-inline datum_string value_cast<datum_string,std::string>
+template<> inline datum_string value_cast<datum_string,std::string>
     (std::string const& from)
 {
     return datum_string(from);
 }
 
-template<>
-inline std::string value_cast<std::string,datum_string>
+template<> inline std::string value_cast<std::string,datum_string>
     (datum_string const& from)
 {
     return from.value();

@@ -1,6 +1,6 @@
 // Census manager.
 //
-// Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -516,7 +516,7 @@ table_type_converter::get(any_member<Input> const& value)
         {
         return get_impl<table_string_converter>();
         }
-    else if(is_reconstitutable_as<datum_sequence>(value))
+    else if(is_reconstitutable_as<sequence_base>(value))
         {
         return get_impl<table_sequence_converter>();
         }
@@ -626,7 +626,7 @@ class CensusViewGridCellAttrProvider
 
 /// Interface to the data for wxGrid.
 
-class CensusViewGridTable
+class CensusViewGridTable final
     :public wxGridTableBase
 {
   public:
@@ -970,7 +970,7 @@ BEGIN_EVENT_TABLE(CensusView, ViewEx)
     EVT_UPDATE_UI(XRCID("print_case_to_disk"   ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("print_spreadsheet"    ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("print_group_roster"   ),CensusView::UponUpdateAlwaysEnabled    )
-    EVT_UPDATE_UI(XRCID("print_group_quote"    ),CensusView::UponUpdateAlwaysEnabled    )
+    EVT_UPDATE_UI(XRCID("print_group_quote"    ),CensusView::UponUpdateAlwaysDisabled   )
     EVT_UPDATE_UI(XRCID("copy_census"          ),CensusView::UponUpdateColumnValuesVary )
     EVT_UPDATE_UI(XRCID("paste_census"         ),CensusView::UponUpdateAlwaysEnabled    )
     EVT_UPDATE_UI(XRCID("add_cell"             ),CensusView::UponUpdateAlwaysEnabled    )
@@ -1159,6 +1159,7 @@ void CensusView::update_class_names()
         {
         all_class_names.push_back(i["EmployeeClass"].str());
         }
+    std::sort(all_class_names.begin(), all_class_names.end());
 
     std::vector<std::string> unique_class_names;
 
@@ -1166,7 +1167,6 @@ void CensusView::update_class_names()
         (unique_class_names
         ,unique_class_names.begin()
         );
-    std::sort(all_class_names.begin(), all_class_names.end());
     std::unique_copy(all_class_names.begin(), all_class_names.end(), iin);
 
     // Rebuild vector of class parameters so that it contains
@@ -1813,7 +1813,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
         }
     else
         {
-        ; // Do nothing: neither age nor DOB pasted.
+        // Do nothing: neither age nor DOB pasted.
         }
 
     cells.reserve(std::count(census_data.begin(), census_data.end(), '\n'));
@@ -1860,7 +1860,7 @@ void CensusView::UponPasteCensus(wxCommandEvent&)
                 int z = value_cast<int>(values[j]);
                 if(jdn_min <= z && z <= jdn_max)
                     {
-                    ; // Do nothing: JDN is the default expectation.
+                    // Do nothing: JDN is the default expectation.
                     }
                 else if(ymd_min <= z && z <= ymd_max)
                     {

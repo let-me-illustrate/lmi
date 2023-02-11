@@ -1,6 +1,6 @@
 // Extensions to C++ run-time type information.
 //
-// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -31,6 +31,7 @@
 
 #include <ostream>
 #include <string>
+#include <type_traits>
 #include <typeinfo>
 
 class RttiLmiTest;
@@ -85,12 +86,12 @@ namespace lmi
 /// explains why the addresses of std::type_info objects should not
 /// be compared directly.
 ///
-/// Implicitly-declared special member functions do the right thing.
+/// Explicitly-defaulted special member functions do the right thing.
 /// It may seem odd to say that of a class with a pointer member, but
 /// std::type_info is not Copyable, so a deep copy is not possible;
 /// neither is it necessary, because a std::type_info object is, in
 /// effect, a smart pointer managed by the implementation.
-///   http://www.two-sdg.demon.co.uk/curbralan/papers/RTTI.html
+///   https://web.archive.org/web/20200115093104/http://www.two-sdg.demon.co.uk/curbralan/papers/RTTI.html
 /// "This is one of the few cases in C++ programming where it is
 /// reasonable for a programmer to take the address associated with a
 /// reference and hold onto it for later use:
@@ -116,7 +117,8 @@ namespace lmi
 ///   lmi::TypeInfo(&ti); // Would refer to typeid(lmi::TypeInfo*).
 /// Those problems are avoided by requiring the idiomatic usage
 ///   lmi::TypeInfo(typeid(X));
-/// and resisting the temptation to add syntactic sugar.
+/// and resisting the temptation to add syntactic sugar here. Use
+/// particularized_type<>() when such information is desired.
 
 class TypeInfo final
 {
@@ -124,7 +126,6 @@ class TypeInfo final
 
   public:
     TypeInfo(std::type_info const& z): ti_(&z) {}
-    ~TypeInfo() = default;
 
     bool operator==(TypeInfo const& z) const {return *z.ti_ == *ti_;}
     bool  operator<(TypeInfo const& z) const {return ti_->before(*z.ti_);}
@@ -138,6 +139,26 @@ class TypeInfo final
 inline std::ostream& operator<<(std::ostream& os, TypeInfo const& z)
 {
     return os << z.Name();
+}
+
+/// Underlying 'typeid' type, with cv and reference garniture.
+///
+/// This could be extended, e.g., to handle (multi-level) pointers,
+/// as needs arise.
+
+template<typename T>
+std::string particularized_type()
+{
+    std::string s {lmi::TypeInfo(typeid(T)).Name()};
+    using U = std::remove_reference_t<T>;
+    s += std::is_const_v   <U> ? " const"    : "";
+    s += std::is_volatile_v<U> ? " volatile" : "";
+    s +=
+          std::is_lvalue_reference_v<T> ? "&"
+        : std::is_rvalue_reference_v<T> ? "&&"
+        :                                 ""
+        ;
+    return s;
 }
 
 } // namespace lmi

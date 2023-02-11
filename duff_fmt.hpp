@@ -1,6 +1,6 @@
 // Format doubles with thousands separators.
 //
-// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -65,9 +65,9 @@ inline std::string duff_fmt(double value, int decimals)
                 do
                     {
                     if('.' == *p) break;
-                    *q++ = ',';  // fall through
-        case 0:     *q++ = *p++; // fall through
-        case 2:     *q++ = *p++; // fall through
+                    *q++ = ',';  [[fallthrough]];
+        case 0:     *q++ = *p++; [[fallthrough]];
+        case 2:     *q++ = *p++; [[fallthrough]];
         case 1:     *q++ = *p++;
                     }
                 while(*p);

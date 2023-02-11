@@ -1,6 +1,6 @@
 // Symbolic member names.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -264,6 +264,8 @@ class any_member final
   private:
     template<typename ExactMemberType>
     ExactMemberType* exact_cast();
+
+    void concrete_if_not_pure() override {}
 
     // any_entity required implementation.
     any_member& assign(std::string const&) override;

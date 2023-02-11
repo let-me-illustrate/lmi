@@ -1,6 +1,6 @@
 # Compiler-specific makefile: ascertain gcc version.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -63,6 +63,8 @@ ifeq      (10,$(gnu_cpp_version))
 else ifeq (10.0,$(gnu_cpp_version))
 else ifeq (11,$(gnu_cpp_version))
 else ifeq (11.0,$(gnu_cpp_version))
+else ifeq (12,$(gnu_cpp_version))
+else ifeq (12.0,$(gnu_cpp_version))
 else
   $(warning Untested $(GNU_CPP) version '$(gnu_cpp_version)')
 endif
@@ -71,6 +73,8 @@ ifeq      (10,$(gnu_cxx_version))
 else ifeq (10.0,$(gnu_cxx_version))
 else ifeq (11,$(gnu_cxx_version))
 else ifeq (11.0,$(gnu_cxx_version))
+else ifeq (12,$(gnu_cxx_version))
+else ifeq (12.0,$(gnu_cxx_version))
 else
   $(warning Untested $(GNU_CXX) version '$(gnu_cxx_version)')
 endif

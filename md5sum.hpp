@@ -1,6 +1,6 @@
 // Compute checksums of files or strings.
 //
-// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -47,7 +47,7 @@ enum class md5_file_mode
 
 struct md5sum_for_file
 {
-    md5sum_for_file(fs::path&& path, std::string&& sum, md5_file_mode mode)
+    md5sum_for_file(fs::path&& path, std::string&& sum, md5_file_mode mode) noexcept
         :filename {std::move(path)}
         ,md5sum   {std::move(sum)}
         ,file_mode{mode}

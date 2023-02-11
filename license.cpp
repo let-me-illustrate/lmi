@@ -1,6 +1,6 @@
 // The GPL and the notices it requires.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -53,7 +53,7 @@ char const license_html[] =
 char const notices_text[] =
     "'Let me illustrate...' creates life insurance illustrations.\n"
     "\n"
-    "Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,\n" /**/ "2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015,\n" /**/ "2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.\n"
+    "Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005,\n" /**/ "2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015,\n" /**/ "2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.\n"
     "\n"
     "This program is free software; you can redistribute it and/or\n"
     "modify it under the terms of the GNU General Public License\n"

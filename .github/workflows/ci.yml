@@ -59,7 +59,7 @@ jobs:
 
           # Create a user with the same UID/GID and name as the existing user
           # outside of the container and allow it using sudo without password.
-          useradd --home-dir $HOME --no-create-home --gid adm --uid 1001 runner
+          useradd --home-dir "$HOME" --no-create-home --gid adm --uid 1001 runner
 
           echo 'runner ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/runner
 
@@ -67,24 +67,25 @@ jobs:
         run: |
           export DEBIAN_FRONTEND=noninteractive
 
-          packages="\
-            automake bc bsdmainutils bzip2 curl cvs default-jre \
-            g++-multilib git jing libarchive-tools \
-            libtool libxml2-utils libxslt1-dev make patch pkg-config rsync \
-            shellcheck trang unzip wget xsltproc x11-xserver-utils xvfb zsh"
+          packages=(
+            automake bc bsdmainutils bzip2 curl cvs default-jre
+            g++-multilib git jing libarchive-tools
+            libtool libxml2-utils libxslt1-dev make patch pkg-config rsync
+            shellcheck trang unzip wget xsltproc x11-xserver-utils xvfb zsh
+          )
 
           if [ ${{ matrix.mingw }} ]
           then
-            packages="$packages g++-mingw-w64-x86-64 wine wine64"
+            packages+=(g++-mingw-w64-x86-64 wine wine64)
 
             # Set WINEDEBUG to avoid annoying warnings about wine32 being
             # missing: this is not a problem in our case, we want to only
             # run 64-bit programs in this build, so set WINEDEBUG to a
             # value equivalent to its default/unset value but recognized
             # as disabling error output by Debian /usr/bin/wine script.
-            echo 'WINEDEBUG=-all,err+all,fixme+all' >> $GITHUB_ENV
+            echo 'WINEDEBUG=-all,err+all,fixme+all' >> "$GITHUB_ENV"
           else
-            packages="$packages libgtk-3-dev"
+            packages+=(libgtk-3-dev)
           fi
 
           # These packages are always installed when using the official
@@ -95,13 +96,17 @@ jobs:
           if [ -z "${{ matrix.autotools }}" -o -z "${{ matrix.mingw }}" ]; then
             # Those are never used with clang currently.
             if [ "${{ matrix.compiler }}" != clang ]; then
-              packages="$packages libunwind-dev libdw-dev"
+              # Instead of installing libunwind-NN-dev directly, install
+              # libc++-dev depending on it, as the latter depends on the
+              # former but has a version-independent name which doesn't need
+              # to be updated with each clang release.
+              packages+=(libc++-dev libdw-dev)
             fi
-            packages="$packages libpcre2-dev"
+            packages+=(libpcre2-dev)
           fi
 
           if [ "${{ matrix.compiler }}" = clang ]; then
-            packages="$packages clang libc++abi-dev libc++-dev"
+            packages+=(clang libc++abi-dev libc++-dev lld)
           fi
 
           # Work around for an apparent bug in either Debian slim Docker image
@@ -109,15 +114,15 @@ jobs:
           # doesn't exist, so create it preemptively.
           sudo mkdir -p /usr/share/man/man1
 
-          sudo apt-get -qq install $packages
+          sudo apt-get -qq install "${packages[@]}"
 
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           submodules: 'recursive'
 
       - name: Install CCache
-        uses: vadz/ccache-action@51a14bafac785236dfc551c76c779429eaf85a13
+        uses: hendrikmuhs/ccache-action@v1.2.5
         with:
           key: ${{ matrix.name }}
           max-size: 900M
@@ -125,15 +130,15 @@ jobs:
 
       - name: Set up build environment
         run: |
-          normal_uid=`id --user`
+          normal_uid=$(id --user)
 
           # The checkout actions runs as root and there doesn't seem to be any
           # way to change this, so just adjust the owner after checkout.
-          sudo chown -R $normal_uid $GITHUB_WORKSPACE
+          sudo chown -R "$normal_uid" "$GITHUB_WORKSPACE"
 
           sudo sed -i'' -e 's/^int _putenv/_CRTIMP int _putenv/' /usr/share/libtool/build-aux/ltmain.sh
 
-          echo "coefficiency=--jobs=`nproc`" >> $GITHUB_ENV
+          echo "coefficiency=--jobs=$(nproc)" >> "$GITHUB_ENV"
 
           CC=${LMI_COMPILER}
           case "$CC" in
@@ -156,33 +161,33 @@ jobs:
             CXX=${LMI_TRIPLET}-${CXX}
           fi
 
-          echo "CC=$CC" >> $GITHUB_ENV
-          echo "CXX=$CXX" >> $GITHUB_ENV
+          echo "CC=$CC" >> "$GITHUB_ENV"
+          echo "CXX=$CXX" >> "$GITHUB_ENV"
 
           gcc_version=$($CC -dumpversion|tr -d '\r')
-          echo "gcc_version=$gcc_version" >> $GITHUB_ENV
+          echo "gcc_version=$gcc_version" >> "$GITHUB_ENV"
 
-          echo "xml2_sha1=$(git rev-parse HEAD:third_party/libxml2)" >> $GITHUB_ENV
-          echo "xmlwrapp_sha1=$(git rev-parse HEAD:third_party/xmlwrapp)" >> $GITHUB_ENV
-          echo "xslt_sha1=$(git rev-parse HEAD:third_party/libxslt)" >> $GITHUB_ENV
-          echo "wx_sha1=$(git rev-parse HEAD:third_party/wx)" >> $GITHUB_ENV
-          echo "wxpdfdoc_sha1=$(git rev-parse HEAD:third_party/wxpdfdoc)" >> $GITHUB_ENV
+          echo "xml2_sha1=$(git rev-parse HEAD:third_party/libxml2)" >> "$GITHUB_ENV"
+          echo "xmlwrapp_sha1=$(git rev-parse HEAD:third_party/xmlwrapp)" >> "$GITHUB_ENV"
+          echo "xslt_sha1=$(git rev-parse HEAD:third_party/libxslt)" >> "$GITHUB_ENV"
+          echo "wx_sha1=$(git rev-parse HEAD:third_party/wx)" >> "$GITHUB_ENV"
+          echo "wxpdfdoc_sha1=$(git rev-parse HEAD:third_party/wxpdfdoc)" >> "$GITHUB_ENV"
 
           # Prepend the directory containing symlinks to the PATH: this allows
           # makefiles to work unchnaged and without defining CXX on the command
           # line. Note that MINIMAL_PATH is used in lmi makefiles to replace
           # the PATH, so we need to define it too.
-          echo "PATH=/usr/lib/ccache:/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/bin:$PATH" >> $GITHUB_ENV
-          echo "MINIMAL_PATH=/usr/lib/ccache:/usr/bin:/bin" >> $GITHUB_ENV
+          echo "PATH=/usr/lib/ccache:/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/bin:$PATH" >> "$GITHUB_ENV"
+          echo "MINIMAL_PATH=/usr/lib/ccache:/usr/bin:/bin" >> "$GITHUB_ENV"
 
           LD_LIBRARY_PATH=/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib
           LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/lmi/${LMI_COMPILER}_${LMI_TRIPLET}/build/ship
-          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> $GITHUB_ENV
+          echo "LD_LIBRARY_PATH=$LD_LIBRARY_PATH" >> "$GITHUB_ENV"
 
           # Create directories required by lmi.
           for d in /opt/lmi /opt/lmi/local /opt/lmi/print /etc/opt/lmi /srv/cache_for_lmi; do
             sudo mkdir --parents $d
-            sudo --preserve-env chown $normal_uid $d
+            sudo --preserve-env chown "$normal_uid" $d
           done
           mkdir /srv/cache_for_lmi/downloads
           mkdir /opt/lmi/gui_test
@@ -213,7 +218,7 @@ jobs:
           fi
 
       - name: Cache downloaded archives
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           # Using the hash of the makefile means that we're going to have
           # false negatives, i.e. re-download the files unnecessarily if the
@@ -228,7 +233,7 @@ jobs:
 
       - name: Cache third-party libraries
         id: cache-local
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             /opt/lmi/local/${{ env.LMI_COMPILER }}_${{ env.LMI_TRIPLET }}
@@ -253,15 +258,15 @@ jobs:
         run: |
           ./autogen.sh
           lmi_build_dir='ci-build'
-          echo "lmi_build_dir=${lmi_build_dir}" >> $GITHUB_ENV
+          echo "lmi_build_dir=${lmi_build_dir}" >> "$GITHUB_ENV"
           mkdir ${lmi_build_dir}
           cd ${lmi_build_dir}
 
           # Disable optimizations just to make the build faster.
           ../configure --disable-optimize \
             CPPFLAGS=-I/opt/lmi/local/include \
-            LDFLAGS=-L/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib \
-            PKG_CONFIG_PATH=/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib/pkgconfig \
+            LDFLAGS="-L/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib" \
+            PKG_CONFIG_PATH="/opt/lmi/local/${LMI_COMPILER}_${LMI_TRIPLET}/lib/pkgconfig" \
               || err=$?
 
           if [ -n "$err" ]; then
@@ -269,7 +274,7 @@ jobs:
             echo '-----------------------------------------------------------'
             cat config.log
             echo '-----------------------------------------------------------'
-            exit $err
+            exit "$err"
           fi
 
       - name: Build lmi
@@ -333,19 +338,19 @@ jobs:
       - name: Run unit tests
         run: |
           if [ ${{ matrix.autotools }} ]; then
-            make --keep-going V=1 $coefficiency -C ${lmi_build_dir} check || err=$?
+            make --keep-going V=1 "$coefficiency" -C "${lmi_build_dir}" check || err=$?
 
             if [ -n "$err" ]; then
-              if [ -f ${lmi_build_dir}/test-suite.log ]; then
+              if [ -f "${lmi_build_dir}/test-suite.log" ]; then
                   echo '*''** Tests failed, contents of test-suite.log follows: *''**'
                   echo '-----------------------------------------------------------'
-                  cat ${lmi_build_dir}/test-suite.log
+                  cat "${lmi_build_dir}/test-suite.log"
                   echo '-----------------------------------------------------------'
               fi
-              exit $err
+              exit "$err"
             fi
           else
-            make $coefficiency unit_tests
+            make "$coefficiency" unit_tests
           fi
 
       - name: Launch Xvfb
@@ -374,7 +379,7 @@ jobs:
                 echo "Still waiting for Xvfb (attempt #$num_tries)"
                 sleep 3
             done
-            echo 'DISPLAY=:10' >> $GITHUB_ENV
+            echo 'DISPLAY=:10' >> "$GITHUB_ENV"
 
       - name: Run GUI tests
         if: matrix.mingw

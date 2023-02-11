@@ -2,7 +2,7 @@
 
 # Create a chroot for cross-building "Let me illustrate...".
 #
-# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -30,8 +30,12 @@ set -evx
 assert_not_su
 assert_chrooted
 
+# Suppress unwanted "wine32 is missing" messages--see:
+#   https://lists.nongnu.org/archive/html/lmi/2022-06/msg00016.html
+export WINEDEBUG=-all,err+all,fixme+all,fixme-hid,fixme-ntdll,fixme-win
+
 # Allow script to continue even if some test fails.
 /opt/lmi/src/lmi/nychthemeral_test.sh || true
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0: Ran nychthemeral test for '$(whoami)'."  | tee /dev/tty
+echo "$stamp $0: Ran nychthemeral test for '$(whoami)'." | tee /dev/tty || true

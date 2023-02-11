@@ -1,6 +1,6 @@
 // Utilities for use with wxWidgets.
 //
-// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -46,21 +46,19 @@ class jdn_t;
 /// (C++98 5.4), which is inherently unsafe. Its sole virtue is that
 /// it is easily searched for.
 
-#if defined LMI_GCC
+#if defined LMI_GCC || defined LMI_CLANG
 #   pragma GCC diagnostic push
-#   if 8 <= __GNUC__
-#       pragma GCC diagnostic ignored "-Wcast-function-type"
-#   endif // 8 <= __GNUC__
+#   pragma GCC diagnostic ignored "-Wcast-function-type"
 #   pragma GCC diagnostic ignored "-Wold-style-cast"
-#endif // defined LMI_GCC
+#endif // defined LMI_GCC || defined LMI_CLANG
 template<typename To, typename From>
 To c_cast(From z)
 {
     return (To)(z);
 }
-#if defined LMI_GCC
+#if defined LMI_GCC || defined LMI_CLANG
 #   pragma GCC diagnostic pop
-#endif // defined LMI_GCC
+#endif // defined LMI_GCC || defined LMI_CLANG
 
 /// Encapsulate wx clipboard.
 ///

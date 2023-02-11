@@ -1,6 +1,6 @@
 // Root finding by Brent's method.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -185,7 +185,7 @@ inline double binary64_midpoint(double d0, double d1)
         {d0 = std::copysign(d0, d1);}
     else if(0.0 == s1)
         {d1 = std::copysign(d1, d0);}
-    else {;} // Do nothing.
+    else {} // Do nothing.
 
     u_dbl_int_t u0;
     u_dbl_int_t u1;
@@ -569,7 +569,7 @@ root_type lmi_root
                 }
             else
                 {
-                ; // Do nothing.
+                // Do nothing.
                 }
             }
         if(sprauchling_limit < n_eval)
@@ -1310,8 +1310,16 @@ int rroot_(FunctionalType& f, int* nprob, int* neps, double* eps,
 /* FOUR FUNCTION VALUES "FA", "FB", "FD", AND "FE" ARE DISTINCT, AND */
 /* HENCE "PZERO" WILL BE CALLED. */
 
+#if defined LMI_CLANG
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wconditional-uninitialized"
+#endif // defined LMI_CLANG
+    // clang: "variable 'fd' may be uninitialized when used here"
     prof = (fa - fb) * (fa - fd) * (fa - fe) * (fb - fd) * (fb - fe) * (fd -
             fe);
+#if defined LMI_CLANG
+#   pragma clang diagnostic pop
+#endif // defined LMI_CLANG
     if (itnum == 2 || prof == 0.) {
         newqua_(a, b, &d_0, &fa, &fb, &fd, &c0, &c2);
     } else {
@@ -1365,9 +1373,17 @@ int rroot_(FunctionalType& f, int* nprob, int* neps, double* eps,
         fu = fb;
     }
     c0 = u - fu / (fb - fa) * 2. * (*b - *a);
+#if defined LMI_CLANG
+#   pragma clang diagnostic push
+#   pragma clang diagnostic ignored "-Wcomma"
+#endif // defined LMI_CLANG
+    // clang: "possible misuse of comma operator"
     if ((d_1 = c0 - u, std::fabs(d_1)) > (*b - *a) * .5) {
         c0 = *a + (*b - *a) * .5;
     }
+#if defined LMI_CLANG
+#   pragma clang diagnostic pop
+#endif // defined LMI_CLANG
 
 /* CALL SUBROUTINE "BRACKT" TO GET A SHRINKED ENCLOSING INTERVAL AS */
 /* WELL AS TO UPDATE THE TERMINATION CRITERION. STOP THE PROCEDURE */

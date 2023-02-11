@@ -2,7 +2,7 @@
 
 # Create a chroot for cross-building "Let me illustrate...".
 #
-# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -155,7 +155,12 @@ fstamp=$(date -u +"%Y%m%dT%H%MZ" -d "$stamp0")
 
 (cd "${logdir}"
 logfiles=
-for z in "${flavor}-log" "${CHRTNAME}"-apt-get-log lmi-log; do
+for z in \
+    "${CHRTNAME}"-debootstrap-log \
+    "${CHRTNAME}"-apt-get-log \
+    lmi-log \
+    "${flavor}-log" \
+  ; do
   z_stamped="${z}_${fstamp}"
   mv "${z}" "${z_stamped}"
   logfiles="${logfiles} ${z_stamped}"
@@ -172,5 +177,5 @@ seconds=$(($(date -u '+%s' -d "$stamp1") - $(date -u '+%s' -d "$stamp0")))
 elapsed=$(date -u -d @"$seconds" +'%H:%M:%S')
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
-echo "$stamp $0 Installed and tested lmi."    | tee /dev/tty
-echo "Elapsed: $elapsed; log suffix: $fstamp" | tee /dev/tty
+echo "$stamp $0 Installed and tested lmi."    | tee /dev/tty || true
+echo "Elapsed: $elapsed; log suffix: $fstamp" | tee /dev/tty || true

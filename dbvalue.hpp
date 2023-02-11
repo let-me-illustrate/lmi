@@ -1,6 +1,6 @@
 // Product-database entity.
 //
-// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -50,8 +50,6 @@ namespace xml_serialize {template<typename T> struct xml_io;}
 /// all axes. In a typical query, all other axes are single-valued,
 /// but all durations are wanted; this axis ordering puts consecutive
 /// durational values in contiguous storage for efficient retrieval.
-///
-/// Implicitly-declared special member functions do the right thing.
 
 class LMI_SO database_entity final
 {
@@ -77,7 +75,6 @@ class LMI_SO database_entity final
         ,double             datum
         ,std::string const& gloss = std::string()
         );
-    ~database_entity() = default;
 
     bool operator==(database_entity const&) const;
 

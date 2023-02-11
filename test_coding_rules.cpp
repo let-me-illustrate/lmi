@@ -1,6 +1,6 @@
 // Test files for consistency with various rules.
 //
-// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -214,6 +214,7 @@ file::file(std::string const& file_path)
         // phyloanalyze() tests inspect only file name [sort by enumerator]
         : phyloanalyze("^ChangeLog-")  ? e_binary
         : phyloanalyze("^Speed_")      ? e_binary
+        : phyloanalyze("^nohup.out$")  ? e_binary
         : phyloanalyze("^tags$")       ? e_expungible
         : phyloanalyze("^COPYING$")    ? e_gpl
         : phyloanalyze("^quoted_gpl")  ? e_gpl
@@ -1164,14 +1165,9 @@ void enforce_taboos(file const& f)
         }
 }
 
-/// Implicitly-declared special member functions do the right thing.
-
 class statistics
 {
   public:
-    statistics() = default;
-    ~statistics() = default;
-
     statistics& operator+=(statistics const&);
 
     static statistics analyze_file(file const&);

@@ -1,6 +1,6 @@
 // Life-insurance illustration input--control harmonization.
 //
-// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -489,10 +489,10 @@ void Input::DoHarmonize()
         ;
 
     bool salary_used =
-// TODO ?? WX PORT !! Figure out how to handle the next line:
-//           mce_sa_salary == VectorSpecifiedAmountStrategy[0]
-true // Silly workaround for now.
-        || mce_sa_salary == SpecifiedAmountStrategyFromIssue
+// TODO ?? WX PORT !! Figure out how to handle the first condition:
+//         mce_sa_salary == VectorSpecifiedAmountStrategy[0]
+//      || mce_sa_salary == SpecifiedAmountStrategyFromIssue
+           mce_sa_salary == SpecifiedAmountStrategyFromIssue
         ;
 
     SalarySpecifiedAmountFactor .enable(!specamt_solve && salary_used);
@@ -503,6 +503,14 @@ true // Silly workaround for now.
     // contracts that don't use gpt. One might want to select such a
     // strategy, then toggle back and forth between gpt and cvat to
     // see what difference that makes. TAXATION !! Rethink that.
+
+    // Conditionally restricting SpecifiedAmountStrategyFromIssue has
+    // no visible effect because that scalar variable is obsolete,
+    // having been supplanted by
+    //   specamt_sequence SpecifiedAmount
+    // which has no knowledge of class Input. This is a general issue:
+    // input-sequence controls are unaware of the context that would
+    // be required for selective enablement.
 
     SpecifiedAmountStrategyFromIssue.allow(mce_sa_input_scalar, !specamt_solve && !specamt_from_term_proportion);
     SpecifiedAmountStrategyFromIssue.allow(mce_sa_salary      , !specamt_solve && !specamt_from_term_proportion);
@@ -567,10 +575,6 @@ false // Silly workaround for now.
 // only at durations that exhibit an actual conflict: e.g., a premium
 // solve for the first ten years only shouldn't inhibit anything after
 // the tenth year.
-//
-// At any rate, keywords should not be blocked when the control is
-// disabled: see
-//   https://lists.nongnu.org/archive/html/lmi/2010-07/msg00006.html
 
     Payment           .enable(mce_solve_ee_prem != SolveType);
     CorporationPayment.enable(mce_solve_er_prem != SolveType);
@@ -886,7 +890,7 @@ void Input::set_solve_durations()
         {
         case mce_to_year:
             {
-            ; // Do nothing.
+            // Do nothing.
             }
             break;
         case mce_to_age:
@@ -910,7 +914,7 @@ void Input::set_solve_durations()
         {
         case mce_from_year:
             {
-            ; // Do nothing.
+            // Do nothing.
             }
             break;
         case mce_from_age:
@@ -934,7 +938,7 @@ void Input::set_solve_durations()
         {
         case mce_to_year:
             {
-            ; // Do nothing.
+            // Do nothing.
             }
             break;
         case mce_to_age:

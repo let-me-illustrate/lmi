@@ -1,6 +1,6 @@
 # Top-level lmi makefile.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -102,7 +102,11 @@ endif
 # definitions below.
 
 LMI_ENV_FILE := /tmp/lmi_env_$(shell date -u +'%s_%N').eraseme
-$(shell $(srcdir)/transume_toolchain.sh > $(LMI_ENV_FILE))
+$(shell \
+  LMI_COMPILER="$(LMI_COMPILER)" \
+   LMI_TRIPLET="$(LMI_TRIPLET)" \
+  $(srcdir)/transume_toolchain.sh > $(LMI_ENV_FILE) \
+ )
 include $(LMI_ENV_FILE)
 $(LMI_ENV_FILE):: ;
 
@@ -236,9 +240,8 @@ $(build_dir): $(gpl_files)
 	+@[ -d $(localbindir)     ] || $(MKDIR) --parents $(localbindir)
 	+@[ -d $(locallibdir)     ] || $(MKDIR) --parents $(locallibdir)
 	+@[ -d $(localincludedir) ] || $(MKDIR) --parents $(localincludedir)
-	+@for z in $(compiler_runtime_files); do \
-	    $(INSTALL) -c -m 0775 -c $$z $(localbindir) ; \
-	  done;
+	+@[ -z "$(strip $(compiler_runtime_files))" ] \
+	  || $(INSTALL) -c -m 0775 -c $(compiler_runtime_files) $(localbindir)
 	+@$(MAKETARGET)
 
 % :: $(build_dir) ; @:
@@ -254,6 +257,7 @@ show_env:
 	@printf 'LMI_TRIPLET     = "%s"\n' "$(LMI_TRIPLET)"
 	@printf 'coefficiency    = "%s"\n' "$(coefficiency)"
 	@printf 'PATH            = "%s"\n' "$(PATH)"
+	@printf 'LD_LIBRARY_PATH = "%s"\n' "$(LD_LIBRARY_PATH)"
 	@printf 'WINEPATH        = "%s"\n' "$(WINEPATH)"
 	@printf 'PERFORM         = "%s"\n' "$(PERFORM)"
 	@printf 'prefix          = "%s"\n' "$(prefix)"
@@ -512,8 +516,8 @@ check_concinnity: source_clean custom_tools
 #
 # For rate tables etc., see 'gwc/develop2.txt'.
 
-old_year := 2021
-new_year := 2022
+old_year := 2022
+new_year := 2023
 
 backup_directory := ../saved_$(old_year)
 

@@ -1,6 +1,6 @@
 // GPT commutation functions--unit test.
 //
-// Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+// Copyright (C) 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License version 2 as
@@ -175,23 +175,6 @@ double const touchstone[100][3] =
         ,{114149.2609045463 ,  86890.3134223641  , 178406.5103343175   } // 98
         ,{111221.7271446342 , 112671.1356520957  , 228328.2710683905   } // 99
     };
-
-std::vector<double> q_m                  ;
-std::vector<double> glp_ic               ;
-std::vector<double> glp_ig               ;
-std::vector<double> gsp_ic               ;
-std::vector<double> gsp_ig               ;
-std::vector<double> prem_load_target     ;
-std::vector<double> prem_load_excess     ;
-std::vector<double> policy_fee_monthly   ;
-std::vector<double> policy_fee_annual    ;
-std::vector<double> specamt_load_monthly ;
-std::vector<double> qab_gio_rate         ;
-std::vector<double> qab_adb_rate         ;
-std::vector<double> qab_term_rate        ;
-std::vector<double> qab_spouse_rate      ;
-std::vector<double> qab_child_rate       ;
-std::vector<double> qab_waiver_rate      ;
 } // Unnamed namespace.
 
 /// Implicitly-declared special member functions do the right thing.
@@ -226,6 +209,23 @@ class gpt_cf_triad_test
     static void mete_premiums();
     static void mete_instantiate_old();
     static void mete_premiums_old();
+
+    static inline std::vector<double> q_m_                  {};
+    static inline std::vector<double> glp_ic_               {};
+    static inline std::vector<double> glp_ig_               {};
+    static inline std::vector<double> gsp_ic_               {};
+    static inline std::vector<double> gsp_ig_               {};
+    static inline std::vector<double> prem_load_target_     {};
+    static inline std::vector<double> prem_load_excess_     {};
+    static inline std::vector<double> policy_fee_monthly_   {};
+    static inline std::vector<double> policy_fee_annual_    {};
+    static inline std::vector<double> specamt_load_monthly_ {};
+    static inline std::vector<double> qab_gio_rate_         {};
+    static inline std::vector<double> qab_adb_rate_         {};
+    static inline std::vector<double> qab_term_rate_        {};
+    static inline std::vector<double> qab_spouse_rate_      {};
+    static inline std::vector<double> qab_child_rate_       {};
+    static inline std::vector<double> qab_waiver_rate_      {};
 };
 
 /// Initialize GPT vector parameters.
@@ -243,43 +243,43 @@ void gpt_cf_triad_test::initialize(int issue_age)
     double constexpr igsp = 0.06;
     static double const i12glp = i_upper_12_over_12_from_i<double>()(iglp);
     static double const i12gsp = i_upper_12_over_12_from_i<double>()(igsp);
-    q_m = sample_q(issue_age);
-    int const length = lmi::ssize(q_m);
-    glp_ic               .assign(length,     i12glp);
-    glp_ig               .assign(length,     i12glp);
-    gsp_ic               .assign(length,     i12gsp);
-    gsp_ig               .assign(length,     i12gsp);
-    prem_load_target     .assign(length,  0.03    );
-    prem_load_excess     .assign(length,  0.02    );
-    policy_fee_monthly   .assign(length,  5.0     );
-    policy_fee_annual    .assign(length, 37.0     );
-    specamt_load_monthly .assign(length,  0.000007);
-    qab_gio_rate         .assign(length,  0.000011);
-    qab_adb_rate         .assign(length,  0.000013);
-    qab_term_rate        .assign(length,  0.000017);
-    qab_spouse_rate      .assign(length,  0.000019);
-    qab_child_rate       .assign(length,  0.000023);
-    qab_waiver_rate      .assign(length,  0.000029);
+    q_m_ = sample_q(issue_age);
+    int const length = lmi::ssize(q_m_);
+    glp_ic_               .assign(length,    i12glp);
+    glp_ig_               .assign(length,    i12glp);
+    gsp_ic_               .assign(length,    i12gsp);
+    gsp_ig_               .assign(length,    i12gsp);
+    prem_load_target_     .assign(length,  0.03    );
+    prem_load_excess_     .assign(length,  0.02    );
+    policy_fee_monthly_   .assign(length,  5.0     );
+    policy_fee_annual_    .assign(length, 37.0     );
+    specamt_load_monthly_ .assign(length,  0.000007);
+    qab_gio_rate_         .assign(length,  0.000011);
+    qab_adb_rate_         .assign(length,  0.000013);
+    qab_term_rate_        .assign(length,  0.000017);
+    qab_spouse_rate_      .assign(length,  0.000019);
+    qab_child_rate_       .assign(length,  0.000023);
+    qab_waiver_rate_      .assign(length,  0.000029);
 
     std::vector<int>    iota_i(length);
     std::iota(iota_i.begin(), iota_i.end(), issue_age);
     std::vector<double> iota_d(length, 0.0);
     iota_d += 1.0 + 0.001 * iota_i;
-    glp_ic               *= iota_d;
-    glp_ig               *= iota_d;
-    gsp_ic               *= iota_d;
-    gsp_ig               *= iota_d;
-    prem_load_target     *= iota_d;
-    prem_load_excess     *= iota_d;
-    policy_fee_monthly   *= iota_d;
-    policy_fee_annual    *= iota_d;
-    specamt_load_monthly *= iota_d;
-    qab_gio_rate         *= iota_d;
-    qab_adb_rate         *= iota_d;
-    qab_term_rate        *= iota_d;
-    qab_spouse_rate      *= iota_d;
-    qab_child_rate       *= iota_d;
-    qab_waiver_rate      *= iota_d;
+    glp_ic_               *= iota_d;
+    glp_ig_               *= iota_d;
+    gsp_ic_               *= iota_d;
+    gsp_ig_               *= iota_d;
+    prem_load_target_     *= iota_d;
+    prem_load_excess_     *= iota_d;
+    policy_fee_monthly_   *= iota_d;
+    policy_fee_annual_    *= iota_d;
+    specamt_load_monthly_ *= iota_d;
+    qab_gio_rate_         *= iota_d;
+    qab_adb_rate_         *= iota_d;
+    qab_term_rate_        *= iota_d;
+    qab_spouse_rate_      *= iota_d;
+    qab_child_rate_       *= iota_d;
+    qab_waiver_rate_      *= iota_d;
 }
 
 /// Instantiate vector parameters from globals set by initialize().
@@ -287,17 +287,17 @@ void gpt_cf_triad_test::initialize(int issue_age)
 gpt_vector_parms gpt_cf_triad_test::v_parms()
 {
     gpt_vector_parms z =
-        {.prem_load_target     = prem_load_target
-        ,.prem_load_excess     = prem_load_excess
-        ,.policy_fee_monthly   = policy_fee_monthly
-        ,.policy_fee_annual    = policy_fee_annual
-        ,.specamt_load_monthly = specamt_load_monthly
-        ,.qab_gio_rate         = qab_gio_rate
-        ,.qab_adb_rate         = qab_adb_rate
-        ,.qab_term_rate        = qab_term_rate
-        ,.qab_spouse_rate      = qab_spouse_rate
-        ,.qab_child_rate       = qab_child_rate
-        ,.qab_waiver_rate      = qab_waiver_rate
+        {.prem_load_target     = prem_load_target_
+        ,.prem_load_excess     = prem_load_excess_
+        ,.policy_fee_monthly   = policy_fee_monthly_
+        ,.policy_fee_annual    = policy_fee_annual_
+        ,.specamt_load_monthly = specamt_load_monthly_
+        ,.qab_gio_rate         = qab_gio_rate_
+        ,.qab_adb_rate         = qab_adb_rate_
+        ,.qab_term_rate        = qab_term_rate_
+        ,.qab_spouse_rate      = qab_spouse_rate_
+        ,.qab_child_rate       = qab_child_rate_
+        ,.qab_waiver_rate      = qab_waiver_rate_
         };
     return z;
 }
@@ -326,7 +326,7 @@ gpt_scalar_parms gpt_cf_triad_test::s_parms()
 
 gpt_cf_triad gpt_cf_triad_test::instantiate_cf()
 {
-    return gpt_cf_triad(q_m, glp_ic, glp_ig, gsp_ic, gsp_ig, v_parms());
+    return gpt_cf_triad(q_m_, glp_ic_, glp_ig_, gsp_ic_, gsp_ig_, v_parms());
 }
 
 /// Test gpt_cf_triad::calculate_premium()'s asserted preconditions.
@@ -347,7 +347,7 @@ void gpt_cf_triad_test::test_preconditions()
     parms = s_parms(); // Reset.
 
     // Duration greater than omega minus one.
-    parms.duration = lmi::ssize(q_m);
+    parms.duration = lmi::ssize(q_m_);
     LMI_TEST_THROW
         (z.calculate_premium(oe_gsp, parms)
         ,std::runtime_error
@@ -376,37 +376,37 @@ void gpt_cf_triad_test::test_preconditions()
     parms = s_parms(); // Reset.
 
     // Monthly q shorter than other vector parameters.
-    q_m.resize(99);
+    q_m_.resize(99);
     LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
     // Monthly q equal to unity: probably a bad idea, but permitted.
-    q_m.back() = 1.0;
+    q_m_.back() = 1.0;
     instantiate_cf();
     initialize(0); // Reset.
 
     // Monthly q greater than unity.
-    q_m.back() = 1.001;
+    q_m_.back() = 1.001;
     LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
     // Negative monthly q.
-    q_m[0] = -0.001;
+    q_m_[0] = -0.001;
     LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
     // Premium load equal to unity.
-    prem_load_target[0] = 1.0;
+    prem_load_target_[0] = 1.0;
     LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
     // Monthly specamt load equal to unity.
-    specamt_load_monthly[0] = 1.0;
+    specamt_load_monthly_[0] = 1.0;
     LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
     // Monthly QAB rate equal to unity.
-    qab_adb_rate[0] = 1.0;
+    qab_adb_rate_[0] = 1.0;
     LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 
@@ -414,7 +414,7 @@ void gpt_cf_triad_test::test_preconditions()
     // used, if rarely, and presumably just reduce guidelines; but
     // it's not worth the trouble to validate premium calculations
     // in advance under rare and questionable circumstances.
-    prem_load_excess[0] = -0.01;
+    prem_load_excess_[0] = -0.01;
     LMI_TEST_THROW(instantiate_cf(), std::runtime_error, "");
     initialize(0); // Reset.
 }
@@ -423,7 +423,7 @@ void gpt_cf_triad_test::test_preconditions()
 
 Irc7702 gpt_cf_triad_test::instantiate_old(int issue_age)
 {
-    int const length = lmi::ssize(q_m);
+    int const length = lmi::ssize(q_m_);
     // The old class recognizes only one QAB: ADB. So that all QABs
     // can be exercised with the new class, use a linear combination
     // of all QAB rates as the ADB rate here. Copying literal values
@@ -440,28 +440,28 @@ Irc7702 gpt_cf_triad_test::instantiate_old(int issue_age)
         / (100000.0 * 0.0013)
         ;
     std::vector<double> adj_qab_adb_rate(length);
-    assign(adj_qab_adb_rate, qab_adb_rate * adj);
+    assign(adj_qab_adb_rate, qab_adb_rate_ * adj);
     return Irc7702
         (mce_gpt                         // a_Test7702
         ,issue_age                       // a_IssueAge
         ,issue_age + length              // a_EndtAge
-        ,q_m                             // a_Qc
-        ,glp_ic                          // ic_glp
-        ,gsp_ic                          // ic_gsp
-        ,glp_ig                          // ig_glp
-        ,gsp_ig                          // ig_gsp
+        ,q_m_                            // a_Qc
+        ,glp_ic_                         // ic_glp
+        ,gsp_ic_                         // ic_gsp
+        ,glp_ig_                         // ig_glp
+        ,gsp_ig_                         // ig_gsp
         ,0.0                             // a_PresentBftAmt
         ,0.0                             // a_PresentSpecAmt
         ,0.0                             // a_LeastBftAmtEver
         ,mce_option1_for_7702            // a_PresentDBOpt
-        ,policy_fee_annual               // a_AnnChgPol
-        ,policy_fee_monthly              // a_MlyChgPol
-        ,specamt_load_monthly            // a_MlyChgSpecAmt
+        ,policy_fee_annual_              // a_AnnChgPol
+        ,policy_fee_monthly_             // a_MlyChgPol
+        ,specamt_load_monthly_           // a_MlyChgSpecAmt
         ,1000000000.0                    // a_SpecAmtLoadLimit [in effect, no limit]
         ,adj_qab_adb_rate                // a_MlyChgADD
         ,1000000000.0                    // a_ADDLimit [in effect, no limit]
-        ,prem_load_target                // a_LoadTgt
-        ,prem_load_excess                // a_LoadExc
+        ,prem_load_target_               // a_LoadTgt
+        ,prem_load_excess_               // a_LoadExc
         // Plausible low default target (overridden by compare_premiums()):
         ,1000.0                          // a_TargetPremium
         ,round_to<double>(2, r_upward)   // a_round_min_premium
@@ -497,7 +497,7 @@ void gpt_cf_triad_test::compare_premiums(int issue_age, double target)
     z_old.Initialize7702(f3_bft, endt_bft, mce_option1_for_7702, target);
 
     int const omega = lmi::ssize(sample_q(0));
-    LMI_ASSERT(lmi::ssize(qab_waiver_rate) == omega - issue_age);
+    LMI_ASSERT(lmi::ssize(qab_waiver_rate_) == omega - issue_age);
     for(int duration = 0; duration < omega - issue_age; ++duration)
         {
         parms.duration = duration;

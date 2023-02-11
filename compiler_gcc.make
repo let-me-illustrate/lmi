@@ -1,6 +1,6 @@
 # Compiler-specific makefile: gcc.
 #
-# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Gregory W. Chicares.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023 Gregory W. Chicares.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License version 2 as
@@ -176,7 +176,11 @@ endif
 # The gprof '-pg' flag is one example. Another is '-fPIC', which
 # pc-linux-gnu requires for '-shared':
 #   https://gcc.gnu.org/onlinedocs/gcc/Link-Options.html#DOCF1
-# Yet another is 'debug_flag': the GNU Coding Standards
+# Yet another is 'debug_flag': including it in $(LDFLAGS) seems
+# to be historical practice, as seen in the GNU 'make' manual:
+#   https://www.gnu.org/software/make/manual/make.html#Complex-Makefile
+# | LDFLAGS = -g
+# even though GNU 'ld' ignores '-g'; and the GNU Coding Standards
 #   https://www.gnu.org/prep/standards/html_node/Command-Variables.html
 # suggest including flags such as '-g' in $(CFLAGS) because they
 # are "not required for proper compilation", but lmi deliberately
@@ -232,9 +236,9 @@ CXXFLAGS =
 
 # Linker flags.
 
-# Prefer to invoke GNU 'ld' through the compiler frontends 'gcc' and
-# 'g++' because that takes care of linking the required libraries for
-# each language. Accordingly, pass GNU 'ld' options with '-Wl,'.
+# Prefer to invoke the linker through compiler frontends, because
+# that takes care of linking each language's required libraries.
+# Accordingly, pass linker options with '-Wl,'.
 
 # Directories set in $(overriding_library_directories) are searched
 # before any others except the current build directory. There seems
@@ -274,30 +278,31 @@ all_library_directories := \
 EXTRA_LDFLAGS :=
 
 REQUIRED_LDFLAGS = \
+  -Wl,-Map,$@.map \
   $(c_l_flags) \
   $(addprefix -L , $(all_library_directories)) \
   $(EXTRA_LDFLAGS) \
   $(EXTRA_LIBS) \
 
-LDFLAGS = -Wl,-Map,$@.map \
-
 ifeq (x86_64-pc-linux-gnu,$(LMI_TRIPLET))
-  LDFLAGS += -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -Wl,-z,separate-code
+  REQUIRED_LDFLAGS += -Wl,-z,relro -Wl,-z,now -Wl,-z,noexecstack -Wl,-z,separate-code
 endif
 
 # By infelicitous default, MinGW enables auto-import. See, e.g.:
 #   https://sourceforge.net/p/mingw/mailman/message/16354653/
 # Disabling it globally, thus:
-#   LDFLAGS += -Wl,--disable-auto-import
+#   REQUIRED_LDFLAGS += -Wl,--disable-auto-import
 # worked with mingw.org's gcc, but the more recent MinGW-w64
 # versions seem to require it unless $(USE_SO_ATTRIBUTES) is
 # defined.
 
 ifneq (,$(USE_SO_ATTRIBUTES))
   ifeq (mingw32,$(findstring mingw32,$(LMI_TRIPLET)))
-    LDFLAGS += -Wl,--disable-auto-import -static-libstdc++
+    REQUIRED_LDFLAGS += -Wl,--disable-auto-import -static-libstdc++
   endif
 endif
+
+LDFLAGS =
 
 # Archiver flags.
 
