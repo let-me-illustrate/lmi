@@ -44,7 +44,7 @@
 #include <wx/uiaction.h>
 #include <wx/wfstream.h>
 
-#include <algorithm>                    // sort()
+#include <algorithm>                    // replace(), sort()
 #include <cstring>                      // strcmp()
 #include <exception>                    // uncaught_exceptions()
 #include <iostream>
@@ -497,13 +497,12 @@ TestsResults application_test::run()
                 // Keep everything on a single line to ensure the full text of
                 // the error appears if the output is filtered by the test name
                 // using standard line-oriented tools such as grep.
-                wxString one_line_error(error);
-                one_line_error.Replace("\n", " ");
+                std::replace(error.begin(), error.end(), '\n', ' ');
 
                 std::cout
                     << name
                     << ": ERROR ("
-                    << one_line_error
+                    << error
                     << ")"
                     << std::endl
                     ;
