@@ -42,7 +42,7 @@
 /// to end users, but skin names are more esoteric and it is less
 /// confusing to show them as file names rather than apparent phrases.
 
-class ce_skin_name final
+class LMI_SO ce_skin_name final
     :public mc_enum_base
 {
   public:

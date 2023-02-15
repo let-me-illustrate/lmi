@@ -31,7 +31,14 @@ jobs:
           - name: MSW/make/mingw64
             triplet: x86_64-w64-mingw32
             mingw: true
+            gui_test: true
+          - name: MSW/make/mingw64 (so_test)
+            triplet: x86_64-w64-mingw32
+            build_type: so_test
+            mingw: true
           - name: Linux/make/gcc
+          - name: Linux/make/gcc (so_test)
+            build_type: so_test
           - name: Linux/autotools/gcc
             autotools: true
           - name: Linux/autotools/clang
@@ -83,7 +90,10 @@ jobs:
             # run 64-bit programs in this build, so set WINEDEBUG to a
             # value equivalent to its default/unset value but recognized
             # as disabling error output by Debian /usr/bin/wine script.
-            echo 'WINEDEBUG=-all,err+all,fixme+all' >> "$GITHUB_ENV"
+            #
+            # Additionally disable some "fixme" messages that don't seem to be
+            # useful and that we can't do anything about.
+            echo 'WINEDEBUG=-all,err+all,fixme+all,fixme-hid,fixme-imm' >> "$GITHUB_ENV"
           else
             packages+=(libgtk-3-dev)
           fi
@@ -124,8 +134,8 @@ jobs:
       - name: Install CCache
         uses: hendrikmuhs/ccache-action@v1.2.5
         with:
-          key: ${{ matrix.name }}
-          max-size: 900M
+          key: ${{ matrix.compiler || 'gcc' }}-${{ matrix.triplet || 'x86_64-pc-linux-gnu' }}
+          max-size: 2G
           verbose: 2
 
       - name: Set up build environment
@@ -277,17 +287,44 @@ jobs:
             exit "$err"
           fi
 
+      - name: Launch Xvfb
+        if: matrix.gui_test
+        run: |
+            sudo mkdir /tmp/.X11-unix
+            sudo chmod 1777 /tmp/.X11-unix
+            Xvfb :10 -screen 0 1600x1200x24 &
+            num_tries=1
+            while true; do
+                if xset -d :10 -q >/dev/null 2>&1; then
+                    echo 'Xvfb has become available.'
+                    # Trying to use it immediately can still result in errors
+                    # when creating the windows, somehow, so give it some time
+                    # to settle.
+                    sleep 3
+                    break
+                fi
+
+                if [[ $num_tries -gt 10 ]]; then
+                    echo 'Timed out waiting for Xvfb'
+                    exit 1
+                fi
+
+                ((num_tries++))
+                echo "Still waiting for Xvfb (attempt #$num_tries)"
+                sleep 3
+            done
+            echo 'DISPLAY=:10' >> "$GITHUB_ENV"
+
       - name: Build lmi
         run: |
           if [ ${{ matrix.autotools }} ]; then
             make --keep-going V=1 $coefficiency -C ${lmi_build_dir}
           else
-            make $coefficiency --output-sync=recurse
+            if [ -n "${{ matrix.build_type }}" ]; then
+              build_type_arg=build_type=${{ matrix.build_type }}
+            fi
+            make $coefficiency --output-sync=recurse $build_type_arg
           fi
-
-      - name: Build lmi with SO attributes
-        if: matrix.autotools != true
-        run: make $coefficiency --output-sync=recurse build_type=so_test all
 
       - name: Setup lmi for tests
         run: |
@@ -353,36 +390,8 @@ jobs:
             make "$coefficiency" unit_tests
           fi
 
-      - name: Launch Xvfb
-        if: matrix.mingw
-        run: |
-            sudo mkdir /tmp/.X11-unix
-            sudo chmod 1777 /tmp/.X11-unix
-            Xvfb :10 -screen 0 1600x1200x24 &
-            num_tries=1
-            while true; do
-                if xset -d :10 -q >/dev/null 2>&1; then
-                    echo 'Xvfb has become available.'
-                    # Trying to use it immediately can still result in errors
-                    # when creating the windows, somehow, so give it some time
-                    # to settle.
-                    sleep 3
-                    break
-                fi
-
-                if [[ $num_tries -gt 10 ]]; then
-                    echo 'Timed out waiting for Xvfb'
-                    exit 1
-                fi
-
-                ((num_tries++))
-                echo "Still waiting for Xvfb (attempt #$num_tries)"
-                sleep 3
-            done
-            echo 'DISPLAY=:10' >> "$GITHUB_ENV"
-
       - name: Run GUI tests
-        if: matrix.mingw
+        if: matrix.gui_test
         run: |
             . ./set_toolchain.sh
             $PERFORM /opt/lmi/bin/wx_test"$EXEEXT" --ash_nazg --data_path=/opt/lmi/data
