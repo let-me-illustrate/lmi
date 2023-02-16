@@ -929,7 +929,6 @@ bool check_reserved_name_exception(std::string const& s)
         ,"_IOFBF"
         ,"_IOLBF"
         ,"_IONBF"
-        ,"__DATE__"
         ,"__FILE__"
         ,"__LINE__"
         ,"__STDC_IEC_559__"
