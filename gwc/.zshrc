@@ -23,6 +23,9 @@ if [ "$(id -u)" -eq 0 ]; then
   alias vim='XAUTHORITY=/home/greg/.Xauthority vim'
 fi
 
+# Use a common ccache directory for all users and all chroots.
+export CCACHE_DIR=/srv/cache_for_lmi/ccache
+
 # Something like
 #  "--jobs=$(nproc || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN)"
 # could be used instead for other *nix systems:
