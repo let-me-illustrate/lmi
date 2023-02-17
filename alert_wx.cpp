@@ -138,35 +138,12 @@ void alarum_alert(std::string const& s)
 
 /// Show a message reliably, even before initialization has finished
 /// or after termination has begun.
-///
-/// The msw implementation of wxSafeShowMessage() uses ::MessageBoxA()
-/// with a null parent, which adds an undesirable extra "task" to the
-/// alt-Tab order, yet doesn't disable the application's top window.
-///
-/// If MB_TASKMODAL is specified, then the extra "task" is still
-/// added, but all of the application's top windows are disabled.
-/// Unfortunately, MB_TASKMODAL is in effect ignored unless the parent
-/// is null.
-///
-/// If the main top window (the one returned by wxApp::GetTopWindow())
-/// is used as the messagebox's parent, then the extra "task" is not
-/// added, but only the parent is disabled. Any other top windows the
-/// application may have are not disabled.
-///
-/// The extra "task" seeming to be the worse evil, this implementation
-/// specifies a non-null parent wherever possible. MB_TASKMODAL is
-/// nevertheless specified as well, though its beneficial effect is
-/// realized only if no parent can be found.
 
 void safe_message_alert(char const* message)
 {
+    // We don't use wxSafeShowMessage() here for the same reasons as in
+    // warning_alert() above.
     safely_show_on_stderr(message);
-#if defined LMI_MSW
-    auto handle =
-        (wxTheApp && wxTheApp->GetTopWindow())
-        ? wxTheApp->GetTopWindow()->GetHandle()
-        : nullptr
-        ;
-    ::MessageBoxA(handle, message, "Error", MB_OK | MB_ICONSTOP | MB_TASKMODAL);
-#endif // defined LMI_MSW
+
+    wxApp::GetValidTraits().SafeMessageBox(message, "Error");
 }
