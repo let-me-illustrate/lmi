@@ -49,11 +49,11 @@ build_clutter='
 /^make.*\[[0-9]*\]: warning: -j1 forced in submake: resetting jobserver mode.$/d
 /^make.*\[[0-9]*\]: warning: -jN forced in submake: disabling jobserver mode.$/d
 /^make.*\[[0-9]*\]: .* is up to date\./d
-/^[^ ]*cpp  *-x /d
-/^[^ ]*g++  *-[Mo]/d
-/^[^ ]*gcc  *-[Mo]/d
-/^[^ ]*clang++  *-[Mo]/d
-/^[^ ]*clang  *-[Mo]/d
+/^\(ccache \)\?\(x86_64-w64-mingw32-\)\?cpp  *-x /d
+/^\(ccache \)\?\(x86_64-w64-mingw32-\)\?g++  *-[Mo]/d
+/^\(ccache \)\?\(x86_64-w64-mingw32-\)\?gcc  *-[Mo]/d
+/^\(ccache \)\?clang++  *-[Mo]/d
+/^\(ccache \)\?clang  *-[Mo]/d
 /^[^ ]*windres -o /d
 '
 
