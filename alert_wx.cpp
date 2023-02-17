@@ -27,6 +27,7 @@
 #include "force_linking.hpp"
 
 #include <wx/app.h>                     // wxTheApp
+#include <wx/apptrait.h>
 #include <wx/frame.h>
 #include <wx/msgdlg.h>
 #if defined LMI_MSW
@@ -73,7 +74,14 @@ void status_alert(std::string const& s)
 void warning_alert(std::string const& s)
 {
     std::cerr << "Warning: " << s << std::endl;
-    wxMessageBox(s, "Warning", wxOK, wxTheApp ? wxTheApp->GetTopWindow() : nullptr);
+
+    // We don't use wxSafeShowMessage() here because it would only log the
+    // message to stderr if the message box cannot be shown, while we want to
+    // always log it, even in addition to showing the message box.
+    //
+    // So we use a lower-level function used by wxSafeShowMessage() and simply
+    // ignore its return value, indicating whether it could show the box or not.
+    wxApp::GetValidTraits().SafeMessageBox(s, "Warning");
 }
 
 /// It seems silly to offer an option that should never be declined,
