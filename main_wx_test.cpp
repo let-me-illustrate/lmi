@@ -388,7 +388,7 @@ bool application_test::process_command_line(int& argc, char* argv[])
                    "Additionally, all command line options supported by the\n"
                    "main lmi executable are also supported."
                 ;
-            wxMessageBox(oss.str(), "Command-line options");
+            wxSafeShowMessage("Command-line options", oss.str());
             return false;
             }
         else
