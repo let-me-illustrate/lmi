@@ -85,11 +85,18 @@ void test_same(char const* file, int line)
     // because it can distinguish +/-(2^64) from +/-(2^64 - 1).
     if(traits::is_integer && 64 <= LDBL_MANT_DIG)
         {
+#if defined LMI_MSC
+#   pragma warning(push)
+#   pragma warning(disable : 4805)
+#endif // defined LMI_MSC
         long double const x = std::scalbln(1.0l, traits::digits);
         long double const max = x - 1;
         long double const min = traits::is_signed ? -x : 0;
         INVOKE_LMI_TEST(traits::max() == max, file, line);
         INVOKE_LMI_TEST(traits::min() == min, file, line);
+#if defined LMI_MSC
+#   pragma warning(pop)
+#endif // defined LMI_MSC
         T imax = bourn_cast<T>(max);
         T imin = bourn_cast<T>(min);
         INVOKE_LMI_TEST(traits::max() == imax, file, line);
@@ -164,6 +171,10 @@ void test_signednesses(char const* file, int line)
 
     if(!SignedFrom || !SignedTo) return;
 
+#if defined LMI_MSC
+#   pragma warning(push)
+#   pragma warning(disable : 4245)
+#endif // defined LMI_MSC
     CFrom CFrom_min = SCHAR_MIN;
     IFrom IFrom_min = INT_MIN;
     LFrom LFrom_min = LLONG_MIN;
@@ -171,6 +182,9 @@ void test_signednesses(char const* file, int line)
     CTo   CTo_min   = SCHAR_MIN;
     ITo   ITo_min   = INT_MIN;
     LTo   LTo_min   = LLONG_MIN;
+#if defined LMI_MSC
+#   pragma warning(pop)
+#endif // defined LMI_MSC
 
     // SCHAR_MIN must be <= -127, so -9 must be representable.
 
@@ -471,7 +485,14 @@ void test_m64_neighborhood()
 #   pragma GCC diagnostic push
 #   pragma GCC diagnostic ignored "-Wfloat-conversion"
 #endif // defined __GNUC__
+#if defined LMI_MSC
+#   pragma warning(push)
+#   pragma warning(disable : 4305)
+#endif // defined LMI_MSC
     float const f_ull_max = ull_max;
+#if defined LMI_MSC
+#   pragma warning(pop)
+#endif // defined LMI_MSC
 #if defined __GNUC__
 #   pragma GCC diagnostic pop
 #endif // defined __GNUC__
