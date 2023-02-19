@@ -410,9 +410,10 @@ physical_closure_files := \
 	$(CXX) $(MAKEDEPEND_FLAGS) -c $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) $< -o$@
 	$($(MAKEDEPEND_COMMAND))
 
+# ccache doesn't support '-MM'
 %.o: %.rc
 	$(RC) -o $@ $(ALL_RCFLAGS) -i $<
-	$(MAKEDEPEND_NON_GCC_COMMAND)
+	$(subst ccache ,,$(MAKEDEPEND_NON_GCC_COMMAND))
 
 %$(EXEEXT):
 	$(LD) -o $@ $^ $(ALL_LDFLAGS)

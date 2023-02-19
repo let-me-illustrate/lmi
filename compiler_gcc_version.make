@@ -26,9 +26,9 @@ $(srcdir)/compiler_gcc_version.make:: ;
 # Aliases for tools used in targets elsewhere.
 
 AR      := $(gcc_proclitic)ar
-CC      := $(gcc_proclitic)gcc
-CPP     := $(gcc_proclitic)cpp
-CXX     := $(gcc_proclitic)g++
+CC      := ccache $(gcc_proclitic)gcc
+CPP     := ccache $(gcc_proclitic)cpp
+CXX     := ccache $(gcc_proclitic)g++
 LD      := $(gcc_proclitic)g++
 # For GNU/Linux, $(RC) is never invoked.
 RC      := $(gcc_proclitic)windres
@@ -51,13 +51,13 @@ GNU_CXX := $(CXX)
 # version 7.x.0 as "7.x-win32".
 
 ifeq (gcc,$(LMI_COMPILER))
-  gcc_version   := $(subst -win32,.0,$(shell $(CXX)     -dumpversion))
+  gcc_version   := $(subst -win32,.0,$(shell $(subst ccache ,,$(CXX))     -dumpversion))
 endif
 
 # These are defined even for toolchains other than gcc.
 
-gnu_cpp_version := $(subst -win32,.0,$(shell $(GNU_CPP) -dumpversion))
-gnu_cxx_version := $(subst -win32,.0,$(shell $(GNU_CXX) -dumpversion))
+gnu_cpp_version := $(subst -win32,.0,$(shell $(subst ccache ,,$(GNU_CPP)) -dumpversion))
+gnu_cxx_version := $(subst -win32,.0,$(shell $(subst ccache ,,$(GNU_CXX)) -dumpversion))
 
 ifeq      (10,$(gnu_cpp_version))
 else ifeq (10.0,$(gnu_cpp_version))
