@@ -23,6 +23,20 @@ if [ "$(id -u)" -eq 0 ]; then
   alias vim='XAUTHORITY=/home/greg/.Xauthority vim'
 fi
 
+# Use a common ccache directory for all users and all chroots.
+export CCACHE_DIR=/srv/cache_for_lmi/ccache
+
+# Make ccache ignore date and time macros, which are not allowed
+# by 'make check_concinnity' anyway in lmi code. Consequently, it
+# ignores those macros for third-party libraries as well; as this
+# is written in 2023-02, only
+#   /opt/lmi/third_party/src/cgicc/Cgicc.cpp
+# is affected (its getCompileTime() and getCompileDate() functions
+# still do the right thing when cached), and it is blithely assumed
+# that no other third-party library will ever use these macros in a
+# ccache-unfriendly way.
+export CCACHE_SLOPPINESS=time_macros
+
 # Something like
 #  "--jobs=$(nproc || sysctl -n hw.ncpu || getconf _NPROCESSORS_ONLN)"
 # could be used instead for other *nix systems:

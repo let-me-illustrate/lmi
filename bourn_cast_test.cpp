@@ -54,6 +54,7 @@ inline To bourn_cast(From from)
 #include "test_tools.hpp"
 #include "timer.hpp"
 
+#include <cfloat>                       // LDBL_MANT_DIG
 #include <climits>                      // INT_MIN, LLONG_MIN, SCHAR_MIN
 #include <cmath>                        // isnormal(), nextafterf()
 
@@ -82,7 +83,7 @@ void test_same(char const* file, int line)
     // an 80-bit long double type whose 64-bit mantissa suffices to
     // test the limits of every integral type up to 64 digits exactly
     // because it can distinguish +/-(2^64) from +/-(2^64 - 1).
-    if(traits::is_integer)
+    if(traits::is_integer && 64 <= LDBL_MANT_DIG)
         {
 #if defined LMI_MSC
 #   pragma warning(push)

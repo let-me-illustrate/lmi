@@ -110,10 +110,11 @@ MAKEDEPEND_FLAGS = \
 #   --preprocessor='gcc -E -xc-header -DRC_INVOKED -MMD -MP...'
 # but that fragile enormity isn't worth the minuscule savings that
 # '-MMD' offers, because msw resource files are typically small,
-# simple, and few.
+# simple, and few; accordingly, it costs almost nothing to forgo the
+# use of 'ccache' (which deliberately doesn't support '-MM') here.
 
 MAKEDEPEND_NON_GCC_COMMAND = \
-  $(GNU_CPP) \
+  $(subst ccache ,,$(GNU_CPP)) \
     -x c++ \
     $(ALL_CPPFLAGS) \
     $(compiler_impersonation_cppflags) \

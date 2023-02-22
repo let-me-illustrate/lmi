@@ -23,6 +23,7 @@
 
 #include "assert_lmi.hpp"
 #include "bourn_cast.hpp"
+#include "calendar_date.hpp"
 #include "data_directory.hpp"
 #include "mvc_controller.hpp"
 #include "ssize_lmi.hpp"
@@ -192,8 +193,14 @@ LMI_WX_TEST_CASE(paste_census)
 {
     // Update this file (and the webpage cited above) in 2040--see:
     //   https://lists.nongnu.org/archive/html/lmi/2020-06/msg00037.html
-    // __DATE__[9] is second-to-last digit of a four-digit year
-    static_assert('4' != __DATE__[9]);
+    // If ccache is used with 'CCACHE_SLOPPINESS=time_macros' to
+    // prevent this file from being recompiled, then this static
+    // assertion [spaces inserted in macro name to pass concinnity
+    // test]:
+    //   // _ _ DATE _ _[9] is second-to-last digit of a four-digit year
+    //   static_assert('4' != _ _ DATE _ _[9]);
+    // won't work, so use this non-static assertion instead:
+    LMI_ASSERT(calendar_date().year() < 2040);
 
     // The column titles are the user-visible strings corresponding to the
     // internal column names actually used in the census data below.

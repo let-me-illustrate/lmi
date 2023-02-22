@@ -26,9 +26,9 @@ $(srcdir)/compiler_clang_version.make:: ;
 # Aliases for tools used in targets elsewhere.
 
 AR      := ar
-CC      := clang
+CC      := ccache clang
 #CPP    # Not used.
-CXX     := clang++
+CXX     := ccache clang++
 LD      := clang++
 # For GNU/Linux, $(RC) is never invoked.
 RC      := windres
