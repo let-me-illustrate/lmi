@@ -55,7 +55,7 @@ fi
 
 lmi_build_type=$(/usr/share/misc/config.guess)
 
-# This should work with a rather minimal path.
+# This is designed to work with a rather minimal path.
 
 minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
 
@@ -300,8 +300,8 @@ do
 
     printf 'Building %s with %s for %s.\n' "lmi" "$LMI_COMPILER" "$LMI_TRIPLET"
 
-    # Set a minimal path for makefiles and scripts that are
-    # designed to be independent of lmi's runtime path.
+    # Set a minimal path for makefiles and scripts that are designed
+    # to be independent of lmi's runtime path.
     export PATH="$minimal_path"
 
     ./install_xml_libraries.sh
