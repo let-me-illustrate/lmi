@@ -304,10 +304,19 @@ do
     # to be independent of lmi's runtime path.
     export PATH="$minimal_path"
 
-    ./install_xml_libraries.sh
+    # Add ccache's symlinks directory because that's the least awful
+    # way to get ccache to work with autotools--see:
+    #   https://lists.nongnu.org/archive/html/lmi/2023-02/msg00027.html
+    autotooled_path=/usr/lib/ccache:"$minimal_path"
+    # and use a separate cache directory so that by default
+    #   ccache --show-stats -vv
+    # shows the outcome of lmi's more careful method.
+    autotooled_cache=/srv/cache_for_lmi/ccache_autotooled
 
-    ./install_wx.sh
-    ./install_wxpdfdoc.sh
+    CCACHE_DIR="$autotooled_cache" PATH="$autotooled_path" ./install_xml_libraries.sh
+
+    CCACHE_DIR="$autotooled_cache" PATH="$autotooled_path" ./install_wx.sh
+    CCACHE_DIR="$autotooled_cache" PATH="$autotooled_path" ./install_wxpdfdoc.sh
 
     find /srv/cache_for_lmi/downloads -type f -print0 | xargs --null md5sum
 
