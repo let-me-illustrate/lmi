@@ -224,13 +224,13 @@ schemata_clutter='
 /^  Done\.$/d
 '
 
-# When /dev/tty doesn't exist, 'wine' issues these extra diagnostics.
+# When no X server is running, 'wine' issues these extra diagnostics.
 #
 # Escape a literal dollar sign as '[$]' rather than '\$'. The latter
 # is less weird, but 'shellcheck' thinks '\$VARIABLE' calls for an
 # expansion.
 
-absent_tty_clutter='
+no_X_server_clutter='
 /^[[:xdigit:]]*:err:winediag:nodrv_CreateWindow Application tried to create a window, but no driver could be loaded\.$/d
 /^[[:xdigit:]]*:err:winediag:nodrv_CreateWindow L"The explorer process failed to start."$/d
 /^[[:xdigit:]]*:err:winediag:nodrv_CreateWindow Make sure that your X server is running and that [$]DISPLAY is set correctly\.$/d
@@ -279,7 +279,7 @@ nychthemeral_clutter='
 /^$/d
 '
 
-if ! tty -s; then nychthemeral_clutter="${absent_tty_clutter}${nychthemeral_clutter}"; fi
+if ! xdpyinfo >/dev/null 2>&1; then nychthemeral_clutter="${no_X_server_clutter}${nychthemeral_clutter}"; fi
 
 # Install a bland 'configurable_settings.xml' for all architectures.
 # This overwrites any existing file, but developers probably won't
