@@ -316,8 +316,6 @@ do
     CCACHE_DIR="$autotooled_cache" PATH="$autotooled_path" ./install_wx.sh
     CCACHE_DIR="$autotooled_cache" PATH="$autotooled_path" ./install_wxpdfdoc.sh
 
-find /srv/cache_for_lmi/downloads -type f -print0 | xargs --null md5sum
-
     # Source this script only for commands that depend upon it.
     . ./set_toolchain.sh
 
@@ -337,6 +335,8 @@ find /srv/cache_for_lmi/downloads -type f -print0 | xargs --null md5sum
     fi
     printf 'Built %s with %s for %s.\n' "lmi" "$LMI_COMPILER" "$LMI_TRIPLET"
 done
+
+find /srv/cache_for_lmi/downloads -type f -print0 | xargs --null md5sum
 
 # GID should be the same for all files.
 find /opt/lmi/ -not -group "$(id -gn "$(logname)")" -print
