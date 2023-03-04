@@ -338,6 +338,10 @@ done
 
 find /srv/cache_for_lmi/downloads -type f -print0 | xargs --null md5sum
 
+# Make sure the setgid bit is set for all ccache subdirectories.
+find "$autotooled_cache" -type d -print0 | xargs -0 chmod g+s
+find "$CCACHE_DIR"       -type d -print0 | xargs -0 chmod g+s
+
 # GID should be the same for all files.
 find /opt/lmi/ -not -group "$(id -gn "$(logname)")" -print
 # User and group permissions should be the same throughout $(prefix).
