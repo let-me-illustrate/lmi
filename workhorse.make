@@ -19,6 +19,8 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+# Imperatively assign this value before including any other makefile.
+
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 ################################################################################
