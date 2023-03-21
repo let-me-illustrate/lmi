@@ -123,6 +123,7 @@ git clone git://git.savannah.nongnu.org/lmi.git \
   || git clone https://github.com/let-me-illustrate/lmi.git
 cd lmi || { printf 'failed: cd\n'; exit 3; }
 
+cd /opt/lmi/src/lmi || { printf 'failed: cd\n'; exit 3; }
 if [ "greg" = "$(whoami)" ]; then
   git config --global user.email gchicares@sbcglobal.net
   git config --global user.name "Gregory W. Chicares"
