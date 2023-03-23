@@ -1082,7 +1082,7 @@ physical_closure_files := \
 check_physical_closure: $(physical_closure_files)
 
 %.physical_closure: %
-	@$(GNU_CXX) \
+	@$(subst ccache ,,$(GNU_CXX)) \
 	  -DLMI_IGNORE_PCH \
 	  $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) \
 	  -x c++ -w -O0 -fsyntax-only $<
