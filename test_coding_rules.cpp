@@ -222,6 +222,7 @@ file::file(std::string const& file_path)
         : phyloanalyze("GNUmakefile$") ? e_make
         : phyloanalyze("^Makefile")    ? e_make
         : phyloanalyze("^md5sums$")    ? e_md5
+        : phyloanalyze("^Doxyfile$")   ? e_text_plain
         : phyloanalyze("^INSTALL$")    ? e_text_plain
         : phyloanalyze("^README")      ? e_text_plain
         // test file contents only if necessary
@@ -1147,7 +1148,8 @@ void enforce_taboos(file const& f)
         }
 
     if
-        (  !pcre::search(f.data(), pcre::regex(my_taboo_indulgence()))
+        (  !f.phyloanalyze("Doxyfile") // Has a string resembling a taboo name.
+        && !pcre::search(f.data(), pcre::regex(my_taboo_indulgence()))
         && !contains(f.data(), "Automatically generated from custom input.")
         )
         {
