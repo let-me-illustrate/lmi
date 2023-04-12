@@ -97,11 +97,13 @@ apt-get --assume-yes install \
   curl \
   cvs \
   default-jre \
+  doxygen \
   g++-mingw-w64 \
   g++-multilib \
   gdb \
   git \
   gnupg \
+  graphviz \
   jing \
   libarchive-tools \
   libc++-dev \
