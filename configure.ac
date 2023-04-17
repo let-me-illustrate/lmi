@@ -312,8 +312,7 @@ dnl check that the library options allow to build lmi
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <wx/setup.h>]], [[
     #if !wxUSE_DOC_VIEW_ARCHITECTURE || \
         !wxUSE_MDI_ARCHITECTURE || \
-        !wxUSE_PRINTING_ARCHITECTURE || \
-        !(wxUSE_STL || wxUSE_STD_STRING)
+        !wxUSE_PRINTING_ARCHITECTURE
         wrong wx library options
     #endif
     ]])],
