@@ -71,9 +71,10 @@ assert_not_chrooted
 # setopt extended_glob &&
 #   sudo cp -a /mnt/sda1/srv/chroot/lmi-buster2/opt/^lmi /srv/chroot/"${CHRTNAME}"/opt
 
-# Configure ssh, iff this chroot needs write access to savannah.
-# The easiest way is to copy existing credentials, e.g.:
-cp -a ~/.ssh/ /srv/chroot/"${CHRTNAME}"/home/"${NORMAL_USER}" || true
+# Copy gnupg and ssh credentials, if the user has them (for write
+# access to savannah):
+cp -a ~/.ssh/   /srv/chroot/"${CHRTNAME}"/home/"${NORMAL_USER}" || true
+cp -a ~/.gnupg/ /srv/chroot/"${CHRTNAME}"/home/"${NORMAL_USER}" || true
 # ignoring any message like
 #   cannot stat ‘/home/[some_user_name]/.ssh/’: No such file or directory
 #
