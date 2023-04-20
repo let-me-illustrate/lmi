@@ -19,6 +19,15 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+# Sample invocation:
+#
+# doxygen 2>&1 | sed \
+#   -e'/^Parsing file.*\.\.\.$/d' \
+#   -e'/^Preprocessing.*\.\.\.$/d' \
+#   -e'/^Generating \(code\|docs\) for \(file\|compound\|nested\|namespace\).*\.\.\./d' \
+#   -e'/^Generating docs for namespace/d' \
+# | less -S
+
 # Doxyfile 1.9.4
 
 # This file describes the settings to be used by the documentation system
