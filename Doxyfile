@@ -19,14 +19,21 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-# Sample invocation:
+# Sample invocation, used for documentation published on savannah:
 #
-# doxygen 2>&1 | sed \
+# LMI_DOXYGEN_GRAPHS="NO" doxygen 2>&1 | sed \
 #   -e'/^Parsing file.*\.\.\.$/d' \
 #   -e'/^Preprocessing.*\.\.\.$/d' \
 #   -e'/^Generating \(code\|docs\) for \(file\|compound\|nested\|namespace\).*\.\.\./d' \
 #   -e'/^Generating docs for namespace/d' \
 # | less -S
+#
+# Documentation size as of 2023-04-20:
+#    51 MB LMI_DOXYGEN_GRAPHS="NO" [sample invocation above]
+#   401 MB LMI_DOXYGEN_GRAPHS="" [i.e., doxygen defaults]
+#   811 MB LMI_DOXYGEN_GRAPHS="YES"
+# If you want to study lmi in depth, you might want to generate a
+# personal copy using LMI_DOXYGEN_GRAPHS="YES".
 
 # Doxyfile 1.9.4
 
@@ -2443,7 +2450,7 @@ DOT_FONTPATH           =
 # Possible values are: NO, YES, TEXT and GRAPH.
 # The default value is: YES.
 
-CLASS_GRAPH            = YES
+CLASS_GRAPH            = $(LMI_DOXYGEN_GRAPHS) # YES
 
 # If the COLLABORATION_GRAPH tag is set to YES then doxygen will generate a
 # graph for each documented class showing the direct and indirect implementation
@@ -2452,7 +2459,7 @@ CLASS_GRAPH            = YES
 # The default value is: YES.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-COLLABORATION_GRAPH    = YES
+COLLABORATION_GRAPH    = $(LMI_DOXYGEN_GRAPHS) # YES
 
 # If the GROUP_GRAPHS tag is set to YES then doxygen will generate a graph for
 # groups, showing the direct groups dependencies. See also the chapter Grouping
@@ -2460,7 +2467,7 @@ COLLABORATION_GRAPH    = YES
 # The default value is: YES.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-GROUP_GRAPHS           = YES
+GROUP_GRAPHS           = $(LMI_DOXYGEN_GRAPHS) # YES
 
 # If the UML_LOOK tag is set to YES, doxygen will generate inheritance and
 # collaboration diagrams in a style similar to the OMG's Unified Modeling
@@ -2520,7 +2527,7 @@ TEMPLATE_RELATIONS     = NO
 # The default value is: YES.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-INCLUDE_GRAPH          = YES
+INCLUDE_GRAPH          = $(LMI_DOXYGEN_GRAPHS) # YES
 
 # If the INCLUDED_BY_GRAPH, ENABLE_PREPROCESSING and SEARCH_INCLUDES tags are
 # set to YES then doxygen will generate a graph for each documented file showing
@@ -2529,7 +2536,7 @@ INCLUDE_GRAPH          = YES
 # The default value is: YES.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-INCLUDED_BY_GRAPH      = YES
+INCLUDED_BY_GRAPH      = $(LMI_DOXYGEN_GRAPHS) # YES
 
 # If the CALL_GRAPH tag is set to YES then doxygen will generate a call
 # dependency graph for every global function or class method.
@@ -2541,7 +2548,7 @@ INCLUDED_BY_GRAPH      = YES
 # The default value is: NO.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-CALL_GRAPH             = NO
+CALL_GRAPH             = $(LMI_DOXYGEN_GRAPHS) # NO
 
 # If the CALLER_GRAPH tag is set to YES then doxygen will generate a caller
 # dependency graph for every global function or class method.
@@ -2553,14 +2560,14 @@ CALL_GRAPH             = NO
 # The default value is: NO.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-CALLER_GRAPH           = NO
+CALLER_GRAPH           = $(LMI_DOXYGEN_GRAPHS) # NO
 
 # If the GRAPHICAL_HIERARCHY tag is set to YES then doxygen will graphical
 # hierarchy of all classes instead of a textual one.
 # The default value is: YES.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-GRAPHICAL_HIERARCHY    = YES
+GRAPHICAL_HIERARCHY    = $(LMI_DOXYGEN_GRAPHS) # YES
 
 # If the DIRECTORY_GRAPH tag is set to YES then doxygen will show the
 # dependencies a directory has on other directories in a graphical way. The
@@ -2569,7 +2576,7 @@ GRAPHICAL_HIERARCHY    = YES
 # The default value is: YES.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
-DIRECTORY_GRAPH        = YES
+DIRECTORY_GRAPH        = $(LMI_DOXYGEN_GRAPHS) # YES
 
 # The DIR_GRAPH_MAX_DEPTH tag can be used to limit the maximum number of levels
 # of child directories generated in directory dependency graphs by dot.
