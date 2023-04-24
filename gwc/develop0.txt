@@ -174,29 +174,37 @@ cvs -z3 -d:pserver:anonymous@cvs.savannah.nongnu.org:/web/lmi checkout lmi
   # All savannah webpages are on a cvs-only server
   # Use a subdirectory to avoid conflict on name 'lmi'
 
-mkdir --parents /lmi/src/web
-cd /lmi/src/web
+mkdir --parents /opt/lmi/web
+cd /opt/lmi/web
 export CVS_RSH="ssh"
 export CVSROOT="chicares@cvs.sv.gnu.org:/web/lmi"
 cvs -z3 checkout lmi
 
-  # For git, nothing like $CVS_RSH or $CVSROOT is needed: that
-  # information is embedded in .git/config .
-
-mkdir --parents /lmi/src
-cd /lmi/src
-git clone chicares@git.sv.gnu.org:/srv/git/lmi.git
-  # [anticipate a "fingerprint" message here the first time]
-
-  # Alternatively, and more simply...see
+  # Update webpages...see:
   #   https://lists.nongnu.org/archive/html/lmi/2019-01/msg00003.html
 
-mkdir -p /tmp/web-cvs
-pushd /tmp/web-cvs
+pushd /opt/lmi/web
 cvs -z3 -d "chicares@cvs.sv.gnu.org:/web/lmi" checkout lmi
 cd lmi
+  # ...update copyrights:
 for z in $(grep -l -dskip Copyright *); do sed -i $z -e'/Copyright/s/2022/2022, 2023/'; done
+  # ...then update webpages present in git repository:
 cvs -z3 -d "chicares@cvs.sv.gnu.org:/web/lmi" commit -m'Refresh from git' toms_748.html
+  # ...update doxygen documentation:
+# [create subdirectory--one time only]
+# cvs add doxygen/
+  # ...first, run doxygen:
+  pushd /opt/lmi/src/lmi
+  LMI_DOXYGEN_GRAPHS="NO" doxygen 2>&1 | sed \
+    -e'/^Parsing file.*\.\.\.$/d' \
+    -e'/^Preprocessing.*\.\.\.$/d' \
+    -e'/^Generating \(code\|docs\) for \(file\|compound\|nested\|namespace\).*\.\.\./d' \
+    -e'/^Generating docs for namespace/d' \
+  | less -S
+  popd
+  # ...then update:
+cvs -z3 add    -m'Add doxygen output' doxygen/*
+cvs -z3 commit -m'Add doxygen output' doxygen/*
 popd
 
   # Copy proprietary test data
