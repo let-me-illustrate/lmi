@@ -64,6 +64,10 @@ git rev-parse HEAD
 mv .git/hooks .git/hooks-orig
 ln --symbolic --force --no-dereference ../hooks .git
 
+# Create directories for webpages:
+mkdir --parents /opt/lmi/web/lmi/doxygen
+chmod -R g=u+s  /opt/lmi/web/lmi/doxygen
+
 # Create a "stash" directory as a manual alternative to 'git-stash':
 mkdir --parents /opt/lmi/stash
 chmod g=u+s     /opt/lmi/stash
