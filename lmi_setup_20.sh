@@ -97,11 +97,13 @@ apt-get --assume-yes install \
   curl \
   cvs \
   default-jre \
+  doxygen \
   g++-mingw-w64 \
   g++-multilib \
   gdb \
   git \
   gnupg \
+  graphviz \
   jing \
   libarchive-tools \
   libc++-dev \
@@ -114,6 +116,7 @@ apt-get --assume-yes install \
   libxml2-utils \
   libxslt1-dev \
   lld \
+  locales \
   make \
   mold \
   patch \
@@ -157,6 +160,26 @@ apt-get --assume-yes install \
 #   No schema files found: doing nothing.
 #   Warning: The home dir /run/uuidd you specified can't be accessed: No such file or directory
 #   Not creating home directory `/run/uuidd'.
+
+# Generate all desired locales:
+#   C.UTF-8 for sorting without surprises
+#   en_DK.UTF-8 for its rational date format
+#   en_US.UTF-8 for general use
+
+sed -i /etc/locale.gen \
+      -e'/ C.UTF-8/s/^# *//' \
+  -e'/ en_DK.UTF-8/s/^# *//' \
+  -e'/ en_US.UTF-8/s/^# *//' \
+
+locale-gen
+
+# ...and set them as defaults, taking care to specify C.UTF-8 for
+# both LC_COLLATE and LC_CTYPE, for mutual consistency. Also set
+# these variables in .zshrc because it appears that schroot does
+# not source /etc/default/locale (though it should according to
+# the schroot-1.6.4 release notes).
+
+update-locale LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8 LC_CTYPE=C.UTF-8
 
 stamp=$(date -u +'%Y%m%dT%H%M%SZ')
 echo "$stamp $0: Installed debian packages." | tee /dev/tty || true

@@ -19,6 +19,8 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
+# Imperatively assign this value before including any other makefile.
+
 this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 
 ################################################################################
@@ -1080,7 +1082,7 @@ physical_closure_files := \
 check_physical_closure: $(physical_closure_files)
 
 %.physical_closure: %
-	@$(GNU_CXX) \
+	@$(subst ccache ,,$(GNU_CXX)) \
 	  -DLMI_IGNORE_PCH \
 	  $(ALL_CPPFLAGS) $(ALL_CXXFLAGS) \
 	  -x c++ -w -O0 -fsyntax-only $<

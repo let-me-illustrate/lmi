@@ -78,7 +78,7 @@ enum enum_phylum
     ,e_rates      = 1 << 14
     ,e_relax_ng   = 1 << 15
     ,e_script     = 1 << 16
-    ,e_synopsis   = 1 << 17
+    ,e_text_plain = 1 << 17
     ,e_touchstone = 1 << 18
     ,e_xml_input  = 1 << 19
     ,e_xml_other  = 1 << 20
@@ -222,8 +222,9 @@ file::file(std::string const& file_path)
         : phyloanalyze("GNUmakefile$") ? e_make
         : phyloanalyze("^Makefile")    ? e_make
         : phyloanalyze("^md5sums$")    ? e_md5
-        : phyloanalyze("^INSTALL$")    ? e_synopsis
-        : phyloanalyze("^README")      ? e_synopsis
+        : phyloanalyze("^Doxyfile$")   ? e_text_plain
+        : phyloanalyze("^INSTALL$")    ? e_text_plain
+        : phyloanalyze("^README")      ? e_text_plain
         // test file contents only if necessary
         : begins_with(data(), "#!")    ? e_script
         // keep this last
@@ -1130,7 +1131,7 @@ void enforce_taboos(file const& f)
         (   !f.is_of_phylum(e_log)
         &&  !f.is_of_phylum(e_make)
         &&  !f.is_of_phylum(e_script)
-        &&  !f.is_of_phylum(e_synopsis)
+        &&  !f.is_of_phylum(e_text_plain)
         )
         {
         taboo(f, R"(\bexe\b)", pcre::regex::icase);
@@ -1147,7 +1148,8 @@ void enforce_taboos(file const& f)
         }
 
     if
-        (  !pcre::search(f.data(), pcre::regex(my_taboo_indulgence()))
+        (  !f.phyloanalyze("Doxyfile") // Has a string resembling a taboo name.
+        && !pcre::search(f.data(), pcre::regex(my_taboo_indulgence()))
         && !contains(f.data(), "Automatically generated from custom input.")
         )
         {
@@ -1205,7 +1207,7 @@ statistics statistics::analyze_file(file const& f)
         ||  f.is_of_phylum(e_patch)
         ||  f.is_of_phylum(e_touchstone)
         ||  f.is_of_phylum(e_xml_input)
-        ||  f.is_of_phylum(e_synopsis)
+        ||  f.is_of_phylum(e_text_plain)
         )
         {
         return z;

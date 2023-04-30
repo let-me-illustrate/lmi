@@ -64,6 +64,10 @@ git rev-parse HEAD
 mv .git/hooks .git/hooks-orig
 ln --symbolic --force --no-dereference ../hooks .git
 
+# Create directories for webpages:
+mkdir --parents /opt/lmi/web/lmi/doxygen
+chmod -R g=u+s  /opt/lmi/web/lmi/doxygen
+
 # Create a "stash" directory as a manual alternative to 'git-stash':
 mkdir --parents /opt/lmi/stash
 chmod g=u+s     /opt/lmi/stash
@@ -123,6 +127,7 @@ git clone git://git.savannah.nongnu.org/lmi.git \
   || git clone https://github.com/let-me-illustrate/lmi.git
 cd lmi || { printf 'failed: cd\n'; exit 3; }
 
+cd /opt/lmi/src/lmi || { printf 'failed: cd\n'; exit 3; }
 if [ "greg" = "$(whoami)" ]; then
   git config --global user.email gchicares@sbcglobal.net
   git config --global user.name "Gregory W. Chicares"

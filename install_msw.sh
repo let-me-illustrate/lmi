@@ -55,7 +55,7 @@ fi
 
 lmi_build_type=$(/usr/share/misc/config.guess)
 
-# This should work with a rather minimal path.
+# This is designed to work with a rather minimal path.
 
 minimal_path=${MINIMAL_PATH:-"/usr/bin:/bin:/usr/sbin:/sbin"}
 
@@ -69,7 +69,18 @@ case "$lmi_build_type" in
         ;;
 esac
 
+# Set a minimal path for makefiles and scripts that are designed
+# to be independent of lmi's runtime path.
 export PATH="$minimal_path"
+
+# Add ccache's symlinks directory because that's the least awful
+# way to get ccache to work with autotools--see:
+#   https://lists.nongnu.org/archive/html/lmi/2023-02/msg00027.html
+autotooled_path=/usr/lib/ccache:"$minimal_path"
+# and use a separate cache directory so that by default
+#   ccache --show-stats -vv
+# shows the outcome of lmi's more careful method.
+autotooled_cache=/srv/cache_for_lmi/ccache_autotooled
 
 # '--jobs=': big benefit for multicore (but can be overridden).
 # '--output-sync=recurse' is used passim to facilitate log comparison.
@@ -300,16 +311,10 @@ do
 
     printf 'Building %s with %s for %s.\n' "lmi" "$LMI_COMPILER" "$LMI_TRIPLET"
 
-    # Set a minimal path for makefiles and scripts that are
-    # designed to be independent of lmi's runtime path.
-    export PATH="$minimal_path"
+    CCACHE_DIR="$autotooled_cache" PATH="$autotooled_path" ./install_xml_libraries.sh
 
-    ./install_xml_libraries.sh
-
-    ./install_wx.sh
-    ./install_wxpdfdoc.sh
-
-    find /srv/cache_for_lmi/downloads -type f -print0 | xargs --null md5sum
+    CCACHE_DIR="$autotooled_cache" PATH="$autotooled_path" ./install_wx.sh
+    CCACHE_DIR="$autotooled_cache" PATH="$autotooled_path" ./install_wxpdfdoc.sh
 
     # Source this script only for commands that depend upon it.
     . ./set_toolchain.sh
@@ -330,6 +335,12 @@ do
     fi
     printf 'Built %s with %s for %s.\n' "lmi" "$LMI_COMPILER" "$LMI_TRIPLET"
 done
+
+find /srv/cache_for_lmi/downloads -type f -print0 | xargs --null md5sum
+
+# Make sure the setgid bit is set for all ccache subdirectories.
+find "$autotooled_cache" -type d -print0 | xargs -0 chmod g+s
+find "$CCACHE_DIR"       -type d -print0 | xargs -0 chmod g+s
 
 # GID should be the same for all files.
 find /opt/lmi/ -not -group "$(id -gn "$(logname)")" -print

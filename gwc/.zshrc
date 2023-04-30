@@ -45,15 +45,31 @@ export coefficiency="--jobs=$(nproc)"
 # This should be unnecessary:
 # export TZ=UCT
 
-# redhat-based distributions may lack 'C.UTF-8'--see:
+# This should be unnecessary, but, most regrettably, it seems to
+# have a persistent nonempty value on one particular machine:
+unset LC_ALL
+
+# The "en_US.UTF-8" locale sorts data unreasonably, so use a C locale
+# for sorting. Specify both LC_COLLATE and LC_CTYPE together to avoid
+# unpleasant surprises. Prefer the "C.UTF-8" locale for sorting, if
+# available; otherwise (e.g., for redhat-based distributions that may
+# lack 'C.UTF-8':
 #   https://bugzilla.redhat.com/show_bug.cgi?id=902094
-if locale -a | grep --quiet C.UTF-8; then
-  pref_lc=C.UTF-8; else
-  pref_lc=en_US.UTF-8;
+# ) fall back to the "C" locale.
+#
+# The 'locale -a' command may display something like "C.utf8",
+# rather than the desired "C.UTF-8"; therefore, instead of:
+#   if locale -a | grep --quiet C.UTF-8
+# use the following test, which should reliably enough detect whether
+# "C.UTF-8" is available:
+if locale -a | grep '^C' | grep -i utf --quiet; then
+  pref_lc=C.UTF-8
+else
+  pref_lc=C
 fi
-export LANG=en_US.UTF-8 LC_ALL=$pref_lc LC_TIME=en_DK.UTF-8 LC_COLLATE=$pref_lc
+export LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=$pref_lc LC_CTYPE=$pref_lc
 # Instead of assigning those variables, this is generally preferable:
-#   update-locale LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=C.UTF-8
+#   update-locale LANG=en_US.UTF-8 LC_TIME=en_DK.UTF-8 LC_COLLATE=$pref_lc LC_CTYPE=$pref_lc
 # but neither the chroot's nor the host's /etc/default/locale is
 # sourced by schroot, which strives to set as few environment
 # variables as possible.

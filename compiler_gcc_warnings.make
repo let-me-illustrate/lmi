@@ -209,6 +209,7 @@ gcc_cxx_warnings := \
   -Wnon-template-friend \
   -Wnon-virtual-dtor \
   -Wold-style-cast \
+  -Wopenacc-parallelism \
   -Woverloaded-virtual \
   -Wplacement-new=2 \
   -Wpmf-conversions \
@@ -218,6 +219,7 @@ gcc_cxx_warnings := \
   -Wstrict-null-sentinel \
   -Wsuggest-override \
   -Wsynth \
+  -Wtrivial-auto-var-init \
   -Wuseless-cast \
   -Wvolatile \
   -Wzero-as-null-pointer-constant \

@@ -340,6 +340,8 @@ ALL_LDFLAGS  = $(REQUIRED_LDFLAGS)  $(LDFLAGS)
 ALL_ARFLAGS  = $(REQUIRED_ARFLAGS)  $(ARFLAGS)
 ALL_RCFLAGS  = $(REQUIRED_RCFLAGS)  $(RCFLAGS)
 
+warnings_makefile := $(srcdir)/compiler_gcc_warnings.make
+
 # For the /dev/null rationale, see:
 #   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91011#c7
 
@@ -349,5 +351,5 @@ show_overlooked_cxx_warnings:
 	  | $(GREP) '[[]disabled[]]' \
 	  | $(SED) -e's/[ \t]*[[]disabled[]]//' -e's/^ *-W//' \
 	  > eraseme
-	@$(GREP) -of eraseme $(this_makefile) | $(GREP) -vxf - eraseme || true
+	@$(GREP) -of eraseme $(warnings_makefile) | $(GREP) -vxf - eraseme || true
 	@$(RM) eraseme

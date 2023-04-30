@@ -262,15 +262,10 @@ make $coefficiency unit_tests build_type=safestdlib 2>&1 | tee >(grep '\*\*\*') 
 
 make $coefficiency unit_tests unit_test_targets=regex_test >../log 2>&1
 
-  # Build with a compiler other than gcc
+  # Build with a compiler other than gcc [obsolete]
 
 make -f bcc_5_5_1.make $coefficiency unit_tests >../log 2>&1
 make -f como.make $coefficiency unit_tests >../log 2>&1
-
-  # Build wx and wxpdfdoc
-
-make $coefficiency --output-sync=recurse -f install_wx.make >../log 2>&1
-make $coefficiency --output-sync=recurse -f install_wxpdfdoc.make >../log 2>&1
 
   # Shift differing system-test files among directories:
 pushd /opt/lmi/touchstone && d="/opt/lmi/touchstone-old/touchstone-$(date -u +'%Y%m%dT%H%MZ')" && mkdir -p $d && for z in *; do cmp --quiet $z ../test/$z || ( mv $z $d/$z; mv ../test/$z ./$z; ) ; done && popd

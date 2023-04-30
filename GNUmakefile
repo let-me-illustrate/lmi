@@ -19,8 +19,6 @@
 # email: <gchicares@sbcglobal.net>
 # snail: Chicares, 186 Belle Woods Drive, Glastonbury CT 06033, USA
 
-this_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
-
 ################################################################################
 
 # The general technique used in the 'Multiple build directories'
