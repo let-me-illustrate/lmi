@@ -90,6 +90,11 @@ install_clutter='
 #   because it [exits] earlier.
 # but it is more expedient simply to filter it out (with a regex
 # that, for some unknown reason, mustn't end in '$').
+#
+# The 'Element wxStaticText.*child.*not of wxPanel' message is
+# deliberately filtered out because it is innocuous, and because
+# it occurs in code that resists maintenance--see:
+#   https://lists.nongnu.org/archive/html/lmi/2023-05/msg00001.html
 
 gui_test_clutter='
 /^it looks like wine32 is missing, you should install it\.$/d
@@ -181,6 +186,7 @@ gui_test_clutter='
 /^SUCCESS: [[:digit:]]\+ tests successfully completed\.$/d
 /^NOTE: [[:digit:]]\+ tests were skipped$/d
 /^X connection to .* broken (explicit kill or server shutdown)\./d
+/^Element wxStaticText.*of wxStaticBoxSizer should be created as child of its wxStaticBox and not of wxPanel/d
 '
 
 cli_cgi_clutter='
