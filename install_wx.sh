@@ -88,9 +88,7 @@ config_options="
   --enable-monolithic
   --enable-option-checking
   --enable-shared
-  --enable-stl
   --enable-vendor=$vendor
-  --with-cxx=11
   --without-opengl
   --without-subdirs
 "
