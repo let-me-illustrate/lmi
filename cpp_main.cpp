@@ -91,11 +91,6 @@ extern "C" unsigned int _get_output_format(void) {return 1;}
 #   endif // defined __GNUC__ && 40600 <= LMI_GCC_VERSION
 #endif // defined __MINGW32__
 
-#if defined LMI_MSC
-#   define fileno(f)            _fileno(f)
-#   define setmode(fd, mode)    _setmode((fd), (mode))
-#endif
-
 // main()  ------------------------------------------------------------------//
 
 // Uniformly detects and reports the occurrence of several types of errors,
