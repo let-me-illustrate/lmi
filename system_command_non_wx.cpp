@@ -55,8 +55,8 @@ void concrete_system_command(std::string const& command_line)
 
 void concrete_system_command(std::string const& command_line)
 {
-    STARTUPINFO startup_info = {};
-    startup_info.cb = sizeof(STARTUPINFO);
+    STARTUPINFOA startup_info = {};
+    startup_info.cb = sizeof(STARTUPINFOA);
 
     PROCESS_INFORMATION process_info;
 
