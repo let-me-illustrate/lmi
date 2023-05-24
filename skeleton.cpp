@@ -98,7 +98,6 @@
 #include <wx/textdlg.h>                 // wxGetTextFromUser()
 #include <wx/toolbar.h>
 #include <wx/utils.h>                   // wxMilliSleep(), wxSafeYield()
-#include <wx/persist/toplevel.h>
 #include <wx/xrc/xmlres.h>
 
 #include <iterator>                     // insert_iterator
