@@ -195,6 +195,7 @@ file::file(std::string const& file_path)
         : ".rc"         == extension() ? e_script
         : ".sed"        == extension() ? e_script
         : ".sh"         == extension() ? e_script
+        : ".md"         == extension() ? e_text_plain
         : ".touchstone" == extension() ? e_touchstone
         : ".cns"        == extension() ? e_xml_input
         : ".ill"        == extension() ? e_xml_input

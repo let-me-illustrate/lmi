@@ -133,6 +133,7 @@ apt-get --assume-yes install \
   x11-apps \
   xsltproc \
   xvfb \
+  xz-utils \
   zsh \
  >"${logdir}/${CHRTNAME}"-apt-get-log 2>&1
 
