@@ -105,9 +105,7 @@ struct mc_enum_key
 template<typename T, auto n, T const (&E)[n], char const*const (&C)[n]>
 struct mc_enum_data
 {
-#ifndef LMI_MSC
     static_assert(0 != n);
-#endif
 
     static int const          n_  {n};
     static T    const*        e() {return E;}
