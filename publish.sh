@@ -46,3 +46,9 @@ rsync -vv \
   "$(basename "$filepath")" \
   "$(basename "$filepath.sig")" \
   chicares@dl.sv.nongnu.org:/releases/lmi/
+
+# To remove old releases that are no longer wanted:
+#   sftp chicares@dl.sv.nongnu.org:/releases/lmi/
+# then use interactive commands such as:
+#   sftp> rm lmi-20230417T1615Z.zip*
+#   sftp> quit
