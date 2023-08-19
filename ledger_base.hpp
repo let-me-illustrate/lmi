@@ -179,14 +179,14 @@ class LMI_SO LedgerBase
 
     minmax<double>     scalable_extrema() const;
     std::string const& scale_unit() const;
+    template <double divisor = 1.0>
     std::string value_str
         (std::string const& map_key
         ,int                index
-        ,double             divisor = 1.0
         ) const;
+    template <double divisor = 1.0>
     std::string value_str
         (std::string const& map_key
-        ,double             divisor = 1.0
         ) const;
 
     double_vector_map const& all_vectors() const;
